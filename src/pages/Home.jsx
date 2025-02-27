@@ -121,7 +121,7 @@ const Home = () => {
                     </div>
                     
                 </header>
-                <a href="#">
+                <a href="/">
                     <button className="mail__btn click" onClick={toggleModal}>
                         <FontAwesomeIcon icon={faEnvelope} />
                     </button>
@@ -262,7 +262,7 @@ const Home = () => {
             <footer>
                 <div className="container">
                     <div className="row footer__row">
-                        <a href="#" className="footer__anchor">
+                        <a href="/" className="footer__anchor">
                             <figure className="footer__logo">
                                 <img src="./assets/logo.svg" className="footer__logo--img" alt="" />
                             </figure>
