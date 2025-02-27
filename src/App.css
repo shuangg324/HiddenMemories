@@ -118,7 +118,7 @@ input:focus, textarea:focus {
 }
 
 .container {
-  padding: 36px 24px 36px 36px;
+  padding: 50px;
   width: 100%;
   background-color: #fddf7d
 }
@@ -709,6 +709,7 @@ footer {
 */
 .shape {
   position: fixed;
+  
 }
 .shape--0 {
   top: 20vh;

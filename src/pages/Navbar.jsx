@@ -12,11 +12,26 @@ function Navbar() {
         document.body.classList.toggle('dark-mode');
         setIsDarkMode(!isDarkMode);
     };
+
+    const scaleFactor = 1 / 20;
+    function moveBackground(event) {
+        const shapes = document.querySelectorAll(".shape");
+        const x = event.clientX * scaleFactor;
+        const y = event.clientY * scaleFactor;
+
+        for (let i = 0; i < shapes.length; ++i) {
+            const isOdd = i % 2 !== 0;
+            const boolInt = isOdd ? -1 : 1;
+            // Added rotate after tutorial
+            shapes[i].style.transform = `translate(${x * boolInt}px, ${y * boolInt}px) rotate(${x * boolInt * 10}deg)`;
+        }
+    }
+
     
 
     return (
-        <div className="container">
-            <nav className="navbar">
+        <div className="container" onMouseMove={(event) => moveBackground(event)}>
+            <nav className="navbar" >
             <Link to="/">
                 <figure>
                     <img id="personal-logo" src={teddy} alt="Logo" />
