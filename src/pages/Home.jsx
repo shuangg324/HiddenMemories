@@ -18,6 +18,7 @@ const Home = () => {
         if (location.state && location.state.openModal) {
             setIsModalOpen(true);
             document.body.classList.add("modal--open");
+            window.scrollTo(0, 0);
         }
     }, [location.state]);
 
@@ -38,6 +39,10 @@ const Home = () => {
     // Toggle modal function that uses state to open/close the modal
     const toggleModal = () => {
         setIsModalOpen(prevState => {
+
+            if (!prevState) {
+                window.scrollTo(0, 0);
+            }
             // When the modal is being closed, reset the success state and form
             if (prevState) {
                 const form = document.querySelector("#contact__form");
@@ -47,12 +52,20 @@ const Home = () => {
                 if (form) form.reset(); // Reset the form after modal closes
                 if (success) success.classList.remove("modal__overlay--visible");
                 if (loading) loading.classList.remove("modal__overlay--visible");
+
+                
             }
 
             // Toggle the modal state
             document.body.classList.toggle("modal--open", !prevState);
             return !prevState;
         });
+    };
+
+    const handleClickOutside = (event) => {
+        if (event.target === event.currentTarget) {
+            toggleModal();
+        }
     };
 
 
@@ -129,7 +142,10 @@ const Home = () => {
                 <a href="#projects" className="scroll">
                     <div className="scroll__icon click"></div>
                 </a>
-                <div className={`modal ${isModalOpen ? 'modal--open' : ''}`}>
+                <div 
+    className={`modal ${isModalOpen ? 'modal--open' : ''}`} 
+    onClick={handleClickOutside}
+>
                     
                     <div className="modal__left modal__half modal__about">
                         <h3 className="modal__title modal__title--about">Here's a bit about us.</h3>
@@ -260,7 +276,7 @@ const Home = () => {
             </section>
 
             <footer>
-                <div className="container">
+                <div className="container footer__color">
                     <div className="row footer__row">
                         <a href="/" className="footer__anchor">
                             <figure className="footer__logo">
