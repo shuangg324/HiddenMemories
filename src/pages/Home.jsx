@@ -95,7 +95,9 @@ const Home = () => {
         <div className="App" onMouseMove={(event) => moveBackground(event)}>
             <section id="landing-page">
                 <header className="header">
-                    <div className="header__content">
+                    <div className="container">
+                        <div className="row">
+                        <div className="header__content">
                         <div className="header__content--left">
                         <h1 className="big__title orange">Hidden</h1>
                         <h1 className="title dark-mode-title">Memories</h1>
@@ -109,12 +111,15 @@ const Home = () => {
                         </div>
 
                         <div className='header__content--right'>
-                            <img className="header__img" src={teddy} alt
-                            ="teddy" />
+                            <figure><img className="header__img" src={teddy} alt="teddy" /></figure>
+                            
                             </div>
                         
                        
                     </div>
+                        </div>
+                    </div>
+                    
                 </header>
                 <a href="#">
                     <button className="mail__btn click" onClick={toggleModal}>
