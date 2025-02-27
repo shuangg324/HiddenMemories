@@ -15,7 +15,8 @@ function Navbar() {
     
 
     return (
-        <nav className="navbar">
+        <div className="container">
+            <nav className="navbar">
             <Link to="/">
                 <figure>
                     <img id="personal-logo" src={teddy} alt="Logo" />
@@ -44,6 +45,8 @@ function Navbar() {
                 </li>
             </ul>
         </nav>
+            </div>
+       
     );
 }
 

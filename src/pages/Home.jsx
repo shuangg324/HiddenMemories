@@ -121,11 +121,11 @@ const Home = () => {
                     </div>
                     
                 </header>
-                <a href="/">
+                
                     <button className="mail__btn click" onClick={toggleModal}>
                         <FontAwesomeIcon icon={faEnvelope} />
                     </button>
-                </a>
+               
                 <a href="#projects" className="scroll">
                     <div className="scroll__icon click"></div>
                 </a>
