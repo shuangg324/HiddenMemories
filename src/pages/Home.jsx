@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import { useLocation } from 'react-router-dom';
 import drinks from '../assets/drinks.jpg';
 import drinks2 from '../assets/drinks2.jpg';
@@ -7,7 +7,7 @@ import teddy from '../assets/teddy.PNG';
 import '../App.css';
 import emailjs from 'emailjs-com';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner, faEnvelope, faArrowUp, faTimes, faGlassMartini, faCocktail, faWineGlass, faBeer } from '@fortawesome/free-solid-svg-icons';
+import { faSpinner, faEnvelope, faTimes, faGlassMartini, faCocktail, faWineGlass, faBeer } from '@fortawesome/free-solid-svg-icons';
 
 const Home = () => {
     const location = useLocation();
@@ -55,9 +55,7 @@ const Home = () => {
         });
     };
 
-    const toggleContrast = () => {
-        document.body.classList.toggle('dark-mode');
-    };
+
 
     const contact = (event) => {
         event.preventDefault();
