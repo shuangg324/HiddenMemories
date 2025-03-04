@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import '../App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlassMartini, faCocktail, faWineGlass, faBeer } from '@fortawesome/free-solid-svg-icons';
+import moveBackground from '../utils/moveBackground';
+
 
 
 
@@ -10,20 +12,6 @@ const Packages = () => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
-  const scaleFactor = 1 / 20;
-    function moveBackground(event) {
-        const shapes = document.querySelectorAll(".shape");
-        const x = event.clientX * scaleFactor;
-        const y = event.clientY * scaleFactor;
-
-        for (let i = 0; i < shapes.length; ++i) {
-            const isOdd = i % 2 !== 0;
-            const boolInt = isOdd ? -1 : 1;
-            // Added rotate after tutorial
-            shapes[i].style.transform = `translate(${x * boolInt}px, ${y * boolInt}px) rotate(${x * boolInt * 10}deg)`;
-        }
-    }
 
   return (
     <div className="App" onMouseMove={(event) => moveBackground(event)}>

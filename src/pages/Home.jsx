@@ -1,15 +1,16 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import { useLocation } from 'react-router-dom';
 import drinks from '../assets/drinks.jpg';
 import drinks2 from '../assets/drinks2.jpg';
 import drinks3 from '../assets/drinks3.jpg';
+import moveBackground from '../utils/moveBackground.js';
 // import { projectImages} from '../utils/images';
 
-import teddy from '../assets/teddy.PNG';        
-import moveBackground from '../utils/moveBackground.js';
+// import teddy from '../assets/teddy.PNG';        
+
 
 import '../App.css';
-import {toggleModal, handleClickOutside, contact} from '../utils/toggleModal.js';
+import {toggleModal, contact} from '../utils/toggleModal.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner, faEnvelope, faTimes, faGlassMartini, faCocktail, faWineGlass, faBeer } from '@fortawesome/free-solid-svg-icons';
 
@@ -17,7 +18,9 @@ import { faSpinner, faEnvelope, faTimes, faGlassMartini, faCocktail, faWineGlass
 const Home = () => {
     const location = useLocation();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const modalRef = useRef(null);
 
+    // Handle background movement
     useEffect(() => {
         if (typeof moveBackground !== "function") {
             console.error("moveBackground is not a function");
@@ -32,11 +35,37 @@ const Home = () => {
         };
     }, []);
 
+    // Open modal based on URL state or user actions
     useEffect(() => {
         if (location.state?.openModal) {
-            toggleModal(setIsModalOpen);
+            toggleModal(setIsModalOpen);  // Open modal if state has openModal flag
         }
     }, [location.state]);
+
+    // Handle click outside to close the modal
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                modalRef.current && 
+                !modalRef.current.contains(event.target) &&  // Check if click is outside modal
+                !document.querySelector('.navbar').contains(event.target)  // Check if click is outside navbar
+            ) {
+                toggleModal(setIsModalOpen);  // Close modal if clicked outside both modal and navbar
+            }
+        };
+
+        if (isModalOpen) {
+            document.addEventListener("mousedown", handleClickOutside); // Open listener when modal is open
+        }
+
+        // Cleanup listener when modal is closed
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isModalOpen]);
+    
+
+    
 
     return (
         <div className="App" onMouseMove={(event) => moveBackground(event)}>
@@ -56,7 +85,7 @@ const Home = () => {
                                     </p>
                                 </div>
                                 <div className='header__content--right'>
-                                    <figure><img className="header__img" src={teddy} alt="teddy" /></figure>
+                                    {/* <figure><img className="header__img" src={teddy} alt="teddy" /></figure> */}
                                 </div>
                             </div>
                         </div>
@@ -68,8 +97,8 @@ const Home = () => {
                 <a href="#projects" className="scroll">
                     <div className="scroll__icon click"></div>
                 </a>
-                <div className={`modal ${isModalOpen ? 'modal--open' : ''}`} onClick={(event) => handleClickOutside(event, () => toggleModal(setIsModalOpen))}>
-                    <div className="modal__left modal__half modal__about">
+                <div className={`modal ${isModalOpen ? 'modal--open' : ''}`} ref={modalRef}>
+                <div className="modal__left modal__half modal__about" onClick={(e) => e.stopPropagation()}> {/* Prevent event propagation */}
                         <h3 className="modal__title modal__title--about">Here's a bit about us.</h3>
                         <p className="modal__para">
                             We are experienced <b className="dark-mode-white orange">Bartenders</b> with over 5+ years working in high-end restaurants and bars.
@@ -79,13 +108,13 @@ const Home = () => {
                             Let us turn your gathering into an unforgettable experience—<b className="dark-mode-white orange">Book Us</b> today!
                         </p>
                     </div>
-                    <div className="modal__right modal__half modal__contact">
+                    <div className="modal__right modal__half modal__contact" onClick={(e) => e.stopPropagation()}> {/* Prevent event propagation */}
                         <i className="fas fa-times modal__exit click" onClick={() => toggleModal(setIsModalOpen)}>
                             <FontAwesomeIcon icon={faTimes} />
                         </i>
                         <h3 className="modal__title modal__title--contact">Let's have a chat!</h3>
                         <h3 className="modal__sub-title modal__sub-title--contact">We'd love to be part of your next event!</h3>
-                        <form id="contact__form" onSubmit={(event) => contact(event, () => toggleModal(setIsModalOpen))}>
+                        <form id="contact__form" onSubmit={(event) => contact(event, setIsModalOpen)}>
                             <div className="form__item">
                                 <label className="form__item--label" htmlFor="user_name">Name</label>
                                 <input className="input" name="user_name" type="text" required />
