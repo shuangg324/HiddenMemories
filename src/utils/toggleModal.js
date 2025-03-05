@@ -45,7 +45,7 @@ export const contact = (event, setIsModalOpen) => {
             success.classList.add("modal__overlay--visible");
 
             setTimeout(() => {
-                toggleModal(setIsModalOpen);
+                setIsModalOpen(false);
             }, 1500);
         })
         .catch(() => {

@@ -4,11 +4,13 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import teddy from '../assets/teddy.PNG';
 import moveBackground from '../utils/moveBackground.js';
+import { useModal } from '../utils/modalContext';
 import { faBars, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 
 function Navbar() {
     const [isDarkMode, setIsDarkMode] = useState(document.body.classList.contains('dark-mode')); // Track dark mode state
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const { toggleModal } = useModal();
 
     const toggleContrast = () => {
         document.body.classList.toggle('dark-mode');
@@ -21,6 +23,12 @@ function Navbar() {
 
     const closeMenu = () => {
         setIsMenuOpen(false);
+    };
+
+    const handleAboutContactClick = () => {
+        toggleModal();
+        closeMenu();
+        window.scrollTo(0, 0);
     };
 
     return (
@@ -46,7 +54,7 @@ function Navbar() {
                 }} >
                     <Link to="/" className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black">Home</Link>
                 </li>
-                <li className="nav__link" onClick={() => { closeMenu();}}>
+                <li className="nav__link" onClick={handleAboutContactClick}>
                     <Link to="/" state={{ openModal: true }} className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black">About</Link>
                 </li>
                 {/* <li className="nav__link" onClick={closeMenu}>
@@ -55,7 +63,7 @@ function Navbar() {
                 <li className="nav__link" onClick={closeMenu}>
                     <Link to="./packages" className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black">Package</Link>
                 </li>
-                <li className="nav__link" onClick={() => { closeMenu();}}>
+                <li className="nav__link" onClick={handleAboutContactClick}>
                 <Link to="/" state={{ openModal: true }} className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black">Contact</Link>
                 </li>
                 <li className="nav__link" onClick={closeMenu}>

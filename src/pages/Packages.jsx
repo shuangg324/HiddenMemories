@@ -1,16 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import '../App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlassMartini, faCocktail, faWineGlass, faBeer } from '@fortawesome/free-solid-svg-icons';
 import moveBackground from '../utils/moveBackground';
-
-
-
+import { useModal } from '../utils/modalContext';
 
 const Packages = () => {
+  const { toggleModal } = useModal();
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleContactClick = () => {
+    toggleModal();
+    scrollToTop();
   };
 
   return (
@@ -68,31 +72,24 @@ const Packages = () => {
 
 
             <div>
-                <FontAwesomeIcon icon={faGlassMartini} className="shape shape--0" />
-                <FontAwesomeIcon icon={faCocktail} className="shape shape--1" />
-                <FontAwesomeIcon icon={faWineGlass} className="shape shape--2" />
-                <FontAwesomeIcon icon={faCocktail} className="shape shape--3" />
-                <FontAwesomeIcon icon={faBeer} className="shape shape--4" />
-                <FontAwesomeIcon icon={faCocktail} className="shape shape--5" />
-                <FontAwesomeIcon icon={faWineGlass} className="shape shape--6" />
-                <FontAwesomeIcon icon={faCocktail} className="shape shape--7" />
-                <FontAwesomeIcon icon={faGlassMartini} className="shape shape--8" />
-            </div>
+    {[faGlassMartini, faCocktail, faWineGlass, faBeer].flatMap((icon, index) => [
+        <FontAwesomeIcon key={`${index}-1`} icon={icon} className={`shape shape--${index * 2}`} />,
+        <FontAwesomeIcon key={`${index}-2`} icon={icon} className={`shape shape--${index * 2 + 1}`} />
+    ])}
+</div>
                 
             
 
             <div className="contact__cta">
               <p className="packages__footer">Ready to create your perfect bar experience?</p>
               
-              <Link 
-                to="/" 
-                state={{ openModal: true }} 
+              <span 
+                onClick={handleContactClick}
                 className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black"
-                onClick={scrollToTop}
               >
               <br></br>
                 <p className="orange packages__contact">Contact Us Today!</p>
-              </Link>
+                </span>
             </div>
           </div>
         </div>

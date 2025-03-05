@@ -1,24 +1,24 @@
-import React, { useState, useEffect, useRef} from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useRef} from 'react';
 import drinks from '../assets/drinks.jpg';
 import drinks2 from '../assets/drinks2.jpg';
 import drinks3 from '../assets/drinks3.jpg';
 import moveBackground from '../utils/moveBackground.js';
+import {useModal} from '../utils/modalContext';
 // import { projectImages} from '../utils/images';
-
 // import teddy from '../assets/teddy.PNG';        
-
-
 import '../App.css';
-import {toggleModal, contact} from '../utils/toggleModal.js';
+import { contact } from '../utils/toggleModal.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner, faEnvelope, faTimes, faGlassMartini, faCocktail, faWineGlass, faBeer } from '@fortawesome/free-solid-svg-icons';
 
 
 const Home = () => {
-    const location = useLocation();
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const { isModalOpen, setIsModalOpen } = useModal();
     const modalRef = useRef(null);
+
+    const { toggleModal } = useModal();
+
+
 
     // Handle background movement
     useEffect(() => {
@@ -35,22 +35,16 @@ const Home = () => {
         };
     }, []);
 
-    // Open modal based on URL state or user actions
-    useEffect(() => {
-        if (location.state?.openModal) {
-            toggleModal(setIsModalOpen);  // Open modal if state has openModal flag
-        }
-    }, [location.state]);
-
     // Handle click outside to close the modal
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (
                 modalRef.current && 
-                !modalRef.current.contains(event.target) &&  // Check if click is outside modal
+                !modalRef.current.contains(event.target) &&
+                !document.querySelector('.mail__btn').contains(event.target) &&  // Check if click is outside modal
                 !document.querySelector('.navbar').contains(event.target)  // Check if click is outside navbar
             ) {
-                toggleModal(setIsModalOpen);  // Close modal if clicked outside both modal and navbar
+                toggleModal();  // Close modal if clicked outside both modal and navbar
             }
         };
 
@@ -62,9 +56,11 @@ const Home = () => {
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [isModalOpen]);
-    
+    }, [isModalOpen, toggleModal]);
 
+    const toggleModalHandler = () => {
+        toggleModal();
+    };
     
 
     return (
@@ -81,7 +77,7 @@ const Home = () => {
                                         Elevate your event with our expert <b className="orange">Mobile Bartenders</b>. We craft <i>custom cocktails</i> and provide <i>exceptional service</i> to make your celebration unforgettable.
                                         Let us bring your vision to life!
                                         <br />
-                                        Here's a bit more <b className="orange click" onClick={() => toggleModal(setIsModalOpen)}>about us</b>.
+                                        Here's a bit more <b className="orange click" onClick={toggleModalHandler}>about us</b>.
                                     </p>
                                 </div>
                                 <div className='header__content--right'>
@@ -91,13 +87,19 @@ const Home = () => {
                         </div>
                     </div>
                 </header>
-                <button className="mail__btn click" onClick={() => toggleModal(setIsModalOpen)}>
+                <button 
+                    className="mail__btn click" 
+                    onClick={(e) => {
+                        e.stopPropagation(); // Prevent event from bubbling up
+                        toggleModal();
+                    }}
+>
                     <FontAwesomeIcon icon={faEnvelope} />
                 </button>
                 <a href="#projects" className="scroll">
                     <div className="scroll__icon click"></div>
                 </a>
-                <div className={`modal ${isModalOpen ? 'modal--open' : ''}`} ref={modalRef}>
+                <div className={`modal ${isModalOpen ? 'modal--open' : ''}`} ref={modalRef}  onClick={(e) => e.stopPropagation()}>
                 <div className="modal__left modal__half modal__about" onClick={(e) => e.stopPropagation()}> {/* Prevent event propagation */}
                         <h3 className="modal__title modal__title--about">Here's a bit about us.</h3>
                         <p className="modal__para">
@@ -109,7 +111,7 @@ const Home = () => {
                         </p>
                     </div>
                     <div className="modal__right modal__half modal__contact" onClick={(e) => e.stopPropagation()}> {/* Prevent event propagation */}
-                        <i className="fas fa-times modal__exit click" onClick={() => toggleModal(setIsModalOpen)}>
+                        <i className="fas fa-times modal__exit click" onClick={toggleModal}>
                             <FontAwesomeIcon icon={faTimes} />
                         </i>
                         <h3 className="modal__title modal__title--contact">Let's have a chat!</h3>
@@ -140,16 +142,11 @@ const Home = () => {
             </section>
 
             <div>
-                <FontAwesomeIcon icon={faGlassMartini} className="shape shape--0" />
-                <FontAwesomeIcon icon={faCocktail} className="shape shape--1" />
-                <FontAwesomeIcon icon={faWineGlass} className="shape shape--2" />
-                <FontAwesomeIcon icon={faCocktail} className="shape shape--3" />
-                <FontAwesomeIcon icon={faBeer} className="shape shape--4" />
-                <FontAwesomeIcon icon={faCocktail} className="shape shape--5" />
-                <FontAwesomeIcon icon={faWineGlass} className="shape shape--6" />
-                <FontAwesomeIcon icon={faCocktail} className="shape shape--7" />
-                <FontAwesomeIcon icon={faGlassMartini} className="shape shape--8" />
-            </div>
+    {[faGlassMartini, faCocktail, faWineGlass, faBeer].flatMap((icon, index) => [
+        <FontAwesomeIcon key={`${index}-1`} icon={icon} className={`shape shape--${index * 2}`} />,
+        <FontAwesomeIcon key={`${index}-2`} icon={icon} className={`shape shape--${index * 2 + 1}`} />
+    ])}
+</div>
 
             <section id="projects">
                 <div className="container">
