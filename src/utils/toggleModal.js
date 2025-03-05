@@ -39,7 +39,7 @@ export const contact = (event, setIsModalOpen) => {
 
     // Using EmailJS to send the form
     emailjs
-        .sendForm("service_sd6g1hw", "template_eph0ydf", event.target, "7j7vJcTfHGJ0hv0R4")
+        .sendForm("service_t3znxtz", "template_eph0ydf", event.target, "7j7vJcTfHGJ0hv0R4")
         .then(() => {
             loading.classList.remove("modal__overlay--visible");
             success.classList.add("modal__overlay--visible");
