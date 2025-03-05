@@ -18,8 +18,6 @@ const Home = () => {
 
     const { toggleModal } = useModal();
 
-
-
     // Handle background movement
     useEffect(() => {
         if (typeof moveBackground !== "function") {
@@ -48,14 +46,30 @@ const Home = () => {
             }
         };
 
-        if (isModalOpen) {
-            document.addEventListener("mousedown", handleClickOutside); // Open listener when modal is open
-        }
-
-        // Cleanup listener when modal is closed
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
+        const handleCloseModal = () => {
+            toggleModal();
         };
+
+        if (isModalOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+            
+            // Store the current value of modalRef
+            const currentModalRef = modalRef.current;
+            
+            // Add event listener for custom close event
+            if (currentModalRef) {
+                currentModalRef.addEventListener('closeModal', handleCloseModal);
+            }
+    
+            return () => {
+                document.removeEventListener("mousedown", handleClickOutside);
+                
+                // Use the stored ref for removal
+                if (currentModalRef) {
+                    currentModalRef.removeEventListener('closeModal', handleCloseModal);
+                }
+            };
+        }
     }, [isModalOpen, toggleModal]);
 
     const toggleModalHandler = () => {

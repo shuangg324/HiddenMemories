@@ -45,11 +45,18 @@ export const contact = (event, setIsModalOpen) => {
             success.classList.add("modal__overlay--visible");
 
             setTimeout(() => {
+                const modalContext = document.querySelector('.modal');
+                if (modalContext) {
+                    // Dispatch a custom event to trigger modal close
+                    const event = new Event('closeModal');
+                    modalContext.dispatchEvent(event);
+                }
                 setIsModalOpen(false);
-            }, 1500);
+            }, 3000);
         })
         .catch(() => {
             loading.classList.remove("modal__overlay--visible");
             alert("The email service is temporarily unavailable. Please contact me directly at hiddenmemoriesbar@gmail.com");
         });
 };
+
