@@ -4,6 +4,7 @@ import './App.css';
 import Home from './pages/Home.jsx';
 import Packages from './pages/Packages.jsx';
 import Navbar from './pages/Navbar.jsx';
+import Gallery from './pages/Gallery';
 import { ModalProvider } from './utils/modalContext.js';
 
 
@@ -16,6 +17,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/packages" element={<Packages />} />
+        <Route path="/gallery" element={<Gallery />} /> 
       </Routes>
       </ModalProvider>
       </Router>

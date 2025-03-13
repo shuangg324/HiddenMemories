@@ -6,16 +6,17 @@ import moveBackground from '../utils/moveBackground';
 import { useModal } from '../utils/modalContext';
 
 const Packages = () => {
-  const { toggleModal } = useModal();
+  const { openModal } = useModal();
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleContactClick = () => {
-    toggleModal();
     scrollToTop();
-  };
+    // Use openModal directly - no need for setTimeout anymore
+    openModal();
+};
 
   return (
     <div className="App" onMouseMove={(event) => moveBackground(event)}>

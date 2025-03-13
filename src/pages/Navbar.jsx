@@ -10,7 +10,7 @@ import { faBars, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 function Navbar() {
     const [isDarkMode, setIsDarkMode] = useState(document.body.classList.contains('dark-mode')); // Track dark mode state
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const { toggleModal } = useModal();
+    const { isModalOpen, openModal, closeModal } = useModal();
 
     const toggleContrast = () => {
         document.body.classList.toggle('dark-mode');
@@ -25,8 +25,16 @@ function Navbar() {
         setIsMenuOpen(false);
     };
 
+    
+
     const handleAboutContactClick = () => {
-        toggleModal();
+        // If modal is already open, close it
+        // Otherwise, open it
+        if (isModalOpen) {
+            closeModal();
+        } else {
+            openModal();
+        }
         closeMenu();
         window.scrollTo(0, 0);
     };
@@ -57,9 +65,9 @@ function Navbar() {
                 <li className="nav__link" onClick={handleAboutContactClick}>
                     <Link to="/" state={{ openModal: true }} className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black">About</Link>
                 </li>
-                {/* <li className="nav__link" onClick={closeMenu}>
-                    <a href="#projects" className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black">Events</a>
-                </li> */}
+                <li className="nav__link" onClick={closeMenu}>
+                    <Link to="/gallery" className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black">Gallery</Link>
+                </li>
                 <li className="nav__link" onClick={closeMenu}>
                     <Link to="./packages" className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black">Package</Link>
                 </li>
