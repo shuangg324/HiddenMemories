@@ -983,7 +983,12 @@ nav {
 
 .gallery__grid {
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1rem;
+  gap: 1.5rem;
+}
+
+
+.image-loading-placeholder {
+  height: 200px;
 }
 
 }
@@ -1104,10 +1109,17 @@ nav {
 
  .gallery__grid {
   grid-template-columns: 1fr;
+  gap: 1rem;
+ }
+
+  .load-more__button {
+    padding: 0.5rem 1rem;
+    font-size: 14px;
+  }
 }
 
   
-}
+
 
 @keyframes spin {
   0% {
@@ -1149,4 +1161,60 @@ nav {
 .packages__contact,
 .packages__footer {
   font-size: 24px;
+}
+
+
+/* Additional styles for optimized Gallery component */
+
+.image-loading-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 250px;
+  background-color: rgba(245, 245, 245, 0.3);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.gallery__img.loading {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gallery__img.loaded {
+  opacity: 1;
+}
+
+.load-more {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.load-more__button {
+  padding: 0.75rem 1.5rem;
+  background-color: rgb(112, 64, 38);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 300ms ease;
+}
+
+.load-more__button:hover {
+  background-color: rgba(112, 64, 38, 0.8);
+  transform: scale(1.05);
+}
+
+body.dark-mode .load-more__button {
+  background-color: #fddf7d;
+  color: rgb(112, 64, 38);
+}
+
+body.dark-mode .load-more__button:hover {
+  background-color: rgba(253, 223, 125, 0.8);
 }
