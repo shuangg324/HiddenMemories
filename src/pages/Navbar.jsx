@@ -25,9 +25,7 @@ function Navbar() {
         setIsMenuOpen(false);
     };
 
-    
-
-    const handleAboutContactClick = () => {
+    const handleAboutContactClick = (e) => {
         // If modal is already open, close it
         // Otherwise, open it
         if (isModalOpen) {
@@ -36,53 +34,61 @@ function Navbar() {
             openModal();
         }
         closeMenu();
-        window.scrollTo(0, 0);
+        // Optional: Remove this if you don't want to scroll to top when opening modal
+        // window.scrollTo(0, 0);
     };
 
     return (
-
-            <div className="container navbar__color" onMouseMove={(event) => moveBackground(event)}>
-            
+        <div className="container navbar__color" onMouseMove={(event) => moveBackground(event)}>
             <nav className="navbar" >
-            <FontAwesomeIcon icon={faBars} id="menu__icon" onClick={toggleMenu} />
-            <Link to="/">
-                <figure>
-                    <img id="personal-logo" src={teddy} alt="Logo" onClick={() => window.scrollTo(0, 0)}/>
-                </figure>
-            </Link>
-            <div className="navbar-title" onClick={() => window.scrollTo(0, 0)}>
+                <FontAwesomeIcon icon={faBars} id="menu__icon" onClick={toggleMenu} />
+                <Link to="/">
+                    <figure>
+                        <img id="personal-logo" src={teddy} alt="Logo" onClick={() => window.scrollTo(0, 0)}/>
+                    </figure>
+                </Link>
+                <div className="navbar-title" onClick={() => window.scrollTo(0, 0)}>
                     <Link to="/" className="navbar-title-text">
                         Hidden Memories
                     </Link>
                 </div>
-            <ul className={`nav__link--list ${isMenuOpen ? 'open' : ''}`}>
-                <li className="nav__link" onClick={() => {
-                    closeMenu();
-                    window.scrollTo(0, 0);
-                }} >
-                    <Link to="/" className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black">Home</Link>
-                </li>
-                <li className="nav__link" onClick={handleAboutContactClick}>
-                    <Link to="/" state={{ openModal: true }} className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black">About</Link>
-                </li>
-                <li className="nav__link" onClick={closeMenu}>
-                    <Link to="/gallery" className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black">Gallery</Link>
-                </li>
-                <li className="nav__link" onClick={closeMenu}>
-                    <Link to="./packages" className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black">Package</Link>
-                </li>
-                <li className="nav__link" onClick={handleAboutContactClick}>
-                <Link to="/" state={{ openModal: true }} className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black">Contact</Link>
-                </li>
-                <li className="nav__link" onClick={closeMenu}>
-                    <button id="dark-mode-toggle" onClick={toggleContrast}>
-                        <FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} id="dark-mode-icon" />
-                    </button>
-                </li>
-            </ul>
-        </nav>
-            </div>
-       
+                <ul className={`nav__link--list ${isMenuOpen ? 'open' : ''}`}>
+                    <li className="nav__link" onClick={() => {
+                        closeMenu();
+                        window.scrollTo(0, 0);
+                    }} >
+                        <Link to="/" className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black">Home</Link>
+                    </li>
+                    <li className="nav__link">
+                        {/* Use button styled as a link instead of anchor with empty href */}
+                        <button 
+                           onClick={handleAboutContactClick} 
+                           className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black nav__button">
+                            About
+                        </button>
+                    </li>
+                    <li className="nav__link" onClick={closeMenu}>
+                        <Link to="/gallery" className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black">Gallery</Link>
+                    </li>
+                    <li className="nav__link" onClick={closeMenu}>
+                        <Link to="./packages" className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black">Package</Link>
+                    </li>
+                    <li className="nav__link">
+                        {/* Use button styled as a link instead of anchor with empty href */}
+                        <button 
+                           onClick={handleAboutContactClick} 
+                           className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black nav__button">
+                            Contact
+                        </button>
+                    </li>
+                    <li className="nav__link" onClick={closeMenu}>
+                        <button id="dark-mode-toggle" onClick={toggleContrast}>
+                            <FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} id="dark-mode-icon" />
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     );
 }
 

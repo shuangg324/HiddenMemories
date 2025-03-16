@@ -1,4 +1,4 @@
-import React, { useEffect, useRef} from 'react';
+import React, { useEffect } from 'react';
 import drinks from '../assets/drinks.jpg';
 import drinks2 from '../assets/drinks2.jpg';
 import drinks3 from '../assets/drinks3.jpg';
@@ -7,14 +7,12 @@ import {useModal} from '../utils/modalContext';
 // import { projectImages} from '../utils/images';
 // import teddy from '../assets/teddy.PNG';        
 import '../App.css';
-import { contact } from '../utils/toggleModal.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner, faEnvelope, faTimes, faGlassMartini, faCocktail, faWineGlass, faBeer } from '@fortawesome/free-solid-svg-icons';
+import { faGlassMartini, faCocktail, faWineGlass, faBeer } from '@fortawesome/free-solid-svg-icons';
 
 
 const Home = () => {
-    const { isModalOpen, setIsModalOpen, toggleModal, closeModal } = useModal();
-    const modalRef = useRef(null);
+    const { toggleModal } = useModal();
 
     // Handle background movement
     useEffect(() => {
@@ -31,48 +29,6 @@ const Home = () => {
         };
     }, []);
 
-    // Handle click outside to close the modal
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (
-                modalRef.current && 
-                !modalRef.current.contains(event.target) &&
-                !document.querySelector('.mail__btn').contains(event.target) &&  // Check if click is outside modal
-                !document.querySelector('.navbar').contains(event.target)  // Check if click is outside navbar
-            ) {
-                toggleModal();  // Close modal if clicked outside both modal and navbar
-            }
-        };
-
-        const handleCloseModal = () => {
-            toggleModal();
-        };
-
-        if (isModalOpen) {
-            document.addEventListener("mousedown", handleClickOutside);
-            
-            // Store the current value of modalRef
-            const currentModalRef = modalRef.current;
-            
-            // Add event listener for custom close event
-            if (currentModalRef) {
-                currentModalRef.addEventListener('closeModal', handleCloseModal);
-            }
-    
-            return () => {
-                document.removeEventListener("mousedown", handleClickOutside);
-                
-                // Use the stored ref for removal
-                if (currentModalRef) {
-                    currentModalRef.removeEventListener('closeModal', handleCloseModal);
-                }
-            };
-        }
-    }, [isModalOpen, toggleModal]);
-
-    const toggleModalHandler = () => {
-        toggleModal();
-    };
     
 
     return (
@@ -89,7 +45,7 @@ const Home = () => {
                                         Elevate your event with our expert <b className="orange">Mobile Bartenders</b>. We craft <i>custom cocktails</i> and provide <i>exceptional service</i> to make your celebration unforgettable.
                                         Let us bring your vision to life!
                                         <br />
-                                        Here's a bit more <b className="orange click" onClick={toggleModalHandler}>about us</b>.
+                                        Here's a bit more <b className="orange click" onClick={toggleModal}>about us</b>.
                                     </p>
                                 </div>
                                 <div className='header__content--right'>
@@ -99,58 +55,10 @@ const Home = () => {
                         </div>
                     </div>
                 </header>
-                <button 
-                    className="mail__btn click" 
-                    onClick={(e) => {
-                        e.stopPropagation(); // Prevent event from bubbling up
-                        toggleModal();
-                    }}
->
-                    <FontAwesomeIcon icon={faEnvelope} />
-                </button>
                 <a href="#projects" className="scroll">
                     <div className="scroll__icon click"></div>
                 </a>
-                <div className={`modal ${isModalOpen ? 'modal--open' : ''}`} ref={modalRef} onClick={(e) => e.stopPropagation()}>
-    <div className="modal__left modal__half modal__about" onClick={(e) => e.stopPropagation()}>
-        <h3 className="modal__title modal__title--about">Here's a bit about us.</h3>
-        <p className="modal__para">
-            We are experienced <b className="dark-mode-white orange">Bartenders</b> with over 5+ years working in high-end restaurants and bars.
-            Whether you're planning an <b className="dark-mode-white orange">Elegant Soirée</b> or a <b className="dark-mode-white orange">Casual Celebration</b>,
-            our mobile bar service is designed to elevate your event with custom-crafted cocktails, exceptional service, and a personalized touch.
-            <br />
-            Let us turn your gathering into an unforgettable experience—<b className="dark-mode-white orange">Book Us</b> today!
-        </p>
-    </div>
-    <div className="modal__right modal__half modal__contact" onClick={(e) => e.stopPropagation()}>
-        <i className="fas fa-times modal__exit click" onClick={closeModal}>
-            <FontAwesomeIcon icon={faTimes} />
-        </i>
-        <h3 className="modal__title modal__title--contact">Let's have a chat!</h3>
-        <h3 className="modal__sub-title modal__sub-title--contact">We'd love to be part of your next event!</h3>
-        <form id="contact__form" onSubmit={(event) => contact(event, setIsModalOpen)}>
-            <div className="form__item">
-                <label className="form__item--label" htmlFor="user_name">Name</label>
-                <input className="input" name="user_name" type="text" required />
-            </div>
-            <div className="form__item">
-                <label className="form__item--label" htmlFor="user_email">Email</label>
-                <input className="input" name="user_email" type="email" required />
-            </div>
-            <div className="form__item">
-                <label className="form__item--label" htmlFor="message">Message</label>
-                <textarea className="input" name="message" required></textarea>
-            </div>
-            <button id="contact__submit" className="form__submit">Send it my way</button>
-        </form>
-        <div className="modal__overlay modal__overlay--loading">
-            <FontAwesomeIcon icon={faSpinner} />
-        </div>
-        <div className="modal__overlay modal__overlay--success">
-            Thanks for the message! Looking forward to speaking to you soon.
-        </div>
-    </div>
-</div>
+               
             </section>
 
             <div>
