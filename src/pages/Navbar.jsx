@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import '../App.css';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import teddy from '../assets/teddy.PNG';
+import Logo from '../assets/Logo.png';
 import moveBackground from '../utils/moveBackground.js';
 import { useModal } from '../utils/modalContext';
 import { faBars, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 
 function Navbar() {
-    const [isDarkMode, setIsDarkMode] = useState(document.body.classList.contains('dark-mode')); // Track dark mode state
+    const [isDarkMode, setIsDarkMode] = useState(document.body.classList.contains('dark-mode'));
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { isModalOpen, openModal, closeModal } = useModal();
 
@@ -26,41 +26,39 @@ function Navbar() {
     };
 
     const handleAboutContactClick = (e) => {
-        // If modal is already open, close it
-        // Otherwise, open it
         if (isModalOpen) {
             closeModal();
         } else {
             openModal();
         }
         closeMenu();
-        // Optional: Remove this if you don't want to scroll to top when opening modal
-        // window.scrollTo(0, 0);
     };
 
     return (
         <div className="container navbar__color" onMouseMove={(event) => moveBackground(event)}>
-            <nav className="navbar" >
+            <nav className="navbar">
                 <FontAwesomeIcon icon={faBars} id="menu__icon" onClick={toggleMenu} />
-                <Link to="/">
-                    <figure>
-                        <img id="personal-logo" src={teddy} alt="Logo" onClick={() => window.scrollTo(0, 0)}/>
-                    </figure>
-                </Link>
-                <div className="navbar-title" onClick={() => window.scrollTo(0, 0)}>
-                    <Link to="/" className="navbar-title-text">
-                        Hidden Memories
+                
+                {/* Empty space where the logo was */}
+                <div></div>
+                
+                {/* Center the logo by putting it in the navbar-title div */}
+                <div className="navbar-title">
+                    <Link to="/">
+                        <figure>
+                            <img id="personal-logo" src={Logo} alt="Logo" onClick={() => window.scrollTo(0, 0)}/>
+                        </figure>
                     </Link>
                 </div>
+                
                 <ul className={`nav__link--list ${isMenuOpen ? 'open' : ''}`}>
                     <li className="nav__link" onClick={() => {
                         closeMenu();
                         window.scrollTo(0, 0);
-                    }} >
+                    }}>
                         <Link to="/" className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black">Home</Link>
                     </li>
                     <li className="nav__link">
-                        {/* Use button styled as a link instead of anchor with empty href */}
                         <button 
                            onClick={handleAboutContactClick} 
                            className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black nav__button">
@@ -74,7 +72,6 @@ function Navbar() {
                         <Link to="./packages" className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black">Package</Link>
                     </li>
                     <li className="nav__link">
-                        {/* Use button styled as a link instead of anchor with empty href */}
                         <button 
                            onClick={handleAboutContactClick} 
                            className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black nav__button">

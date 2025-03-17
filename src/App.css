@@ -230,7 +230,7 @@ nav,
   background-color: #242424;
 }
 .dark-theme #personal-logo {
-  filter: none;
+  filter: invert(1);
 }
 .dark-theme .scroll__icon {
   border-color: white;
@@ -386,14 +386,9 @@ nav {
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
+  
 }
 
-.navbar-title-text {
-  font-size: 24px;
-  font-weight: bold;
-  color: rgb(112,64,38); /* Or any color depending on your dark mode */
-  text-decoration: none;
-}
 
 .footer__color {
   background-color: beige;
@@ -407,9 +402,11 @@ nav {
 }
 
 #personal-logo {
-  width: 100px;
-  height: 100px;
+  width: 350px;
+  height: 350px;
 }
+
+
 
 .nav__link--list {
   display: flex;
@@ -924,6 +921,13 @@ footer {
 .footer__anchor:hover .footer__logo--popper {
   transform: translateX(60px);
   opacity: 1;
+}
+
+/* Laptops */
+@media (max-width: 1496px) {
+  .modal {
+    top: 450px;
+  }
 }
 
 /* Small phones, tablets, large smart phones */
