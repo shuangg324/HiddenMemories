@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
-import drinks from '../assets/drinks.jpg';
-import drinks2 from '../assets/drinks2.jpg';
-import drinks3 from '../assets/drinks3.jpg';
+import drinks from '../assets/drink_stations.jpg';
+import drinks2 from '../assets/glasses.jpg';
+import drinks3 from '../assets/margs.jpg';
 import moveBackground from '../utils/moveBackground.js';
-import {useModal} from '../utils/modalContext';
-// import { projectImages} from '../utils/images';
-// import teddy from '../assets/teddy.PNG';        
+import {useModal} from '../utils/modalContext';      
 import '../App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGlassMartini, faCocktail, faWineGlass, faBeer } from '@fortawesome/free-solid-svg-icons';
+import { faGlassMartini, faCocktail, faWineGlass, faChampagneGlasses } from '@fortawesome/free-solid-svg-icons';
+
 
 
 const Home = () => {
@@ -42,7 +41,7 @@ const Home = () => {
                                     <h1 className="big__title orange">Hidden</h1>
                                     <h1 className="title dark-mode-title">Memories</h1>
                                     <p className="header__para dark-mode-white">
-                                        Elevate your event with our expert <b className="orange">Mobile Bartenders</b>. We craft <i>custom cocktails</i> and provide <i>exceptional service</i> to make your celebration unforgettable.
+                                        Elevate your event with our expert <i className="orange">Mobile Bartenders</i>. We craft <i className="orange">custom cocktails</i> and provide <i className="orange">exceptional service</i> to make your celebration unforgettable.
                                         Let us bring your vision to life!
                                         <br />
                                         Here's a bit more <b className="orange click" onClick={toggleModal}>about us</b>.
@@ -62,7 +61,7 @@ const Home = () => {
             </section>
 
             <div>
-    {[faGlassMartini, faCocktail, faWineGlass, faBeer].flatMap((icon, index) => [
+    {[faGlassMartini, faCocktail, faWineGlass, faChampagneGlasses].flatMap((icon, index) => [
         <FontAwesomeIcon key={`${index}-1`} icon={icon} className={`shape shape--${index * 2}`} />,
         <FontAwesomeIcon key={`${index}-2`} icon={icon} className={`shape shape--${index * 2 + 1}`} />
     ])}
