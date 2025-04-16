@@ -55,6 +55,8 @@ const Modal = () => {
                     our mobile bar service is designed to elevate your event with custom-crafted cocktails, exceptional service, and a personalized touch.
                     <br />
                     Let us turn your gathering into an unforgettable experience—<b className="dark-mode-white orange">Book Us</b> today!
+                    <br />
+                    Servicing LA County and Surrounding Areas.
                 </p>
             </div>
             <div className="modal__right modal__half modal__contact" onClick={(e) => e.stopPropagation()}>

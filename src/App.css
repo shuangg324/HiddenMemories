@@ -13,15 +13,14 @@ html, section, nav, .container{
   transition: all 300ms ease;
 }
 
-
-
+/* Main color scheme */
 body.dark-mode #landing-page,
 body.dark-mode .container {
-  background-color: #333; /* Dark gray background for landing page in dark mode */
+  background-color: #1c6142; /* Dark emerald background for dark mode */
 }
 
 body.dark-mode .title {
-  color: #fddf7d; /* Make the word "Mobile" yellow in dark mode */
+  color: #d4af37; /* Gold title in dark mode */
 }
 
 body.dark-mode .navbar-title-text{
@@ -29,38 +28,38 @@ body.dark-mode .navbar-title-text{
 }
 
 body.dark-mode nav {
-  background-color:#494021;
+  background-color: #0b5c38; /* Dark emerald nav in dark mode */
 }
 
 body.dark-mode .footer__color {
-  background-color: #494021;
+  background-color: #0b5c38; /* Dark emerald footer in dark mode */
 }
 
 body.dark-mode .dark-mode-title {
-  color: white !important; /* Make the word "Bar" stay white in dark mode */
+  color: white !important; /* White title in dark mode */
 }
 
 body.dark-mode .orange {
-  color: #fddf7d; /* Make the phrase "Mobile Bartenders" yellow in dark mode */
+  color: #d4af37; /* Gold text in dark mode */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 body.dark-mode .modal__left {
-  background-color: #fddf7d ;
-  color: rgb(112,64,38);;
-  /* Make the left side of the modal yellow in dark mode */
+  background-color: #0f7c4c; /* Medium emerald modal in dark mode */
+  color: #d4af37; /* Gold text in dark mode */
 }
 
-body.dark-mode .dark-mode-white  {
-  color:white;
+body.dark-mode .dark-mode-white {
+  color: white;
 }
 
 body.dark-mode .link__hover-effect:after {
-  background-color: white; /* Make the link hover effect white in dark mode */
+  background-color: #d4af37; /* Gold hover effect in dark mode */
 }
 
 button#dark-mode-toggle { 
   background-color: transparent;
-  color: rgb(112,64,38);
+  color: #b87333; /* Copper color for dark mode toggle */
   border: none;
   cursor: pointer;
   z-index: 1000;
@@ -68,7 +67,7 @@ button#dark-mode-toggle {
 }
 
 body.dark-mode #dark-mode-toggle {
-  color: white;
+  color: #d4af37; /* Gold color for dark mode toggle in dark mode */
 }
 
 button#dark-mode-toggle i {
@@ -78,7 +77,6 @@ button#dark-mode-toggle i {
 button#dark-mode-toggle:hover {
   background-color: transparent;
 }
-
 
 p {
   line-height: 1.5;
@@ -95,7 +93,7 @@ button {
 }
 
 section {
-  background-color: rgb(245, 245, 245);
+  background-color: #f5f5f5;
 }
 
 input, textarea {
@@ -103,7 +101,7 @@ input, textarea {
   background-color: #242424;
   color: #fff;
   outline: none;
-  border: 3px solid #c0c4cc;
+  border: 3px solid #b87333; /* Copper border */
   border-top: none;
   border-left: none;
   border-right: none;
@@ -123,17 +121,17 @@ label {
 }
 
 input:hover, textarea:hover {
-  border-color: #dcdfe6;
+  border-color: #d4af37; /* Gold border on hover */
 }
 
 input:focus, textarea:focus {
-  border-color: #f06449;
+  border-color: #d4af37; /* Gold border on focus */
 }
 
 .container {
   padding: 50px 0px 50px 0px;
   width: 100%;
-  background-color: #fddf7d
+  background-color: #f8f4ba; /* Light emerald background */
 }
 
 .row {
@@ -163,6 +161,7 @@ input:focus, textarea:focus {
   text-align: left;
   line-height: 1;
   font-family: 'Moon Dance' !important; 
+  color: #b87333; /* Copper color for big title */
 }
 
 .title {
@@ -170,12 +169,12 @@ input:focus, textarea:focus {
   margin-bottom: 12px;
   text-align: left;
   line-height: 1;
-  color: rgb(112,64,38);
+  color: #b87333; /* Copper color for title */
   font-family: 'Moon Dance' !important; 
 }
 
 .orange {
-  color: rgb(255, 255, 255);
+  color: white;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
 }
 
@@ -198,7 +197,7 @@ input:focus, textarea:focus {
 }
 
 .link__hover-effect--black:after {
-  background-color: rgb(112,64,38);
+  background-color: #b87333; /* Copper color for hover effect */
 }
 
 .link__hover-effect:hover:after {
@@ -212,10 +211,6 @@ nav,
   opacity: 1;
   visibility: visible;
 }
-
-
-
-
 
 .dark-theme .title,
 .dark-theme .section__title,
@@ -244,12 +239,10 @@ nav,
   color: #242424;
 }
 /* 
-
   LANDING PAGE 
-  
 */
 #landing-page {
-  background-color: #fddf7d;
+  background-color: #f8f4ba; /* Light emerald background */
   min-height: 100vh;
   padding-top: 100px;
 }
@@ -272,9 +265,8 @@ nav,
   font-size: 24px;
   line-height: 2;
   max-width: 450px;
-  color: rgb(112,64,38);
+  color: #b87333; /* Copper color for header paragraph */
 }
-
 
 .social__list {
   margin-top: 16px;
@@ -282,7 +274,7 @@ nav,
 }
 
 .social__link {
-  background-color: #f06449;
+  background-color: #b87333; /* Copper background for social links */
   color: white;
   padding: 6px;
   width: 32px;
@@ -301,13 +293,13 @@ nav,
   font-size: 32px;
   border-radius: 50%;
   border: none;
-  background-color: #242424;
+  background-color: #b87333; /* Copper background for mail button */
   color: white;
   position: fixed;
   bottom: 32px;
   right: 40px;
   z-index: 100;
-  box-shadow: 0 12px 30px 0 rgb(0, 0, 0, 0.28);
+  box-shadow: 0 12px 30px 0 rgba(0, 0, 0, 0.28);
 }
 
 .scroll {
@@ -320,7 +312,7 @@ nav,
 .scroll__icon {
   width: 20px;
   height: 30px;
-  border: 2px solid #242424;
+  border: 2px solid #b87333; /* Copper border for scroll icon */
   border-radius: 24px;
   display: flex;
   align-items: center;
@@ -331,7 +323,7 @@ nav,
   content: "";
   width: 4px;
   height: 6px;
-  background-color: #242424;
+  background-color: #b87333; /* Copper color for scroll icon */
   border-radius: 2px;
   animation: scroll 1000ms infinite alternate-reverse;
 }
@@ -347,9 +339,7 @@ nav,
 }
 
 /* 
-
   NAVIGATION 
-  
 */
 
 nav {
@@ -360,10 +350,10 @@ nav {
   margin: 0 auto;
   padding: 0 20px;
   height: 100px;
-  position:fixed;
+  position: fixed;
   top: 0;
   z-index: 1000;
-  background-color: beige;
+  background-color: #0b5839; /* Light emerald background for navigation */
 }
 
 .nav__button {
@@ -386,27 +376,20 @@ nav {
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
-  
 }
-
 
 .footer__color {
-  background-color: beige;
+  background-color: #14a76c; /* Light emerald background for footer */
 }
 
-
-
-
 #menu__icon {
-  display:none;
+  display: none;
 }
 
 #personal-logo {
   width: 350px;
   height: 350px;
 }
-
-
 
 .nav__link--list {
   display: flex;
@@ -419,7 +402,7 @@ nav {
 
 .nav__link--anchor {
   font-size: 16px;
-  color: rgb(112,64,38);
+  color: #b87333; /* Copper color for nav links */
   font-weight: 700;
 }
 
@@ -433,7 +416,6 @@ nav {
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
   margin: 2rem 0;
-
 }
 
 .gallery__item {
@@ -476,7 +458,7 @@ nav {
   left: 0;
   width: 100%;
   padding: 1rem;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+  background: linear-gradient(transparent, rgba(11, 92, 56, 0.7)); /* Emerald gradient overlay */
   color: white;
   opacity: 0;
   transition: opacity 300ms ease;
@@ -496,6 +478,7 @@ nav {
   max-width: 800px;
   margin: 0 auto;
   font-size: 1.2rem;
+  color: #b87333; /* Copper color for gallery header and footer */
 }
 
 .gallery__contact {
@@ -503,14 +486,11 @@ nav {
   font-size: 1.5rem;
   cursor: pointer;
   transition: color 300ms ease;
-  
-  
+  color: #b87333; /* Copper color for gallery contact */
 }
 
 /* 
-
   MODAL 
-  
 */
 .modal {
   position: absolute;
@@ -529,7 +509,7 @@ nav {
 }
 .modal--open .modal{
   z-index: 60;
-  box-shadow: 0 20px 80px 0 rgb(0, 0, 0, 0.55);
+  box-shadow: 0 20px 80px 0 rgba(0, 0, 0, 0.55);
   visibility: visible;
 }
 .modal__half {
@@ -549,7 +529,7 @@ nav {
 }
 
 .modal__about {
-  background-color: #fddf7d;
+  background-color: #14a76c; /* Light emerald background for modal about */
   transform: translateX(-110%);
 }
 
@@ -590,14 +570,14 @@ nav {
 
 .modal__contact {
   transform: translateX(110%);
-  background-color: #242424;
+  background-color: #0b5c38; /* Dark emerald background for modal contact */
   color: white;
 }
 
 .modal__title {
   justify-content: center;
   font-size: 26px;
-  color: rgb(112,64,38);
+  color: #b87333; /* Copper color for modal title */
   margin-bottom: 12px;
 }
 
@@ -609,12 +589,13 @@ nav {
 .modal__sub-title {
   margin: 12px 0 24px 0;
   font-size: 14px;
+  color: #b87333; /* Copper color for modal subtitle */
 }
 
 .modal__para {
   margin-bottom: 12px;
   line-height: 1.75;
-  color: rgb(112,64,38);
+  color: #b87333; /* Copper color for modal paragraph */
 }
 
 .form__item {
@@ -622,8 +603,8 @@ nav {
 }
 
 .form__submit {
-  background-color: #f06449;
-  border: 2px solid #f06449;
+  background-color: #b87333; /* Copper background for form submit button */
+  border: 2px solid #b87333; /* Copper border for form submit button */
   color: white;
   font-weight: 700;
   width: 100%;
@@ -634,13 +615,14 @@ nav {
 }
 
 .form__submit:hover {
-  border-color: #fff;
+  border-color: #d4af37; /* Gold border on hover */
   background-color: transparent;
+  color: #d4af37; /* Gold text on hover */
 }
 
 .form__submit:active {
-  border-color: #f06449;
-  color: #f06449;
+  border-color: #d4af37; /* Gold border when active */
+  color: #d4af37; /* Gold text when active */
 }
 
 .modal__overlay {
@@ -656,12 +638,12 @@ nav {
 }
 
 .modal__overlay--loading {
-  background-color: #242424;
+  background-color: #0b5c38; /* Dark emerald background for loading overlay */
   font-size: 80px;
 }
 
 .modal__overlay--success {
-  background-color: #9dc183;
+  background-color: #0f7c4c; /* Medium emerald background for success overlay */
   font-size: 40px;
   font-weight: 700;
   text-align: center;
@@ -696,16 +678,14 @@ nav {
   z-index: 100;
 }
 /* 
-
   PROJECTS 
-  
 */
 
 .section__title {
   text-align: center;
   font-size: 48px;
   margin-bottom: 60px;
-  color: rgb(112,64,38);
+  color: #b87333; /* Copper color for section title */
 }
 
 .project {
@@ -714,15 +694,15 @@ nav {
 }
 
 .project__img {
-  width:100%;
-  display:block;
+  width: 100%;
+  display: block;
   transition: all 600ms ease;
 }
 
 .project__wrapper {
   position: relative;
   border-radius: 20px;
-  box-shadow: 0 10px 30px 0 rgb(0, 0, 0, 0.7);
+  box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.7);
   overflow: hidden;
   padding: 0;
   margin: 0;
@@ -760,7 +740,7 @@ nav {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #1c1d25;
+  background-color: #0b5c38; /* Dark emerald background for project wrapper */
   opacity: 0; 
   transition: all 450ms ease;
   visibility: hidden;
@@ -785,14 +765,12 @@ nav {
 }
 
 /* 
-
   FOOTER 
-  
 */
 
 footer {
   position: relative;
-  background-color: #fddf7d;
+  background-color: #14a76c; /* Light emerald background for footer */
   display: flex;
   padding: 0;
 }
@@ -817,89 +795,68 @@ footer {
 
 .footer__social--link,
 .footer__copyright {
-  color: rgb(112,64,38);
+  color: #b87333; /* Copper color for footer links and copyright */
 }
 
 /* 
-
   SHAPES
-
-  shapes on the first row 
-  height = 15vh
-  
-  shapes on the second row 
-  height = 50vh
-  
-  shapes on the third row 
-  height = 80vh
-
-  shapes on the first column
-  width = 5vw
-  
-  shapes on the second column
-  width = 50vw
-
-  shapes on the third column
-  width = 80vw
-
 */
 .shape {
   position: fixed;
   z-index: 0;
-  
 }
 .shape--0 {
   top: 20vh;
   left: 1vw;
-  color: #ff1493;
+  color: #d4af37; /* Gold color for shape 0 */
   font-size: 24px;
 }
 .shape--1 {
   top: 15vh;
   left: 50vw;
-  color: #f06449;
+  color: #b87333; /* Copper color for shape 1 */
   font-size: 24px;
 }
 .shape--2 {
   top: 15vh;
   left: 80vw;
-  color: #1e90ff;
+  color: #0b5c38; /* Dark emerald color for shape 2 */
   font-size: 24px;
 }
 .shape--3 {
   top: 50vh;
   left: 5vw;
-  color: #f06449;
+  color: #b87333; /* Copper color for shape 3 */
   font-size: 24px;
 }
 .shape--4 {
   top: 50vh;
   left: 50vw;
-  color: #8a2be2;
+  color: #0f7c4c; /* Medium emerald color for shape 4 */
   font-size: 24px;
 }
 .shape--5 {
   top: 50vh;
   left: 80vw;
-  color: #f06449;
+  color: #b87333; /* Copper color for shape 5 */
   font-size: 24px;
 }
 .shape--6 {
   top: 80vh;
   left: 5vw;
-  color: #1e90ff;
+  color: #0b5c38; /* Dark emerald color for shape 6 */
   font-size: 24px;
 }
 .shape--7 {
   top: 80vh;
   left: 50vw;
-  color: #f06449;
+  color: #b87333; /* Copper color for shape 7 */
   font-size: 24px;
 }
 .shape--8 {
   top: 80vh;
   left: 80vw;
-  color: #ff1493;
+  color: #d4af37; /* Gold color for shape 8 */
   font-size: 24px;
 }
 
@@ -953,7 +910,7 @@ footer {
   }
 
   .shape {
-    display:none;
+    display: none;
   }
 
   .nav__link:first-child {
@@ -964,7 +921,7 @@ footer {
     display: none;
     flex-direction: column;
     align-items: center;
-    background-color: #333;
+    background-color: #0b5c38; /* Dark emerald background for nav link list */
     position: absolute;
     top: 0;
     width: 100%;
@@ -976,40 +933,38 @@ footer {
     position: fixed;
   }
   
- .nav__link {
+  .nav__link {
     margin: 12px 0;
- }
+  }
 
- #menu__icon {
-  display: block;
-  font-size: 32px;
-  color: rgb(112,64,38);
-  position: fixed;
-  top: 10px;
-  right: 20px;
-  cursor: pointer;
-  z-index: 2;
-}
+  #menu__icon {
+    display: block;
+    font-size: 32px;
+    color: #b87333; /* Copper color for menu icon */
+    position: fixed;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+    z-index: 2;
+  }
 
-nav {
-  justify-content: center;
-  width:100%;
-}
+  nav {
+    justify-content: center;
+    width: 100%;
+  }
 
-.navbar-title{
-  display: none;
-}
+  .navbar-title {
+    display: none;
+  }
 
-.gallery__grid {
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1.5rem;
-}
+  .gallery__grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
 
-
-.image-loading-placeholder {
-  height: 200px;
-}
-
+  .image-loading-placeholder {
+    height: 200px;
+  }
 }
 
 /* Small phones */
@@ -1030,7 +985,7 @@ nav {
     display: none;
     flex-direction: column;
     align-items: center;
-    background-color: #333;
+    background-color: #0b5c38; /* Dark emerald background for nav link list */
     position: absolute;
     top: 0;
     width: 100%;
@@ -1042,25 +997,25 @@ nav {
     position: fixed;
   }
   
- .nav__link {
+  .nav__link {
     margin: 12px 0;
- }
+  }
 
- #menu__icon {
-  display: block;
-  font-size: 32px;
-  color: rgb(112,64,38);
-  position: fixed;
-  top: 10px;
-  right: 20px;
-  cursor: pointer;
-  z-index: 2;
-}
+  #menu__icon {
+    display: block;
+    font-size: 32px;
+    color: #b87333; /* Copper color for menu icon */
+    position: fixed;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+    z-index: 2;
+  }
 
-nav {
-  justify-content: center;
-  width:100%;
-}
+  nav {
+    justify-content: center;
+    width: 100%;
+  }
 
   .project__description--para {
     display: none;
@@ -1083,7 +1038,7 @@ nav {
   }
 
   .header__content {
-    display:block;
+    display: block;
   }
 
   .big__title, .title {
@@ -1096,7 +1051,7 @@ nav {
   }
 
   .header__content--right {
-    width:100%;
+    width: 100%;
     text-align: center;
   }
   .header__img {
@@ -1112,33 +1067,24 @@ nav {
     min-height: 80vh; /* Adjust this value as needed */
   }
 
-  
+  .navbar-title {
+    display: none;
+  }
 
+  .footer__color {
+    background-color: #14a76c; /* Light emerald background for footer */
+  }
 
-
-.navbar-title{
-  display: none;
-}
-
-
-
- .footer__color {
-  background-color: beige;
- }
-
- .gallery__grid {
-  grid-template-columns: 1fr;
-  gap: 1rem;
- }
+  .gallery__grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
 
   .load-more__button {
     padding: 0.5rem 1rem;
     font-size: 14px;
   }
 }
-
-  
-
 
 @keyframes spin {
   0% {
@@ -1149,7 +1095,6 @@ nav {
   }
 }
 
-
 /* PACKAGES TAB */
 
 .packages__header {
@@ -1157,17 +1102,19 @@ nav {
   justify-content: center;
   margin-bottom: 24px;
   font-size: 24px;
+  color: #b87333; /* Copper color for packages header */
 }
 
 .package__items {
-    list-style-type: disc;
-    padding-left: 20px;
+  list-style-type: disc;
+  padding-left: 20px;
 }
 
 .package__title {
-    text-decoration: underline;
-    padding-top: 12px;
-    padding-bottom: 8px;
+  text-decoration: underline;
+  padding-top: 12px;
+  padding-bottom: 8px;
+  color: #b87333; /* Copper color for package title */
 }
 
 .contact__cta {
@@ -1181,8 +1128,8 @@ nav {
 .packages__footer {
   font-size: 24px;
   cursor: pointer;
+  color: #b87333; /* Copper color for packages contact and footer */
 }
-
 
 /* Additional styles for optimized Gallery component */
 
@@ -1191,7 +1138,7 @@ nav {
   justify-content: center;
   align-items: center;
   height: 250px;
-  background-color: rgba(245, 245, 245, 0.3);
+  background-color: rgba(20, 167, 108, 0.3); /* Light emerald background with opacity */
   position: absolute;
   top: 0;
   left: 0;
@@ -1216,7 +1163,7 @@ nav {
 
 .load-more__button {
   padding: 0.75rem 1.5rem;
-  background-color: rgb(112, 64, 38);
+  background-color: #b87333; /* Copper background for load more button */
   color: white;
   border: none;
   border-radius: 4px;
@@ -1226,15 +1173,15 @@ nav {
 }
 
 .load-more__button:hover {
-  background-color: rgba(112, 64, 38, 0.8);
+  background-color: rgba(184, 115, 51, 0.8); /* Copper with opacity for hover */
   transform: scale(1.05);
 }
 
 body.dark-mode .load-more__button {
-  background-color: #fddf7d;
-  color: rgb(112, 64, 38);
+  background-color: #d4af37; /* Gold background for load more button in dark mode */
+  color: #0b5c38; /* Dark emerald text for load more button in dark mode */
 }
 
 body.dark-mode .load-more__button:hover {
-  background-color: rgba(253, 223, 125, 0.8);
+  background-color: rgba(212, 175, 55, 0.8); /* Gold with opacity for hover in dark mode */
 }
