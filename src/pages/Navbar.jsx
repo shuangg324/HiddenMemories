@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../App.css';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Logo from '../assets/Logo.png';
+//import Logo from '../assets/Logo.png';
 import moveBackground from '../utils/moveBackground.js';
 import { useModal } from '../utils/modalContext';
 import { faBars, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
@@ -43,13 +43,13 @@ function Navbar() {
                 <div></div>
                 
                 {/* Center the logo by putting it in the navbar-title div */}
-                <div className="navbar-title">
+                {/* <div className="navbar-title">
                     <Link to="/">
                         <figure>
                             <img id="personal-logo" src={Logo} alt="Logo" onClick={() => window.scrollTo(0, 0)}/>
                         </figure>
                     </Link>
-                </div>
+                </div> */}
                 
                 <ul className={`nav__link--list ${isMenuOpen ? 'open' : ''}`}>
                     <li className="nav__link" onClick={() => {
@@ -78,11 +78,11 @@ function Navbar() {
                             Contact
                         </button>
                     </li>
-                    <li className="nav__link" onClick={closeMenu}>
+                    {/* <li className="nav__link" onClick={closeMenu}>
                         <button id="dark-mode-toggle" onClick={toggleContrast}>
                             <FontAwesomeIcon icon={isDarkMode ? faSun : faMoon} id="dark-mode-icon" />
                         </button>
-                    </li>
+                    </li> */}
                 </ul>
             </nav>
         </div>

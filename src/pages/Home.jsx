@@ -38,17 +38,15 @@ const Home = () => {
                         <div className="row">
                             <div className="header__content">
                                 <div className="header__content--left">
-                                    <h1 className="big__title orange">Hidden</h1>
-                                    <h1 className="title dark-mode-title">Memories</h1>
+                                    <h1 className="big__title">Hidden Memories</h1>
+                                    {/* <h1 className="title dark-mode-title">Memories</h1> */}
                                     <p className="header__para dark-mode-white">
-                                        Elevate your event with our expert <i className="orange">Mobile Bartenders</i>. We craft <i className="orange">custom cocktails</i> and provide <i className="orange">exceptional service</i> to make your celebration unforgettable.
+                                        Elevate your event with our expert Mobile Bartenders. We craft custom cocktails and provide exceptional service to make your celebration unforgettable.
                                         Let us bring your vision to life!
                                         <br />
-                                        Here's a bit more <b className="orange click" onClick={toggleModal}>about us</b>.
+                                        <br />
+                                        Here's a bit more <b className="italic header__para link__hover-effect link__hover-effect--black click" onClick={toggleModal}>about us</b>.
                                     </p>
-                                </div>
-                                <div className='header__content--right'>
-                                    {/* <figure><img className="header__img" src={teddy} alt="teddy" /></figure> */}
                                 </div>
                             </div>
                         </div>
@@ -61,17 +59,32 @@ const Home = () => {
             </section>
 
             <div>
-    {[faGlassMartini, faCocktail, faWineGlass, faChampagneGlasses].flatMap((icon, index) => [
-        <FontAwesomeIcon key={`${index}-1`} icon={icon} className={`shape shape--${index * 2}`} />,
-        <FontAwesomeIcon key={`${index}-2`} icon={icon} className={`shape shape--${index * 2 + 1}`} />
-    ])}
+            {(() => {
+  // Generate all icons first
+  const allIcons = [faGlassMartini, faCocktail, faWineGlass, faChampagneGlasses];
+  
+  // Create the shapes array manually to have more control
+  const shapes = [
+    <FontAwesomeIcon key="0" icon={allIcons[0]} className="shape shape--0" />,
+    <FontAwesomeIcon key="1" icon={allIcons[0]} className="shape shape--1" />,
+    <FontAwesomeIcon key="2" icon={allIcons[1]} className="shape shape--2" />,
+    <FontAwesomeIcon key="3" icon={allIcons[1]} className="shape shape--3" />,
+    <FontAwesomeIcon key="4" icon={allIcons[3]} className="shape shape--4" />,
+    <FontAwesomeIcon key="5" icon={allIcons[2]} className="shape shape--5" />,
+    <FontAwesomeIcon key="6" icon={allIcons[3]} className="shape shape--6" />,
+    <FontAwesomeIcon key="7" icon={allIcons[2]} className="shape shape--7" />,
+    <FontAwesomeIcon key="8" icon={faGlassMartini} className="shape shape--8" />
+  ];
+  
+  return shapes;
+})()}
 </div>
 
             <section id="projects">
                 <div className="container">
                     <div className="row">
                         <h1 className="section__title dark-mode-white">
-                            Featured <span className="orange">Events</span>
+                            Featured Events
                         </h1>
                         <ul className="project__list">
                             <li className="project">

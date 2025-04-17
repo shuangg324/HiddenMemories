@@ -100,7 +100,7 @@ const Gallery = () => {
         <div className="container">
           <div className="row dark-mode-white">
             <h1 className="section__title dark-mode-title">
-              Our <span className="orange">Gallery</span>
+              Our Gallery
             </h1>
             <p className="gallery__header">
               Explore our past events and signature cocktails
@@ -123,7 +123,7 @@ const Gallery = () => {
                       onLoad={() => handleImageLoad(image.id)}
                     />
                     <div className="gallery__overlay">
-                      <h3 className="gallery__title">{image.title}</h3>
+                      <p className="gallery__title">{image.title}</p>
                     </div>
                   </div>
                 </div>
@@ -147,8 +147,7 @@ const Gallery = () => {
                 onClick={() => toggleModal()}
                 className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black"
               >
-                <br />
-                <p className="orange gallery__contact">Contact Us Today!</p>
+                <p className="italic gallery__contact">Contact Us Today!</p>
               </span>
             </div>
           </div>

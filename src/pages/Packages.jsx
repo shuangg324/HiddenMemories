@@ -24,14 +24,14 @@ const Packages = () => {
         <div className="container">
           <div className="row dark-mode-white">
             <h1 className="section__title dark-mode-title">
-              Our <span className="orange">Package</span>
+              Our Package
             </h1>
             <p className="packages__header ">
               Take out the guesswork and customize your event to your liking!
             </p>
 
             <div className="how-it-works">
-              <h2 className="package__title">How It Works</h2>
+              <p className="italic package__title">How It Works</p>
               <ul className="package__items">
                 <li><b>Choose the Basic Package:</b> Every event starts with our dry hire package.</li>
                 <li><b>Select Add-ons:</b> Pick extras that suit your event needs.</li>
@@ -42,7 +42,7 @@ const Packages = () => {
             
             <div className="package__list">
               <div className="package">
-                <h2 className="package__title">Basic Package</h2>
+                <p className="italic package__title">Basic Package</p>
                 <p className="package__description">
                   Our <b>Basic Package</b> is a dry hire model that provides everything you need for a stylish and professional bar setup.
                 </p>
@@ -55,7 +55,7 @@ const Packages = () => {
               </div>
               
               <div className="package">
-                <h2 className="package__title">Customize Your Event with Add-ons</h2>
+                <p className="italic package__title">Customize Your Event with Add-ons</p>
                 <p className="package__description">
                   Enhance your event with our selection of add-ons to tailor the experience to your needs.
                 </p>
@@ -70,6 +70,9 @@ const Packages = () => {
                 </ul>
               </div>
             </div>
+
+            <br></br>
+            <p className="italic package__items">**ASK US ABOUT OUR WEDDING PLANNING SERVICES!</p>
 
 
             <div>
@@ -88,8 +91,7 @@ const Packages = () => {
                 onClick={handleContactClick}
                 className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black"
               >
-              <br></br>
-                <p className="orange packages__contact">Contact Us Today!</p>
+                <p className="italic packages__contact">Book With Us Today!</p>
                 </span>
             </div>
           </div>

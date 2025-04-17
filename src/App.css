@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&family=Moon+Dance:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&family=Bebas+Neue:wght@400;700;900&family=Moon+Dance:wght@400;700;900&display=swap');
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'bebas neue', sans-serif;
 }
 
 html, section, nav, .container{
@@ -59,7 +59,7 @@ body.dark-mode .link__hover-effect:after {
 
 button#dark-mode-toggle { 
   background-color: transparent;
-  color: #b87333; /* Copper color for dark mode toggle */
+  color: #fff8f3; /* Copper color for dark mode toggle */
   border: none;
   cursor: pointer;
   z-index: 1000;
@@ -98,10 +98,11 @@ section {
 
 input, textarea {
   width: 100%;
-  background-color: #242424;
-  color: #fff;
+  background-color: #ebddc9;
+  color: #360a05;
+  font-size: 18px;
   outline: none;
-  border: 3px solid #b87333; /* Copper border */
+  border: 3px solid #dda165; /* Copper border */
   border-top: none;
   border-left: none;
   border-right: none;
@@ -131,7 +132,7 @@ input:focus, textarea:focus {
 .container {
   padding: 50px 0px 50px 0px;
   width: 100%;
-  background-color: #f8f4ba; /* Light emerald background */
+  background-color: #fff8f3; /* Light emerald background */
 }
 
 .row {
@@ -156,12 +157,11 @@ input:focus, textarea:focus {
 
 .big__title{
   font-size: 80px;
-  opacity: 0.5;
   margin-bottom: 12px;
   text-align: left;
   line-height: 1;
-  font-family: 'Moon Dance' !important; 
-  color: #b87333; /* Copper color for big title */
+  font-family: 'Bebas Neue' !important; 
+  color: #7d3327; /* Copper color for big title */
 }
 
 .title {
@@ -242,7 +242,7 @@ nav,
   LANDING PAGE 
 */
 #landing-page {
-  background-color: #f8f4ba; /* Light emerald background */
+  background-color: #fff8f3; /* Light emerald background */
   min-height: 100vh;
   padding-top: 100px;
 }
@@ -257,15 +257,18 @@ nav,
   width: 100%;
 }
 
-.header__content--left, .header__content--right {
-  width: 50%;
+
+
+.italic {
+  font-style: italic;
 }
 
 .header__para {
-  font-size: 24px;
-  line-height: 2;
-  max-width: 450px;
-  color: #b87333; /* Copper color for header paragraph */
+  font-size: 32px;
+  line-height: 1.3;
+  max-width: 650px;
+  color: #dda165;
+  font-family: 'Bebas Neue';
 }
 
 .social__list {
@@ -293,8 +296,8 @@ nav,
   font-size: 32px;
   border-radius: 50%;
   border: none;
-  background-color: #b87333; /* Copper background for mail button */
-  color: white;
+  background-color: #dda165; /* Copper background for mail button */
+  color: #fff8f3;
   position: fixed;
   bottom: 32px;
   right: 40px;
@@ -312,7 +315,7 @@ nav,
 .scroll__icon {
   width: 20px;
   height: 30px;
-  border: 2px solid #b87333; /* Copper border for scroll icon */
+  border: 2px solid #dda165; /* Copper border for scroll icon */
   border-radius: 24px;
   display: flex;
   align-items: center;
@@ -323,7 +326,7 @@ nav,
   content: "";
   width: 4px;
   height: 6px;
-  background-color: #b87333; /* Copper color for scroll icon */
+  background-color: #dda165; /* Copper color for scroll icon */
   border-radius: 2px;
   animation: scroll 1000ms infinite alternate-reverse;
 }
@@ -353,7 +356,7 @@ nav {
   position: fixed;
   top: 0;
   z-index: 1000;
-  background-color: #0b5839; /* Light emerald background for navigation */
+  background-color: #849f4f; /* Light emerald background for navigation */
 }
 
 .nav__button {
@@ -379,7 +382,7 @@ nav {
 }
 
 .footer__color {
-  background-color: #14a76c; /* Light emerald background for footer */
+  background-color: #849f4f; /* Light emerald background for footer */
 }
 
 #menu__icon {
@@ -401,8 +404,8 @@ nav {
 }
 
 .nav__link--anchor {
-  font-size: 16px;
-  color: #b87333; /* Copper color for nav links */
+  font-size: 24px;
+  color: #fff8f3; /* Copper color for nav links */
   font-weight: 700;
 }
 
@@ -457,8 +460,7 @@ nav {
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 1rem;
-  background: linear-gradient(transparent, rgba(11, 92, 56, 0.7)); /* Emerald gradient overlay */
+  padding: 1rem; /* Emerald gradient overlay */
   color: white;
   opacity: 0;
   transition: opacity 300ms ease;
@@ -477,8 +479,8 @@ nav {
   text-align: center;
   max-width: 800px;
   margin: 0 auto;
-  font-size: 1.2rem;
-  color: #b87333; /* Copper color for gallery header and footer */
+  font-size: 24px;
+  color: #dda165; /* Copper color for gallery header and footer */
 }
 
 .gallery__contact {
@@ -486,7 +488,7 @@ nav {
   font-size: 1.5rem;
   cursor: pointer;
   transition: color 300ms ease;
-  color: #b87333; /* Copper color for gallery contact */
+  color: #dda165; /* Copper color for gallery contact */
 }
 
 /* 
@@ -529,7 +531,7 @@ nav {
 }
 
 .modal__about {
-  background-color: #14a76c; /* Light emerald background for modal about */
+  background-color: #dda165; /* Light emerald background for modal about */
   transform: translateX(-110%);
 }
 
@@ -570,14 +572,14 @@ nav {
 
 .modal__contact {
   transform: translateX(110%);
-  background-color: #0b5c38; /* Dark emerald background for modal contact */
+  background-color: #7d3327; /* Dark emerald background for modal contact */
   color: white;
 }
 
 .modal__title {
   justify-content: center;
-  font-size: 26px;
-  color: #b87333; /* Copper color for modal title */
+  font-size: 36px;
+  color: #fff8f3; /* Copper color for modal title */
   margin-bottom: 12px;
 }
 
@@ -588,14 +590,15 @@ nav {
 
 .modal__sub-title {
   margin: 12px 0 24px 0;
-  font-size: 14px;
-  color: #b87333; /* Copper color for modal subtitle */
+  font-size: 20px;
+  color: #fff8f3; /* Copper color for modal subtitle */
 }
 
 .modal__para {
   margin-bottom: 12px;
-  line-height: 1.75;
-  color: #b87333; /* Copper color for modal paragraph */
+  line-height: 1.4;
+  font-size: 22px;
+  color: #fff8f3; /* Copper color for modal paragraph */
 }
 
 .form__item {
@@ -603,21 +606,21 @@ nav {
 }
 
 .form__submit {
-  background-color: #b87333; /* Copper background for form submit button */
-  border: 2px solid #b87333; /* Copper border for form submit button */
+  background-color: #dda165; /* Copper background for form submit button */
+  border: 2px solid #dda165; /* Copper border for form submit button */
   color: white;
-  font-weight: 700;
   width: 100%;
   max-width: 240px;
   padding: 12px 24px;
   font-size: 20px;
+  font-style: italic;
   transition: all 300ms ease;
 }
 
 .form__submit:hover {
-  border-color: #d4af37; /* Gold border on hover */
+  border-color: #ebddc9; /* Gold border on hover */
   background-color: transparent;
-  color: #d4af37; /* Gold text on hover */
+  color: #ebddc9; /* Gold text on hover */
 }
 
 .form__submit:active {
@@ -638,12 +641,12 @@ nav {
 }
 
 .modal__overlay--loading {
-  background-color: #0b5c38; /* Dark emerald background for loading overlay */
+  background-color: #7d3327; /* Dark emerald background for loading overlay */
   font-size: 80px;
 }
 
 .modal__overlay--success {
-  background-color: #0f7c4c; /* Medium emerald background for success overlay */
+  background-color: #849f4f; /* Medium emerald background for success overlay */
   font-size: 40px;
   font-weight: 700;
   text-align: center;
@@ -684,8 +687,9 @@ nav {
 .section__title {
   text-align: center;
   font-size: 48px;
-  margin-bottom: 60px;
-  color: #b87333; /* Copper color for section title */
+  margin-bottom: 36px;
+  font-family: 'bebas neue';
+  color: #849f4f; /* Copper color for section title */
 }
 
 .project {
@@ -726,7 +730,7 @@ nav {
   opacity: 0;
   transition: opacity 300ms, transform 450ms ease;
   color: white;
-  max-width: 550px;
+  max-width: 800px;
 }
 
 .project__wrapper:hover .project__wrapper--bg {
@@ -740,18 +744,20 @@ nav {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #0b5c38; /* Dark emerald background for project wrapper */
+  background-color: #dda165; /* Dark emerald background for project wrapper */
   opacity: 0; 
   transition: all 450ms ease;
   visibility: hidden;
 }
 
 .project__description--title {
-  font-size: 40px;
+  font-size: 64px;
+  color: #7d3327;
 }
 
 .project__description--sub-title {
   margin-top: 8px;
+  font-size: 32px;
 }
 
 .project__description--link {
@@ -762,6 +768,7 @@ nav {
 
 .project__description--para {
   margin: 16px 0;
+  font-size: 24px;
 }
 
 /* 
@@ -795,7 +802,8 @@ footer {
 
 .footer__social--link,
 .footer__copyright {
-  color: #b87333; /* Copper color for footer links and copyright */
+  color: #fff8f3;
+  font-size: 18px; /* Copper color for footer links and copyright */
 }
 
 /* 
@@ -808,55 +816,55 @@ footer {
 .shape--0 {
   top: 20vh;
   left: 1vw;
-  color: #d4af37; /* Gold color for shape 0 */
+  color: #ebddc9; /* Gold color for shape 0 */
   font-size: 24px;
 }
 .shape--1 {
   top: 15vh;
   left: 50vw;
-  color: #b87333; /* Copper color for shape 1 */
+  color: #ebddc9; /* Copper color for shape 1 */
   font-size: 24px;
 }
 .shape--2 {
   top: 15vh;
   left: 80vw;
-  color: #0b5c38; /* Dark emerald color for shape 2 */
+  color: #ebddc9; /* Dark emerald color for shape 2 */
   font-size: 24px;
 }
 .shape--3 {
   top: 50vh;
   left: 5vw;
-  color: #b87333; /* Copper color for shape 3 */
+  color: #ebddc9; /* Copper color for shape 3 */
   font-size: 24px;
 }
 .shape--4 {
   top: 50vh;
   left: 50vw;
-  color: #0f7c4c; /* Medium emerald color for shape 4 */
+  color: #ebddc9; /* Medium emerald color for shape 4 */
   font-size: 24px;
 }
 .shape--5 {
   top: 50vh;
   left: 80vw;
-  color: #b87333; /* Copper color for shape 5 */
+  color: #ebddc9; /* Copper color for shape 5 */
   font-size: 24px;
 }
 .shape--6 {
   top: 80vh;
   left: 5vw;
-  color: #0b5c38; /* Dark emerald color for shape 6 */
+  color: #ebddc9; /* Dark emerald color for shape 6 */
   font-size: 24px;
 }
 .shape--7 {
   top: 80vh;
   left: 50vw;
-  color: #b87333; /* Copper color for shape 7 */
+  color: #ebddc9; /* Copper color for shape 7 */
   font-size: 24px;
 }
 .shape--8 {
   top: 80vh;
   left: 80vw;
-  color: #d4af37; /* Gold color for shape 8 */
+  color: #ebddc9; /* Gold color for shape 8 */
   font-size: 24px;
 }
 
@@ -1102,33 +1110,43 @@ footer {
   justify-content: center;
   margin-bottom: 24px;
   font-size: 24px;
-  color: #b87333; /* Copper color for packages header */
+  color: #dda165; /* Copper color for packages header */
 }
 
 .package__items {
   list-style-type: disc;
+  color:#7d3327;
   padding-left: 20px;
+  font-size: 20px;
+}
+
+.package__description{
+  color:#7d3327;
+  font-size: 20px;
 }
 
 .package__title {
-  text-decoration: underline;
   padding-top: 12px;
-  padding-bottom: 8px;
-  color: #b87333; /* Copper color for package title */
+  font-size: 28px;
+  color: #dda165; /* Copper color for package title */
 }
 
 .contact__cta {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 24px;
 }
 
-.packages__contact,
-.packages__footer {
+.packages__contact {
   font-size: 24px;
   cursor: pointer;
-  color: #b87333; /* Copper color for packages contact and footer */
+  color: #dda165;
+}
+.packages__footer {
+  padding-top: 48px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #dda165; /* Copper color for packages contact and footer */
 }
 
 /* Additional styles for optimized Gallery component */
@@ -1138,7 +1156,6 @@ footer {
   justify-content: center;
   align-items: center;
   height: 250px;
-  background-color: rgba(20, 167, 108, 0.3); /* Light emerald background with opacity */
   position: absolute;
   top: 0;
   left: 0;
@@ -1153,7 +1170,7 @@ footer {
 }
 
 .gallery__img.loaded {
-  opacity: 1;
+
 }
 
 .load-more {
@@ -1163,12 +1180,12 @@ footer {
 
 .load-more__button {
   padding: 0.75rem 1.5rem;
-  background-color: #b87333; /* Copper background for load more button */
+  background-color: #dda165; /* Copper background for load more button */
   color: white;
   border: none;
+  font-size: 20px;
   border-radius: 4px;
   cursor: pointer;
-  font-weight: bold;
   transition: all 300ms ease;
 }
 
