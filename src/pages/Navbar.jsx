@@ -5,17 +5,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 //import Logo from '../assets/Logo.png';
 import moveBackground from '../utils/moveBackground.js';
 import { useModal } from '../utils/modalContext';
-import { faBars, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
+// import { faBars, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 function Navbar() {
-    const [isDarkMode, setIsDarkMode] = useState(document.body.classList.contains('dark-mode'));
+    // const [isDarkMode, setIsDarkMode] = useState(document.body.classList.contains('dark-mode'));
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { isModalOpen, openModal, closeModal } = useModal();
 
-    const toggleContrast = () => {
-        document.body.classList.toggle('dark-mode');
-        setIsDarkMode(!isDarkMode);
-    };
+    // const toggleContrast = () => {
+    //     document.body.classList.toggle('dark-mode');
+    //     setIsDarkMode(!isDarkMode);
+    // };
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
