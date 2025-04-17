@@ -52,7 +52,7 @@ const Modal = () => {
                 <p className="modal__para">
                     We are a small, passionate crew of bartenders who genuinely love what we do. 
                     With over five years working in upscale bars and restaurants, we've learned that great service isn’t 
-                    just about the drink—it’s about connection, atmosphere, and the little moments that stick with people long after the last call.
+                    just about the drink; it’s about connection, atmosphere, and the little moments that stick with people long after the last call.
                     <br />
                     Let us turn your gathering into an unforgettable experience - Book Us today!
                     <br />
