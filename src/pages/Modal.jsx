@@ -50,9 +50,9 @@ const Modal = () => {
             <div className="modal__left modal__half modal__about" onClick={(e) => e.stopPropagation()}>
                 <h3 className="modal__title modal__title--about">Here's a bit about us.</h3>
                 <p className="modal__para">
-                    We are experienced Bartenders with over 5+ years working in high-end restaurants and bars.
-                    Whether you're planning an Elegant Soirée or a Casual Celebration,
-                    our mobile bar service is designed to elevate your event with custom-crafted cocktails, exceptional service, and a personalized touch.
+                    We are a small, passionate crew of bartenders who genuinely love what we do. 
+                    With over five years working in upscale bars and restaurants, we've learned that great service isn’t 
+                    just about the drink—it’s about connection, atmosphere, and the little moments that stick with people long after the last call.
                     <br />
                     Let us turn your gathering into an unforgettable experience - Book Us today!
                     <br />
