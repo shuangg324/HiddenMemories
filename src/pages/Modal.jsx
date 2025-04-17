@@ -56,7 +56,7 @@ const Modal = () => {
                     <br />
                     Let us turn your gathering into an unforgettable experience - Book Us today!
                     <br />
-                    *Servicing LA County and Surrounding Areas.
+                    <p className="italic">*Servicing LA County and Surrounding Areas.</p>
                 </p>
             </div>
             <div className="modal__right modal__half modal__contact" onClick={(e) => e.stopPropagation()}>
