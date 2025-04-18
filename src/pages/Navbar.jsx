@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../App.css';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Logo from '../assets/logo.png';
+import Logo from '../assets/logo.jpg';
 import moveBackground from '../utils/moveBackground.js';
 import { useModal } from '../utils/modalContext';
 import { faBars, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
