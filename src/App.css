@@ -993,6 +993,7 @@ footer {
   }
   .header__para {
     font-size: 32px;
+    text-align: center;
   }
 
   .section__title{
