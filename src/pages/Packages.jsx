@@ -44,13 +44,13 @@ const Packages = () => {
               <div className="package">
                 <p className="italic package__title">Basic Package</p>
                 <p className="package__description">
-                  Our <b>Basic Package</b> is a dry hire model that provides everything you need for a stylish and professional bar setup.
+                  Our Basic Package is a dry hire model that provides everything you need for a stylish and professional bar setup.
                 </p>
                 <ul className="package__items">
-                  <li>Bar setup</li>
-                  <li>Cups</li>
-                  <li>Napkins</li>
-                  <li>Straws</li>
+                  <li><b>Bar setup</b></li>
+                  <li><b>Cups</b></li>
+                  <li><b>Napkins</b></li>
+                  <li><b>Straws</b></li>
                 </ul>
               </div>
               

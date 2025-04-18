@@ -16,27 +16,30 @@ html, section, nav, .container{
 /* Main color scheme */
 body.dark-mode #landing-page,
 body.dark-mode .container {
-  background-color: #1c6142; /* Dark emerald background for dark mode */
+  background-color: #360a05; /* Dark emerald background for dark mode */
 }
 
-body.dark-mode .title {
-  color: #d4af37; /* Gold title in dark mode */
-}
 
-body.dark-mode .navbar-title-text{
-  color: white;
+
+
+body.dark-mode .mail__btn {
+  background-color: #849f4f;
 }
 
 body.dark-mode nav {
-  background-color: #0b5c38; /* Dark emerald nav in dark mode */
+  background-color: #7d3327; /* Dark emerald nav in dark mode */
 }
 
 body.dark-mode .footer__color {
-  background-color: #0b5c38; /* Dark emerald footer in dark mode */
+  background-color: #7d3327; /* Dark emerald footer in dark mode */
+}
+
+body.dark-mode .big__title{
+  color: #849f4f;
 }
 
 body.dark-mode .dark-mode-title {
-  color: white !important; /* White title in dark mode */
+  color: #7d3327 !important; /* White title in dark mode */
 }
 
 body.dark-mode .orange {
@@ -44,13 +47,16 @@ body.dark-mode .orange {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
 }
 
-body.dark-mode .modal__left {
-  background-color: #0f7c4c; /* Medium emerald modal in dark mode */
-  color: #d4af37; /* Gold text in dark mode */
+body.dark-mode .package__items {
+  color: #849f4f;
+}
+
+body.dark-mode .package__description {
+  color: #849f4f;
 }
 
 body.dark-mode .dark-mode-white {
-  color: white;
+  color: #ebddc9;
 }
 
 body.dark-mode .link__hover-effect:after {
@@ -224,9 +230,7 @@ nav,
 .dark-theme section {
   background-color: #242424;
 }
-.dark-theme #personal-logo {
-  filter: invert(1);
-}
+
 .dark-theme .scroll__icon {
   border-color: white;
 }
@@ -302,7 +306,6 @@ nav,
   bottom: 32px;
   right: 40px;
   z-index: 100;
-  box-shadow: 0 12px 30px 0 rgba(0, 0, 0, 0.28);
 }
 
 .scroll {
@@ -345,7 +348,7 @@ nav,
   NAVIGATION 
 */
 
-nav {
+.navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -356,8 +359,23 @@ nav {
   position: fixed;
   top: 0;
   z-index: 1000;
-  background-color: #849f4f; /* Light emerald background for navigation */
+  background-color: #849f4f;
 }
+
+/* Logo styling */
+.navbar-logo {
+  display: flex;
+  align-items: center;
+}
+
+/* Adjust personal logo size */
+#personal-logo {
+  width: 300px; /* Adjust this size as needed */
+  display: flex;
+  visibility: visible;
+}
+
+
 
 .nav__button {
   background: none;
@@ -370,16 +388,13 @@ nav {
   margin: 0;
 }
 
+
+
 .nav__button:focus {
   outline: none;
 }
 
-.navbar-title {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-}
+
 
 .footer__color {
   background-color: #849f4f; /* Light emerald background for footer */
@@ -389,10 +404,7 @@ nav {
   display: none;
 }
 
-#personal-logo {
-  width: 350px;
-  height: 350px;
-}
+
 
 .nav__link--list {
   display: flex;
@@ -777,7 +789,7 @@ nav {
 
 footer {
   position: relative;
-  background-color: #14a76c; /* Light emerald background for footer */
+  background-color: #849f4f; /* Light emerald background for footer */
   display: flex;
   padding: 0;
 }
@@ -812,59 +824,51 @@ footer {
 .shape {
   position: fixed;
   z-index: 0;
+  color: #ebddc9;
 }
 .shape--0 {
   top: 20vh;
   left: 1vw;
-  color: #ebddc9; /* Gold color for shape 0 */
   font-size: 24px;
 }
 .shape--1 {
   top: 15vh;
   left: 50vw;
-  color: #ebddc9; /* Copper color for shape 1 */
   font-size: 24px;
 }
 .shape--2 {
   top: 15vh;
   left: 80vw;
-  color: #ebddc9; /* Dark emerald color for shape 2 */
   font-size: 24px;
 }
 .shape--3 {
   top: 50vh;
   left: 5vw;
-  color: #ebddc9; /* Copper color for shape 3 */
   font-size: 24px;
 }
 .shape--4 {
   top: 50vh;
   left: 50vw;
-  color: #ebddc9; /* Medium emerald color for shape 4 */
   font-size: 24px;
 }
 .shape--5 {
   top: 50vh;
   left: 80vw;
-  color: #ebddc9; /* Copper color for shape 5 */
   font-size: 24px;
 }
 .shape--6 {
-  top: 80vh;
+  top: 85vh;
   left: 5vw;
-  color: #ebddc9; /* Dark emerald color for shape 6 */
   font-size: 24px;
 }
 .shape--7 {
-  top: 80vh;
+  top: 90vh;
   left: 50vw;
-  color: #ebddc9; /* Copper color for shape 7 */
   font-size: 24px;
 }
 .shape--8 {
-  top: 80vh;
+  top: 85vh;
   left: 80vw;
-  color: #ebddc9; /* Gold color for shape 8 */
   font-size: 24px;
 }
 
@@ -901,7 +905,7 @@ footer {
     font-size: 80px;
   }
   .header__para {
-    font-size: 20px;
+    font-size: 32px;
   }
   .modal {
     padding-top: 72px;
@@ -929,7 +933,7 @@ footer {
     display: none;
     flex-direction: column;
     align-items: center;
-    background-color: #0b5c38; /* Dark emerald background for nav link list */
+    background-color: #849f4f; /* Dark emerald background for nav link list */
     position: absolute;
     top: 0;
     width: 100%;
@@ -961,7 +965,7 @@ footer {
     width: 100%;
   }
 
-  .navbar-title {
+  .navbar-logo {
     display: none;
   }
 
@@ -977,11 +981,15 @@ footer {
 
 /* Small phones */
 @media (max-width: 480px) {
-  .title {
-    font-size: 52px;
+  .big__title {
+    font-size: 78px;
   }
   .header__para {
-    font-size: 18px;
+    font-size: 32px;
+  }
+
+  .section__title{
+    padding-top:32px;
   }
 
   /* navbar menu */
@@ -993,7 +1001,7 @@ footer {
     display: none;
     flex-direction: column;
     align-items: center;
-    background-color: #0b5c38; /* Dark emerald background for nav link list */
+    background-color: #849f4f; /* Dark emerald background for nav link list */
     position: absolute;
     top: 0;
     width: 100%;
@@ -1075,12 +1083,12 @@ footer {
     min-height: 80vh; /* Adjust this value as needed */
   }
 
-  .navbar-title {
+  .navbar-logo {
     display: none;
   }
 
   .footer__color {
-    background-color: #14a76c; /* Light emerald background for footer */
+    background-color: #849f4f; /* Light emerald background for footer */
   }
 
   .gallery__grid {
@@ -1169,10 +1177,6 @@ footer {
   transition: opacity 0.3s ease;
 }
 
-.gallery__img.loaded {
-
-}
-
 .load-more {
   text-align: center;
   margin: 2rem 0;
@@ -1194,11 +1198,62 @@ footer {
   transform: scale(1.05);
 }
 
-body.dark-mode .load-more__button {
-  background-color: #d4af37; /* Gold background for load more button in dark mode */
-  color: #0b5c38; /* Dark emerald text for load more button in dark mode */
+
+/* NOW BOOKING MARQUEE STRIP */
+.ticker-container {
+  width: 100%;
+  background-color: #fff8f3; 
+  overflow: hidden;
+  padding: 15px 0;
+  position: relative;
+  border-top: 1px solid #7d3327; /* Top border line */
+  border-bottom: 1px solid #7d3327;
+  margin-top: 100px; /* Bottom border line */
+  transition: all 300ms ease;
 }
 
-body.dark-mode .load-more__button:hover {
-  background-color: rgba(212, 175, 55, 0.8); /* Gold with opacity for hover in dark mode */
+.ticker-wrapper {
+  margin-top: 50px; /* Add space above the ticker - adjust this value as needed */
+}
+
+.ticker-wrap {
+  white-space: nowrap;
+  display: flex;
+  animation: ticker-move 30s linear infinite;
+}
+
+.ticker-item {
+  display: inline-block;
+  padding: 0 30px;
+  color: #7d3327;
+  font-size: 20px;
+}
+
+.ticker-separator {
+  display: inline-block;
+  padding: 0 5px;
+  color: #7d3327
+}
+
+@keyframes ticker-move {
+  0% {
+      transform: translateX(0);
+  }
+  100% {
+      transform: translateX(-50%);
+  }
+}
+
+body.dark-mode .ticker-container {
+  background-color: #360a05;
+  border-top: 1px solid #ebddc9; /* Top border line */
+  border-bottom: 1px solid #ebddc9;/* Bottom border line */
+}
+
+body.dark-mode .ticker-item {
+  color: #ebddc9;
+}
+
+body.dark-mode .ticker-separator {
+  color: #ebddc9;
 }

@@ -38,8 +38,7 @@ const Home = () => {
                         <div className="row">
                             <div className="header__content">
                                 <div className="header__content--left">
-                                    <h1 className="big__title">Hidden Memories</h1>
-                                    {/* <h1 className="title dark-mode-title">Memories</h1> */}
+                                    <h1 className="big__title">Mobile Bar Services</h1>
                                     <p className="header__para dark-mode-white">
                                         Elevate your event with our expert Mobile Bartenders. We craft custom cocktails and provide exceptional service to make your celebration unforgettable.
                                         Let us bring your vision to life!
@@ -51,6 +50,43 @@ const Home = () => {
                             </div>
                         </div>
                     </div>
+                    <div class="ticker-container">
+        <div class="ticker-wrap">
+            <div class="ticker-item">NOW BOOKING 2025</div>
+            <div class="ticker-separator">♦</div>
+            <div class="ticker-item">NOW BOOKING 2025</div>
+            <div class="ticker-separator">♦</div>
+            <div class="ticker-item">NOW BOOKING 2025</div>
+            <div class="ticker-separator">♦</div>
+            <div class="ticker-item">NOW BOOKING 2025</div>
+            <div class="ticker-separator">♦</div>
+            <div class="ticker-item">NOW BOOKING 2025</div>
+            <div class="ticker-separator">♦</div>
+            <div class="ticker-item">NOW BOOKING 2025</div>
+            <div class="ticker-separator">♦</div>
+            <div class="ticker-item">NOW BOOKING 2025</div>
+            <div class="ticker-separator">♦</div>
+            <div class="ticker-item">NOW BOOKING 2025</div>
+            <div class="ticker-separator">♦</div>
+            
+            <div class="ticker-item">NOW BOOKING 2025</div>
+            <div class="ticker-separator">♦</div>
+            <div class="ticker-item">NOW BOOKING 2025</div>
+            <div class="ticker-separator">♦</div>
+            <div class="ticker-item">NOW BOOKING 2025</div>
+            <div class="ticker-separator">♦</div>
+            <div class="ticker-item">NOW BOOKING 2025</div>
+            <div class="ticker-separator">♦</div>
+            <div class="ticker-item">NOW BOOKING 2025</div>
+            <div class="ticker-separator">♦</div>
+            <div class="ticker-item">NOW BOOKING 2025</div>
+            <div class="ticker-separator">♦</div>
+            <div class="ticker-item">NOW BOOKING 2025</div>
+            <div class="ticker-separator">♦</div>
+            <div class="ticker-item">NOW BOOKING 2025</div>
+            <div class="ticker-separator">♦</div>
+        </div>
+    </div>
                 </header>
                 <a href="#projects" className="scroll">
                     <div className="scroll__icon click"></div>
