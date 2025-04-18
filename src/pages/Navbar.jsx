@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../App.css';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Logo from '../assets/logo.jpg';
+import DarkModeLogo from '../assets/logo2.png';
 import moveBackground from '../utils/moveBackground.js';
 import { useModal } from '../utils/modalContext';
 import { faBars, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
@@ -12,11 +13,20 @@ function Navbar() {
     const [isDarkMode, setIsDarkMode] = useState(document.body.classList.contains('dark-mode'));
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { isModalOpen, openModal, closeModal } = useModal();
+    const [currentLogo, setCurrentLogo] = useState(isDarkMode ? DarkModeLogo : Logo);
 
     const toggleContrast = () => {
         document.body.classList.toggle('dark-mode');
-        setIsDarkMode(!isDarkMode);
+        const newDarkMode = !isDarkMode;
+        setIsDarkMode(newDarkMode);
+        setCurrentLogo(newDarkMode ? DarkModeLogo : Logo);
     };
+
+    useEffect(() => {
+        const isDark = document.body.classList.contains('dark-mode');
+        setIsDarkMode(isDark);
+        setCurrentLogo(isDark ? DarkModeLogo : Logo);
+    }, []);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -44,7 +54,7 @@ function Navbar() {
                 <div className="navbar-logo">
                     <Link to="/">
                         <figure>
-                            <img id="personal-logo" src={Logo} alt="Logo" onClick={() => window.scrollTo(0, 0)}/>
+                            <img id="personal-logo" src={currentLogo} alt="Logo" onClick={() => window.scrollTo(0, 0)}/>
                         </figure>
                     </Link>
                 </div>

@@ -366,6 +366,7 @@ nav,
 .navbar-logo {
   display: flex;
   align-items: center;
+  margin-top: 10px;
 }
 
 /* Adjust personal logo size */
@@ -711,8 +712,11 @@ nav,
 
 .project__img {
   width: 100%;
+  height: 100%;
   display: block;
   transition: all 600ms ease;
+  object-fit: cover;
+  object-position: center;
 }
 
 .project__wrapper {
@@ -722,6 +726,9 @@ nav,
   overflow: hidden;
   padding: 0;
   margin: 0;
+
+  width: 100%;
+  aspect-ratio: 16/9;
 }
 
 .project__wrapper:hover .project__description {
@@ -1086,6 +1093,10 @@ footer {
 
   #landing-page {
     min-height: 80vh; /* Adjust this value as needed */
+  }
+
+  .mail__btn {
+    right: 10px;
   }
 
   .navbar-logo {

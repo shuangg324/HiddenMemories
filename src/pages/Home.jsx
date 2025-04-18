@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import drinks from '../assets/drink_stations.jpg';
-import drinks2 from '../assets/glasses.jpg';
+import drinks2 from '../assets/lychee.jpg';
 import drinks3 from '../assets/margs.jpg';
 import moveBackground from '../utils/moveBackground.js';
 import {useModal} from '../utils/modalContext';      
@@ -53,38 +53,38 @@ const Home = () => {
                     <div class="ticker-container">
         <div class="ticker-wrap">
             <div class="ticker-item">NOW BOOKING 2025</div>
-            <div class="ticker-separator">♦</div>
+            <div class="ticker-separator">✦ </div>
             <div class="ticker-item">NOW BOOKING 2025</div>
-            <div class="ticker-separator">♦</div>
+            <div class="ticker-separator">✦ </div>
             <div class="ticker-item">NOW BOOKING 2025</div>
-            <div class="ticker-separator">♦</div>
+            <div class="ticker-separator">✦ </div>
             <div class="ticker-item">NOW BOOKING 2025</div>
-            <div class="ticker-separator">♦</div>
+            <div class="ticker-separator">✦ </div>
             <div class="ticker-item">NOW BOOKING 2025</div>
-            <div class="ticker-separator">♦</div>
+            <div class="ticker-separator">✦ </div>
             <div class="ticker-item">NOW BOOKING 2025</div>
-            <div class="ticker-separator">♦</div>
+            <div class="ticker-separator">✦ </div>
             <div class="ticker-item">NOW BOOKING 2025</div>
-            <div class="ticker-separator">♦</div>
+            <div class="ticker-separator">✦ </div>
             <div class="ticker-item">NOW BOOKING 2025</div>
-            <div class="ticker-separator">♦</div>
+            <div class="ticker-separator">✦ </div>
             
             <div class="ticker-item">NOW BOOKING 2025</div>
-            <div class="ticker-separator">♦</div>
+            <div class="ticker-separator">✦</div>
             <div class="ticker-item">NOW BOOKING 2025</div>
-            <div class="ticker-separator">♦</div>
+            <div class="ticker-separator">✦</div>
             <div class="ticker-item">NOW BOOKING 2025</div>
-            <div class="ticker-separator">♦</div>
+            <div class="ticker-separator">✦</div>
             <div class="ticker-item">NOW BOOKING 2025</div>
-            <div class="ticker-separator">♦</div>
+            <div class="ticker-separator">✦</div>
             <div class="ticker-item">NOW BOOKING 2025</div>
-            <div class="ticker-separator">♦</div>
+            <div class="ticker-separator">✦</div>
             <div class="ticker-item">NOW BOOKING 2025</div>
-            <div class="ticker-separator">♦</div>
+            <div class="ticker-separator">✦</div>
             <div class="ticker-item">NOW BOOKING 2025</div>
-            <div class="ticker-separator">♦</div>
+            <div class="ticker-separator">✦</div>
             <div class="ticker-item">NOW BOOKING 2025</div>
-            <div class="ticker-separator">♦</div>
+            <div class="ticker-separator">✦</div>
         </div>
     </div>
                 </header>
