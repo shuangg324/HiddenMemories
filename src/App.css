@@ -925,9 +925,7 @@ footer {
     display: none;
   }
 
-  .nav__link:first-child {
-    display: none;
-  }
+
 
   .nav__link--list {
     display: none;
@@ -939,10 +937,15 @@ footer {
     width: 100%;
   }
 
+  body.dark-mode .nav__link--list{
+    background-color: #7d3327;
+  }
+
   .nav__link--list.open {
     display: flex;
     z-index: 1;
     position: fixed;
+    left:0;
   }
   
   .nav__link {
@@ -966,7 +969,11 @@ footer {
   }
 
   .navbar-logo {
-    display: none;
+    display: flex;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
   }
 
   .gallery__grid {
@@ -993,9 +1000,6 @@ footer {
   }
 
   /* navbar menu */
-  .nav__link:first-child {
-    display: none;
-  }
 
   .nav__link--list {
     display: none;
@@ -1084,7 +1088,15 @@ footer {
   }
 
   .navbar-logo {
-    display: none;
+    display: flex;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+
+  #personal-logo {
+    width: 250px; /* Adjust this size as needed */
   }
 
   .footer__color {
@@ -1213,7 +1225,7 @@ footer {
 }
 
 .ticker-wrapper {
-  margin-top: 50px; /* Add space above the ticker - adjust this value as needed */
+  margin-top: 50px;/* Add space above the ticker - adjust this value as needed */
 }
 
 .ticker-wrap {
@@ -1227,12 +1239,14 @@ footer {
   padding: 0 30px;
   color: #7d3327;
   font-size: 20px;
+  z-index:100;
 }
 
 .ticker-separator {
   display: inline-block;
   padding: 0 5px;
-  color: #7d3327
+  color: #7d3327;
+  z-index:100;
 }
 
 @keyframes ticker-move {
