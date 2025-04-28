@@ -1,25 +1,26 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Hidden Memories",
+  "name": "Hidden Memories Bar | LA Mobile Bartending",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "logo.jpg",
       "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "type": "image/png"
     },
     {
-      "src": "logo192.png",
+      "src": "logo.jpg",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "teddy.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#849f4f",
+  "background_color": "#ffffff",
+  "description": "Elegant mobile bartending service for weddings, parties, and events throughout Los Angeles County."
 }
