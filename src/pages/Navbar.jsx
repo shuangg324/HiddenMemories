@@ -3,6 +3,7 @@ import '../App.css';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Logo from '../assets/logo.jpg';
+import MobileLogo from '../assets/LogoHM.png';
 import DarkModeLogo from '../assets/logo2.png';
 import moveBackground from '../utils/moveBackground.js';
 import { useModal } from '../utils/modalContext';
@@ -14,6 +15,7 @@ function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const { isModalOpen, openModal, closeModal } = useModal();
     const [currentLogo, setCurrentLogo] = useState(isDarkMode ? DarkModeLogo : Logo);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
     const toggleContrast = () => {
         document.body.classList.toggle('dark-mode');
@@ -21,6 +23,17 @@ function Navbar() {
         setIsDarkMode(newDarkMode);
         setCurrentLogo(newDarkMode ? DarkModeLogo : Logo);
     };
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     useEffect(() => {
         const isDark = document.body.classList.contains('dark-mode');
@@ -54,7 +67,7 @@ function Navbar() {
                 <div className="navbar-logo">
                     <Link to="/">
                         <figure>
-                            <img id="personal-logo" src={currentLogo} alt="Logo" onClick={() => window.scrollTo(0, 0)}/>
+                            <img id="personal-logo" src={isMobile ? MobileLogo : currentLogo} alt="Logo" onClick={() => window.scrollTo(0, 0)}/>
                         </figure>
                     </Link>
                 </div>

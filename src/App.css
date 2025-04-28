@@ -933,6 +933,11 @@ footer {
     display: none;
   }
 
+  #personal-logo {
+    width: 800px;
+    margin-top: 40px; /* Adjust this size as needed */
+  }
+
 
 
   .nav__link--list {
@@ -1006,6 +1011,10 @@ footer {
 
   .section__title{
     padding-top:32px;
+  }
+
+  #personal-logo {
+    width: 650px; /* Adjust this size as needed */
   }
 
   /* navbar menu */
@@ -1106,10 +1115,6 @@ footer {
     left: 50%;
     transform: translateX(-50%);
     z-index: 1;
-  }
-
-  #personal-logo {
-    width: 250px; /* Adjust this size as needed */
   }
 
   .footer__color {
