@@ -1183,7 +1183,7 @@ footer {
 .packages__footer {
   padding-top: 48px;
   font-size: 24px;
-  cursor: pointer;
+  
   color: #dda165; /* Copper color for packages contact and footer */
 }
 
