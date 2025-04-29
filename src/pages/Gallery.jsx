@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import '../App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlassMartini, faCocktail, faWineGlass, faBeer, faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -26,6 +26,7 @@ const Gallery = () => {
   const [visibleImages, setVisibleImages] = useState(6); // Start with 6 images
   const [loading, setLoading] = useState(true);
   const [imagesLoaded, setImagesLoaded] = useState({});
+  const loadMoreRef = useRef(null);
 
   const galleryImages = useMemo(() => [
     { id: 1, src: drink_stations, alt: 'Drink stations setup', title: 'Drink Stations' },
@@ -70,23 +71,30 @@ const Gallery = () => {
     };
 
     preloadInitialImages();
-  }, [galleryImages, visibleImages]); // Added missing dependencies
+  }, [galleryImages, visibleImages]);
 
-  // Handle intersection observer for infinite scroll
+  // Use Intersection Observer for infinite scroll
   useEffect(() => {
-    const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop >= 
-        document.documentElement.offsetHeight - 500 &&
-        visibleImages < galleryImages.length &&
-        !loading
-      ) {
-        setVisibleImages(prev => Math.min(prev + 4, galleryImages.length));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting && visibleImages < galleryImages.length && !loading) {
+          setVisibleImages(prev => Math.min(prev + 4, galleryImages.length));
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentRef = loadMoreRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
   }, [visibleImages, loading, galleryImages.length]);
 
   // Handle image load
@@ -130,7 +138,12 @@ const Gallery = () => {
               ))}
             </div>
 
-            {visibleImages < galleryImages.length && (
+            {/* This is our observer target */}
+            <div ref={loadMoreRef} style={{ height: '20px', width: '100%' }}></div>
+
+            {/*Load more images button */}
+            
+            {/* {visibleImages < galleryImages.length && (
               <div className="load-more">
                 <button 
                   className="load-more__button"
@@ -139,7 +152,7 @@ const Gallery = () => {
                   Load More Images
                 </button>
               </div>
-            )}
+            )} */}
 
             <div className="contact__cta">
               <p className="gallery__footer">Want us to create memorable moments at your next event?</p>
