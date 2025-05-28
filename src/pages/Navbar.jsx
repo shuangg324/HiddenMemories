@@ -92,12 +92,8 @@ function Navbar() {
                     <li className="nav__link" onClick={closeMenu}>
                         <Link to="./packages" className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black">Package</Link>
                     </li>
-                    <li className="nav__link">
-                        <button 
-                           onClick={handleAboutContactClick} 
-                           className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black nav__button">
-                            Contact
-                        </button>
+                    <li className="nav__link" onClick={closeMenu}>
+                        <Link to="./contact" className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black">Contact</Link>
                     </li>
                     <li className="nav__link" onClick={closeMenu}>
                         <button id="dark-mode-toggle" onClick={toggleContrast}>
