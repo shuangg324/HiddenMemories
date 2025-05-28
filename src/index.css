@@ -11,7 +11,6 @@ body {
 html, body {
   background-color: #849f4f; /* Or whatever color you want */
   height: 100%;
-  overflow-y: auto;
 }
 
 code {

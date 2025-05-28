@@ -10,7 +10,6 @@
 
 
 html, section, nav, .container{
-  height: 100%;
   scroll-behavior: smooth;
   transition: all 300ms ease;
 }
@@ -357,7 +356,6 @@ nav,
   width: 100%;
   margin: 0 auto;
   padding: 0 20px;
-  right: 16px;
   height: 100px;
   position: fixed;
   top: 0;
@@ -1512,31 +1510,21 @@ body.dark-mode .submit-btn:hover {
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #ff0000;
+  border-color: #849f4f;
   box-shadow: 0 0 0 2px rgba(132, 159, 79, 0.2);
 }
 
-/* Error state styling ONLY when .error class is applied - HIGHEST SPECIFICITY */
-.form-group.error input,
-.form-group.error select,
-.form-group.error textarea,
-.form-group.error .date-input,
-.form-group.error input:focus,
-.form-group.error select:focus,
-.form-group.error textarea:focus,
-.form-group.error .date-input:focus {
-  border-color: #dc2626 !important;
-  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.4) !important;
+body.dark-mode .date-input:focus,
+body.dark-mode .form-group input:focus,
+body.dark-mode .form-group select:focus,
+body.dark-mode .form-group textarea:focus {
+  outline: none;
+  border-color: #849f4f;
+  box-shadow: 0 0 0 2px rgba(132, 159, 79, 0.2);
 }
 
-.form-group.error {
-  animation: shake 0.6s ease-in-out;
-}
 
-.form-group.error label {
-  color: #dc2626 !important;
-  font-weight: bold;
-}
+
 
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
@@ -1570,32 +1558,6 @@ body.dark-mode .calendar-icon:hover {
   color: #d4af37;
 }
 
-/* Dark mode normal focus */
-body.dark-mode .date-input:focus,
-body.dark-mode .form-group input:focus,
-body.dark-mode .form-group select:focus,
-body.dark-mode .form-group textarea:focus {
-  border-color: #d4af37;
-  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
-}
-
-/* Dark mode error styling - HIGHEST SPECIFICITY */
-body.dark-mode .form-group.error input,
-body.dark-mode .form-group.error select,
-body.dark-mode .form-group.error textarea,
-body.dark-mode .form-group.error .date-input,
-body.dark-mode .form-group.error input:focus,
-body.dark-mode .form-group.error select:focus,
-body.dark-mode .form-group.error textarea:focus,
-body.dark-mode .form-group.error .date-input:focus {
-  border-color: #ef4444 !important;
-  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.4) !important;
-}
-
-body.dark-mode .form-group.error label {
-  color: #ef4444 !important;
-  font-weight: bold;
-}
 
 /* Mobile responsive */
 @media (max-width: 768px) {
