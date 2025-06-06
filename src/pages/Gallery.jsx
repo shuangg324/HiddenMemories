@@ -1,3 +1,5 @@
+// Updated Gallery.jsx with lightbox functionality - FIXED
+
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlassMartini, faCocktail, faWineGlass, faBeer, faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -21,45 +23,34 @@ import grats from '../assets/Congrats.jpg';
 import '../App.css';
 import moveBackground from '../utils/moveBackground';
 import { useModal } from '../utils/modalContext';
+import Lightbox from '../components/Lightbox';
 
-// Optimized Image Component
-const OptimizedImage = React.memo(({ src, alt, title, onImageLoad }) => {
+// Ultra-fast Image Component - minimal overhead
+const OptimizedImage = React.memo(({ src, alt, title, onClick, priority = false }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
-  const [imageError, setImageError] = useState(false);
 
-  const handleImageLoad = useCallback(() => {
-    setImageLoaded(true);
-    if (onImageLoad) onImageLoad();
-  }, [onImageLoad]);
-
-  const handleImageError = useCallback(() => {
-    setImageError(true);
-    console.warn(`Failed to load image: ${src}`);
-  }, [src]);
+  const handleClick = useCallback(() => {
+    if (onClick) {
+      onClick();
+    }
+  }, [onClick]);
 
   return (
-    <div className="gallery__wrapper">
-      {!imageLoaded && !imageError && (
+    <div className="gallery__wrapper" onClick={handleClick}>
+      {!imageLoaded && (
         <div className="image-loading-placeholder" aria-label="Loading image">
           <FontAwesomeIcon icon={faSpinner} spin aria-hidden="true" />
         </div>
       )}
-      {imageError ? (
-        <div className="image-error-placeholder" role="img" aria-label="Failed to load image">
-          <span>Failed to load image</span>
-        </div>
-      ) : (
-        <img 
-          src={src} 
-          className={`gallery__img ${imageLoaded ? 'loaded' : 'loading'}`}
-          alt={alt} 
-          loading="lazy"
-          onLoad={handleImageLoad}
-          onError={handleImageError}
-          decoding="async"
-          sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw"
-        />
-      )}
+      <img 
+        src={src} 
+        className={`gallery__img ${imageLoaded ? 'loaded' : 'loading'}`}
+        alt={alt} 
+        loading={priority ? "eager" : "lazy"}
+        onLoad={() => setImageLoaded(true)}
+        decoding="async"
+        sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw"
+      />
       <div className="gallery__overlay">
         <h3 className="gallery__title">{title}</h3>
       </div>
@@ -73,58 +64,124 @@ const Gallery = () => {
   const { toggleModal } = useModal();
   const [visibleImages, setVisibleImages] = useState(6);
   const [loading, setLoading] = useState(true);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
   const loadMoreRef = useRef(null);
   const containerRef = useRef(null);
 
-  // Memoized gallery images configuration
+  // Memoized gallery images configuration with appealing titles
   const galleryImages = useMemo(() => [
-    { id: 1, src: drink_stations, alt: 'Professional drink stations setup for events', title: 'Drink Stations' },
-    { id: 2, src: marshmallow, alt: 'Corporate event bar setup with professional service', title: 'Corporate Bar' },
-    { id: 3, src: tray_service, alt: 'Elegant tray service for wedding reception', title: 'Tray Service' },
-    { id: 4, src: trio, alt: 'A trio of martinis', title: 'Espresso, Matcha, and Lychee Martinis' },
-    { id: 5, src: grats, alt: 'Congrats celebration', title: 'Celebratory Shots' },
-    { id: 6, src: clase, alt: 'Row of Clase Azul', title: 'Clase Azul' },
-    { id: 7, src: OF, alt: 'Classic old fashioned cocktail with garnish', title: 'Old Fashioned' },
-    { id: 8, src: margs, alt: 'Triple margaritas with salt rim and lime', title: 'Triple Margaritas' },
-    { id: 9, src: lychee, alt: 'Lychee cocktail setup with Asian-inspired garnish', title: 'Lychee Cocktails' },
-    { id: 10, src: glasses, alt: 'Premium cocktail glassware collection', title: 'Cocktail Glasses' },
-    { id: 11, src: flower_drinks, alt: 'Hibiscus spritz and floral infused vodka tonic', title: 'Hibiscus Spritz | Floral Infused Vodka Tonic' },
-    { id: 12, src: egg_top, alt: 'Raspberry gin sour with egg white foam', title: 'Raspberry Gin Sour' },
-    { id: 13, src: lemony, alt: 'Fresh citrus cocktails with lemon garnish', title: 'Citrus Cocktails' },
-    { id: 14, src: garnish, alt: 'Artistic cocktail garnish preparation', title: 'Garnish Art' },
-    { id: 15, src: marshmallow2, alt: 'Marshmallow and lychee specialty cocktails', title: 'Marshmallow Specialties' },
-    { id: 16, src: marg, alt: 'Signature margarita with premium ingredients', title: 'Signature Margarita' },
-    { id: 17, src: rimmed_cups, alt: 'Artfully rimmed cocktail cups with specialty salts', title: 'Rimmed Cocktails' }
+    { id: 1, src: drink_stations, alt: 'Professional drink stations setup for events', title: 'Premium Bar Setup' },
+    { id: 2, src: marshmallow, alt: 'Corporate event bar setup with professional service', title: 'Elegant Service' },
+    { id: 3, src: tray_service, alt: 'Elegant tray service for wedding reception', title: 'Luxury Tray Service' },
+    { id: 4, src: trio, alt: 'A trio of martinis', title: 'Signature Martini Trio' },
+    { id: 5, src: grats, alt: 'Congrats celebration', title: 'Celebration Shots' },
+    { id: 6, src: clase, alt: 'Row of Clase Azul', title: 'Premium Tequila Selection' },
+    { id: 7, src: OF, alt: 'Classic old fashioned cocktail with garnish', title: 'Craft Old Fashioned' },
+    { id: 8, src: margs, alt: 'Triple margaritas with salt rim and lime', title: 'Perfect Margaritas' },
+    { id: 9, src: lychee, alt: 'Lychee cocktail setup with Asian-inspired garnish', title: 'Exotic Lychee Cocktails' },
+    { id: 10, src: glasses, alt: 'Premium cocktail glassware collection', title: 'Fine Glassware' },
+    { id: 11, src: flower_drinks, alt: 'Hibiscus spritz and floral infused vodka tonic', title: 'Floral Creations' },
+    { id: 12, src: egg_top, alt: 'Raspberry gin sour with egg white foam', title: 'Artisan Gin Sour' },
+    { id: 13, src: lemony, alt: 'Fresh citrus cocktails with lemon garnish', title: 'Fresh Citrus Blends' },
+    { id: 14, src: garnish, alt: 'Artistic cocktail garnish preparation', title: 'Garnish Artistry' },
+    { id: 15, src: marshmallow2, alt: 'Marshmallow and lychee specialty cocktails', title: 'Sweet Specialties' },
+    { id: 16, src: marg, alt: 'Signature margarita with premium ingredients', title: 'House Margarita' },
+    { id: 17, src: rimmed_cups, alt: 'Artfully rimmed cocktail cups with specialty salts', title: 'Specialty Rims' }
   ], []);
 
-  // Preload the first batch of images
+  // Handle lightbox opening - set index first, then open
+  const openLightbox = useCallback((index) => {
+    setLightboxIndex(index);
+    // Small delay to ensure state is set before opening
+    setTimeout(() => {
+      setLightboxOpen(true);
+    }, 0);
+  }, []);
+
+  // Handle lightbox closing
+  const closeLightbox = useCallback(() => {
+    setLightboxOpen(false);
+  }, []);
+
+  // Smooth scroll animations - now that images are optimized
   useEffect(() => {
-    const preloadInitialImages = () => {
-      const initialImages = galleryImages.slice(0, visibleImages);
-      let loadedCount = 0;
-      
-      initialImages.forEach(image => {
-        const img = new Image();
-        img.src = image.src;
-        img.onload = () => {
-          loadedCount++;
-          if (loadedCount === initialImages.length) {
-            setLoading(false);
-          }
-        };
-        img.onerror = () => {
-          loadedCount++;
-          if (loadedCount === initialImages.length) {
-            setLoading(false);
-          }
-        };
-      });
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
     };
 
-    preloadInitialImages();
-  }, [galleryImages, visibleImages]);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const element = entry.target;
+          const animationType = element.dataset.animate;
+          const delay = element.dataset.delay || '';
+          
+          if (animationType) {
+            element.classList.add(`animate-${animationType}`);
+            if (delay) {
+              element.classList.add(`animate-delay-${delay}`);
+            }
+          }
+          
+          observer.unobserve(element);
+        }
+      });
+    }, observerOptions);
 
-  // Optimized intersection observer
+    // Wait for DOM to be ready
+    const timer = setTimeout(() => {
+      const animatedElements = document.querySelectorAll('[data-animate]');
+      animatedElements.forEach(el => observer.observe(el));
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, [visibleImages]);
+
+  // Instant loading - no preloading at all
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+
+  // Initialize scroll animations - Fixed version
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const element = entry.target;
+          const animationType = element.dataset.animate;
+          
+          if (animationType) {
+            element.classList.add(`animate-${animationType}`);
+          }
+          
+          observer.unobserve(element);
+        }
+      });
+    }, observerOptions);
+
+    // Wait a bit for DOM to be ready, then observe all animated elements
+    const timer = setTimeout(() => {
+      const animatedElements = document.querySelectorAll('[data-animate]');
+      animatedElements.forEach(el => observer.observe(el));
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, [visibleImages]); // Re-run when new images load
+
+  // Optimized intersection observer for load more functionality
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -176,10 +233,10 @@ const Gallery = () => {
         <div className="container">
           <div className="row dark-mode-white">
             <header>
-              <h1 className="section__title dark-mode-title">
+              <h1 className="section__title dark-mode-title" data-animate="fade-in-up">
                 Our Gallery
               </h1>
-              <p className="gallery__header" role="doc-subtitle">
+              <p className="gallery__header" role="doc-subtitle" data-animate="fade-in-up" data-delay="2">
                 Explore our past events and signature cocktails
               </p>
             </header>
@@ -193,7 +250,7 @@ const Gallery = () => {
                 {galleryImages.slice(0, visibleImages).map((image, index) => (
                   <article 
                     key={image.id} 
-                    className="gallery__item"
+                    className="gallery__item hover-lift"
                     role="gridcell"
                     aria-label={`Gallery item ${index + 1} of ${galleryImages.length}`}
                   >
@@ -201,6 +258,8 @@ const Gallery = () => {
                       src={image.src}
                       alt={image.alt}
                       title={image.title}
+                      onClick={() => openLightbox(index)}
+                      priority={index < 3} // First 3 images load immediately
                     />
                   </article>
                 ))}
@@ -225,11 +284,11 @@ const Gallery = () => {
               <button
                 onClick={toggleModal}
                 onKeyDown={handleKeyDown}
-                className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black gallery__contact-btn"
+                className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black gallery__contact-btn btn-animated hover-glow"
                 aria-label="Contact us about your event"
                 type="button"
               >
-                <span className="italic gallery__contact">Contact Us Today!</span>
+                <span className="italic gallery__contact text-glow">Contact Us Today!</span>
               </button>
             </aside>
           </div>
@@ -252,6 +311,14 @@ const Gallery = () => {
           ])}
         </div>
       </section>
+
+      {/* Lightbox Component - make sure it gets the full images array */}
+      <Lightbox
+        images={galleryImages} // Full array, not sliced
+        isOpen={lightboxOpen}
+        onClose={closeLightbox}
+        initialIndex={lightboxIndex}
+      />
     </div>
   );
 };

@@ -1,7 +1,7 @@
+// Updated Home.jsx with animations
 import React, { useEffect, useCallback, useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlassMartini, faCocktail, faWineGlass, faChampagneGlasses } from '@fortawesome/free-solid-svg-icons';
-// Static imports for immediate use
 import drinksFallback from '../assets/drink_stations.jpg';
 import drinks2Fallback from '../assets/HMTrio.jpg';
 import drinks3Fallback from '../assets/margs.jpg';
@@ -9,13 +9,14 @@ import Logo from '../assets/LogoHM.png';
 import '../App.css';
 import moveBackground from '../utils/moveBackground.js';
 import { useModal } from '../utils/modalContext';
+import { initScrollAnimations, enhanceShapeMovement } from '../utils/scrollAnimations';
 
-// Optimized Image Component with lazy loading
+// Optimized Image Component with animation
 const OptimizedProjectImage = React.memo(({ src, alt, className }) => {
   return (
     <img 
       src={src} 
-      className={className}
+      className={`${className} animate-fade-in`}
       alt={alt}
       loading="lazy"
       decoding="async"
@@ -26,7 +27,7 @@ const OptimizedProjectImage = React.memo(({ src, alt, className }) => {
 
 OptimizedProjectImage.displayName = 'OptimizedProjectImage';
 
-// Ticker component for better performance
+// Enhanced Ticker component
 const Ticker = React.memo(() => {
   const tickerItems = useMemo(() => {
     const items = [];
@@ -42,7 +43,7 @@ const Ticker = React.memo(() => {
   }, []);
 
   return (
-    <div className="ticker-container" role="marquee" aria-label="Now booking for 2025">
+    <div className="ticker-container animate-slide-in-top" role="marquee" aria-label="Now booking for 2025">
       <div className="ticker-wrap">
         {tickerItems}
       </div>
@@ -55,17 +56,30 @@ Ticker.displayName = 'Ticker';
 const Home = () => {
     const { toggleModal } = useModal();
 
-    // Memoized mouse move handler for better performance
+    // Enhanced mouse move handler with parallax
     const handleMouseMove = useCallback((event) => {
         if (typeof moveBackground === "function") {
             moveBackground(event);
         }
+        // Add enhanced shape movement
+        enhanceShapeMovement(event);
     }, []);
 
-    // Memoized about us click handler
     const handleAboutUsClick = useCallback(() => {
         toggleModal();
     }, [toggleModal]);
+
+    // Initialize scroll animations
+    useEffect(() => {
+        const observer = initScrollAnimations();
+        
+        // Cleanup observer on unmount
+        return () => {
+            if (observer) {
+                observer.disconnect();
+            }
+        };
+    }, []);
 
     // Setup mouse move listener
     useEffect(() => {
@@ -75,23 +89,23 @@ const Home = () => {
         };
     }, [handleMouseMove]);
 
-    // Memoized background shapes
+    // Memoized background shapes with animations
     const backgroundShapes = useMemo(() => {
         const allIcons = [faGlassMartini, faCocktail, faWineGlass, faChampagneGlasses];
         return [
-            <FontAwesomeIcon key="0" icon={allIcons[0]} className="shape shape--0" aria-hidden="true" />,
-            <FontAwesomeIcon key="1" icon={allIcons[0]} className="shape shape--1" aria-hidden="true" />,
-            <FontAwesomeIcon key="2" icon={allIcons[1]} className="shape shape--2" aria-hidden="true" />,
-            <FontAwesomeIcon key="3" icon={allIcons[1]} className="shape shape--3" aria-hidden="true" />,
-            <FontAwesomeIcon key="4" icon={allIcons[3]} className="shape shape--4" aria-hidden="true" />,
-            <FontAwesomeIcon key="5" icon={allIcons[2]} className="shape shape--5" aria-hidden="true" />,
-            <FontAwesomeIcon key="6" icon={allIcons[3]} className="shape shape--6" aria-hidden="true" />,
-            <FontAwesomeIcon key="7" icon={allIcons[2]} className="shape shape--7" aria-hidden="true" />,
-            <FontAwesomeIcon key="8" icon={faGlassMartini} className="shape shape--8" aria-hidden="true" />
+            <FontAwesomeIcon key="0" icon={allIcons[0]} className="shape shape--0 animate-float" aria-hidden="true" />,
+            <FontAwesomeIcon key="1" icon={allIcons[0]} className="shape shape--1 animate-pulse" aria-hidden="true" />,
+            <FontAwesomeIcon key="2" icon={allIcons[1]} className="shape shape--2 animate-float" aria-hidden="true" />,
+            <FontAwesomeIcon key="3" icon={allIcons[1]} className="shape shape--3 animate-pulse" aria-hidden="true" />,
+            <FontAwesomeIcon key="4" icon={allIcons[3]} className="shape shape--4 animate-float" aria-hidden="true" />,
+            <FontAwesomeIcon key="5" icon={allIcons[2]} className="shape shape--5 animate-pulse" aria-hidden="true" />,
+            <FontAwesomeIcon key="6" icon={allIcons[3]} className="shape shape--6 animate-float" aria-hidden="true" />,
+            <FontAwesomeIcon key="7" icon={allIcons[2]} className="shape shape--7 animate-pulse" aria-hidden="true" />,
+            <FontAwesomeIcon key="8" icon={faGlassMartini} className="shape shape--8 animate-float" aria-hidden="true" />
         ];
     }, []);
 
-    // Memoized project data for better performance
+    // Memoized project data with animation attributes
     const projectData = useMemo(() => [
         {
             id: 1,
@@ -99,7 +113,8 @@ const Home = () => {
             title: "Wedding Reception",
             subtitle: "Elegant and Memorable",
             description: "We specialize in bringing a unique and personalized touch to events like wedding receptions. Our mobile bar service includes crafting custom cocktails, creating a welcoming bar atmosphere, and ensuring guests enjoy an elevated experience that adds to the celebration's lasting memories.",
-            alt: "Professional wedding reception bar setup with elegant drink stations"
+            alt: "Professional wedding reception bar setup with elegant drink stations",
+            animateData: "fade-in-up"
         },
         {
             id: 2,
@@ -107,7 +122,8 @@ const Home = () => {
             title: "Private Party",
             subtitle: "Exclusive and Personalized",
             description: "We bring fun and flair to your private parties with our mobile bar service, tailored to create a memorable experience for you and your guests. Whether it's an intimate gathering or a lively celebration, we offer custom cocktails and impeccable service that adds a touch of excitement to your event. From the first drink to the last toast, we ensure every detail is perfect, leaving your guests talking about your party long after it ends.",
-            alt: "Private party bar service featuring signature espresso and lychee martinis"
+            alt: "Private party bar service featuring signature espresso and lychee martinis",
+            animateData: "fade-in-up"
         },
         {
             id: 3,
@@ -115,7 +131,8 @@ const Home = () => {
             title: "Corporate Event",
             subtitle: "Professional and Fun",
             description: "We bring professionalism and elegance to corporate events with our mobile bar service. Whether it's a company celebration, client appreciation event, or team gathering, we craft custom cocktails and create an inviting bar experience that enhances networking and leaves a lasting impression.",
-            alt: "Corporate event bar service with professional tropical margaritas and signature cocktails"
+            alt: "Corporate event bar service with professional tropical margaritas and signature cocktails",
+            animateData: "fade-in-up"
         }
     ], []);
 
@@ -127,15 +144,17 @@ const Home = () => {
                         <div className="row">
                             <div className="header__content">
                                 <div className="header__content--left">
-                                    <h1 className="big__title">Mobile Bar Services</h1>
-                                    <p className="header__para dark-mode-white">
+                                    <h1 className="big__title animate-fade-in-up" data-animate="fade-in-up">
+                                        Mobile Bar Services
+                                    </h1>
+                                    <p className="header__para dark-mode-white animate-fade-in-up" data-animate="fade-in-up" data-delay="2">
                                         Elevate your event with our expert Mobile Bartenders. We craft custom cocktails and provide exceptional service to make your celebration unforgettable.
                                         Let us bring your vision to life!
                                         <br />
                                         <br />
                                         Here's a bit more{' '}
                                         <button 
-                                            className="italic header__para link__hover-effect link__hover-effect--black click"
+                                            className="italic header__para link__hover-effect link__hover-effect--black click btn-animated text-glow"
                                             onClick={handleAboutUsClick}
                                             style={{ background: 'none', border: 'none', font: 'inherit', color: 'inherit', cursor: 'pointer' }}
                                             aria-label="Learn more about Hidden Memories Bar"
@@ -151,12 +170,12 @@ const Home = () => {
                     <Ticker />
                 </header>
                 
-                <a href="#projects" className="scroll" aria-label="Scroll to featured events section">
+                <a href="#projects" className="scroll animate-bounce-in" aria-label="Scroll to featured events section" data-animate="bounce-in" data-delay="4">
                     <div className="scroll__icon click" aria-hidden="true"></div>
                 </a>
             </section>
 
-            {/* Background decorative shapes */}
+            {/* Background decorative shapes with enhanced animations */}
             <div aria-hidden="true">
                 {backgroundShapes}
             </div>
@@ -166,15 +185,15 @@ const Home = () => {
                     <div className="container">
                         <div className="row">
                             <header>
-                                <h2 className="section__title dark-mode-white">
+                                <h2 className="section__title dark-mode-white animate-fade-in-up" data-animate="fade-in-up">
                                     Featured Events
                                 </h2>
                             </header>
                             
                             <ul className="project__list">
                                 {projectData.map((project, index) => (
-                                    <li key={project.id} className="project">
-                                        <article className="project__wrapper">
+                                    <li key={project.id} className="project" data-animate={project.animateData} data-delay={index + 1}>
+                                        <article className="project__wrapper hover-lift">
                                             <OptimizedProjectImage
                                                 src={project.image}
                                                 className="project__img"
@@ -182,7 +201,7 @@ const Home = () => {
                                             />
                                             <div className="project__wrapper--bg" aria-hidden="true"></div>
                                             <div className="project__description">
-                                                <h3 className="project__description--title">
+                                                <h3 className="project__description--title text-glow">
                                                     {project.title}
                                                 </h3>
                                                 <h4 className="project__description--sub-title">
@@ -201,14 +220,14 @@ const Home = () => {
                 </section>
             </main>
 
-            <footer>
+            <footer className="animate-fade-in-up" data-animate="fade-in-up">
                 <div className="container footer__color">
                     <div className="row footer__row">
-                        <a href="/" className="footer__anchor" aria-label="Return to top of page">
+                        <a href="/" className="footer__anchor hover-scale" aria-label="Return to top of page">
                             <figure className="footer__logo">
                                 <img 
-                                    src= {Logo}
-                                    className="footer__logo--img" 
+                                    src={Logo}
+                                    className="footer__logo--img animate-bounce-in" 
                                     alt="Hidden Memories Bar logo" 
                                     loading="lazy"
                                 />
