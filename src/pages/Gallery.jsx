@@ -90,13 +90,13 @@ const Gallery = () => {
     { id: 17, src: rimmed_cups, alt: 'Artfully rimmed cocktail cups with specialty salts', title: 'Specialty Rims' }
   ], []);
 
-  // Handle lightbox opening - set index first, then open
+  // Handle lightbox opening - use batch update to prevent flash
   const openLightbox = useCallback((index) => {
-    setLightboxIndex(index);
-    // Small delay to ensure state is set before opening
-    setTimeout(() => {
+    // Use React's automatic batching to update both states together
+    React.startTransition(() => {
+      setLightboxIndex(index);
       setLightboxOpen(true);
-    }, 0);
+    });
   }, []);
 
   // Handle lightbox closing
@@ -306,6 +306,13 @@ const Gallery = () => {
               key={`${index}-2`} 
               icon={icon} 
               className={`shape shape--${index * 2 + 1}`}
+              aria-hidden="true"
+            />
+          ]).concat([
+            <FontAwesomeIcon 
+              key="9" 
+              icon={faGlassMartini} 
+              className="shape shape--9"
               aria-hidden="true"
             />
           ])}

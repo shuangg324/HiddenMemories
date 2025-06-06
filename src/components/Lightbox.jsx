@@ -7,6 +7,7 @@ import { faTimes, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-
 const Lightbox = ({ images, isOpen, onClose, initialIndex = 0 }) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [showHint, setShowHint] = useState(true);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   // Update current index when initialIndex changes
   useEffect(() => {
@@ -20,13 +21,24 @@ const Lightbox = ({ images, isOpen, onClose, initialIndex = 0 }) => {
       return () => clearTimeout(timer);
     }
   }, [isOpen, showHint]);
+  
   const goToNext = useCallback(() => {
-    setCurrentIndex((prev) => (prev + 1) % images.length);
-  }, [images.length]);
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+      setIsTransitioning(false);
+    }, 150);
+  }, [images.length, isTransitioning]);
 
   const goToPrevious = useCallback(() => {
-    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
-  }, [images.length]);
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
+      setIsTransitioning(false);
+    }, 150);
+  }, [images.length, isTransitioning]);
 
   // Keyboard navigation
   const handleKeyPress = useCallback((e) => {
@@ -66,7 +78,12 @@ const Lightbox = ({ images, isOpen, onClose, initialIndex = 0 }) => {
   }, [isOpen]);
 
   const goToImage = (index) => {
-    setCurrentIndex(index);
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentIndex(index);
+      setIsTransitioning(false);
+    }, 150);
   };
 
   const handleOverlayClick = (e) => {
@@ -123,14 +140,16 @@ const Lightbox = ({ images, isOpen, onClose, initialIndex = 0 }) => {
           <FontAwesomeIcon icon={faChevronRight} />
         </button>
 
-        {/* Main image - uses the same source as gallery for instant display */}
+        {/* Main image - smooth transition */}
         <img
           src={currentImage.src}
           alt={currentImage.alt}
           className="lightbox-image"
           style={{ 
             display: 'block',
-            opacity: 1
+            opacity: isTransitioning ? 0.3 : 1,
+            transform: isTransitioning ? 'scale(0.95)' : 'scale(1)',
+            transition: 'opacity 0.3s ease, transform 0.3s ease'
           }}
         />
 

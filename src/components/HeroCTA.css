@@ -1,0 +1,184 @@
+/* Create this file: src/components/HeroCTA.css */
+
+.hero-cta {
+    margin-top: 40px;
+    text-align: center;
+    padding: 0 20px;
+  }
+  
+  .hero-cta__content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .hero-cta__urgency {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, rgba(221, 161, 101, 0.1), rgba(125, 51, 39, 0.1));
+    border-radius: 25px;
+    border: 1px solid rgba(221, 161, 101, 0.3);
+  }
+  
+  .urgency-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    color: #7d3327;
+    font-weight: bold;
+    letter-spacing: 1px;
+  }
+  
+  .urgency-icon {
+    color: #d4af37;
+    font-size: 12px;
+    animation: twinkle 2s ease-in-out infinite;
+  }
+  
+  @keyframes twinkle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.1); }
+  }
+  
+  .hero-cta__buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .cta-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 30px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    min-width: 160px;
+    justify-content: center;
+  }
+  
+  .cta-button--primary {
+    background: linear-gradient(135deg, #849f4f 0%, #7d3327 100%);
+    color: white;
+    box-shadow: 0 4px 20px rgba(132, 159, 79, 0.3);
+  }
+  
+  .cta-button--primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(132, 159, 79, 0.4);
+    background: linear-gradient(135deg, #7d3327 0%, #849f4f 100%);
+  }
+  
+  .cta-button--secondary {
+    background: transparent;
+    color: #7d3327;
+    border: 2px solid #7d3327;
+  }
+  
+  .cta-button--secondary:hover {
+    background: #7d3327;
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(125, 51, 39, 0.3);
+  }
+  
+  .cta-button:active {
+    transform: translateY(-1px);
+  }
+  
+  /* Shimmer effect for primary button */
+  .cta-button--primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+  }
+  
+  .cta-button--primary:hover::before {
+    left: 100%;
+  }
+  
+  .hero-cta__guarantee {
+    font-size: 14px;
+    color: #dda165;
+    font-style: italic;
+    opacity: 0.9;
+  }
+  
+  /* Dark mode adjustments */
+  body.dark-mode .hero-cta__urgency {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(132, 159, 79, 0.1));
+    border-color: rgba(212, 175, 55, 0.3);
+  }
+  
+  body.dark-mode .urgency-text {
+    color: #ebddc9;
+  }
+  
+  body.dark-mode .cta-button--primary {
+    background: linear-gradient(135deg, #d4af37 0%, #849f4f 100%);
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+  }
+  
+  body.dark-mode .cta-button--primary:hover {
+    background: linear-gradient(135deg, #849f4f 0%, #d4af37 100%);
+    box-shadow: 0 8px 30px rgba(212, 175, 55, 0.4);
+  }
+  
+  body.dark-mode .cta-button--secondary {
+    color: #ebddc9;
+    border-color: #d4af37;
+  }
+  
+  body.dark-mode .cta-button--secondary:hover {
+    background: #d4af37;
+    color: #360a05;
+  }
+  
+  body.dark-mode .hero-cta__guarantee {
+    color: #d4af37;
+  }
+  
+  /* Mobile responsive */
+  @media (max-width: 768px) {
+    .hero-cta__buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .cta-button {
+      width: 100%;
+      max-width: 280px;
+      padding: 12px 24px;
+      font-size: 15px;
+    }
+    
+    .hero-cta__urgency {
+      margin-bottom: 16px;
+    }
+    
+    .urgency-text {
+      font-size: 13px;
+    }
+    
+    .hero-cta__guarantee {
+      font-size: 13px;
+      padding: 0 10px;
+    }
+  }

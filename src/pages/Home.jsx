@@ -9,7 +9,7 @@ import Logo from '../assets/LogoHM.png';
 import '../App.css';
 import moveBackground from '../utils/moveBackground.js';
 import { useModal } from '../utils/modalContext';
-import { initScrollAnimations, enhanceShapeMovement } from '../utils/scrollAnimations';
+import { initScrollAnimations} from '../utils/scrollAnimations';
 
 // Optimized Image Component with animation
 const OptimizedProjectImage = React.memo(({ src, alt, className }) => {
@@ -56,13 +56,11 @@ Ticker.displayName = 'Ticker';
 const Home = () => {
     const { toggleModal } = useModal();
 
-    // Enhanced mouse move handler with parallax
+    // Memoized mouse move handler - same as other pages
     const handleMouseMove = useCallback((event) => {
         if (typeof moveBackground === "function") {
             moveBackground(event);
         }
-        // Add enhanced shape movement
-        enhanceShapeMovement(event);
     }, []);
 
     const handleAboutUsClick = useCallback(() => {
@@ -89,19 +87,19 @@ const Home = () => {
         };
     }, [handleMouseMove]);
 
-    // Memoized background shapes with animations
+    // Memoized background shapes - exactly 9 icons to match other pages
     const backgroundShapes = useMemo(() => {
         const allIcons = [faGlassMartini, faCocktail, faWineGlass, faChampagneGlasses];
         return [
-            <FontAwesomeIcon key="0" icon={allIcons[0]} className="shape shape--0 animate-float" aria-hidden="true" />,
-            <FontAwesomeIcon key="1" icon={allIcons[0]} className="shape shape--1 animate-pulse" aria-hidden="true" />,
-            <FontAwesomeIcon key="2" icon={allIcons[1]} className="shape shape--2 animate-float" aria-hidden="true" />,
-            <FontAwesomeIcon key="3" icon={allIcons[1]} className="shape shape--3 animate-pulse" aria-hidden="true" />,
-            <FontAwesomeIcon key="4" icon={allIcons[3]} className="shape shape--4 animate-float" aria-hidden="true" />,
-            <FontAwesomeIcon key="5" icon={allIcons[2]} className="shape shape--5 animate-pulse" aria-hidden="true" />,
-            <FontAwesomeIcon key="6" icon={allIcons[3]} className="shape shape--6 animate-float" aria-hidden="true" />,
-            <FontAwesomeIcon key="7" icon={allIcons[2]} className="shape shape--7 animate-pulse" aria-hidden="true" />,
-            <FontAwesomeIcon key="8" icon={faGlassMartini} className="shape shape--8 animate-float" aria-hidden="true" />
+            <FontAwesomeIcon key="0" icon={allIcons[0]} className="shape shape--0" aria-hidden="true" />,
+            <FontAwesomeIcon key="1" icon={allIcons[0]} className="shape shape--1" aria-hidden="true" />,
+            <FontAwesomeIcon key="2" icon={allIcons[1]} className="shape shape--2" aria-hidden="true" />,
+            <FontAwesomeIcon key="3" icon={allIcons[1]} className="shape shape--3" aria-hidden="true" />,
+            <FontAwesomeIcon key="4" icon={allIcons[3]} className="shape shape--4" aria-hidden="true" />,
+            <FontAwesomeIcon key="5" icon={allIcons[2]} className="shape shape--5" aria-hidden="true" />,
+            <FontAwesomeIcon key="6" icon={allIcons[3]} className="shape shape--6" aria-hidden="true" />,
+            <FontAwesomeIcon key="7" icon={allIcons[2]} className="shape shape--7" aria-hidden="true" />,
+            <FontAwesomeIcon key="8" icon={faGlassMartini} className="shape shape--8" aria-hidden="true" />
         ];
     }, []);
 
@@ -114,7 +112,7 @@ const Home = () => {
             subtitle: "Elegant and Memorable",
             description: "We specialize in bringing a unique and personalized touch to events like wedding receptions. Our mobile bar service includes crafting custom cocktails, creating a welcoming bar atmosphere, and ensuring guests enjoy an elevated experience that adds to the celebration's lasting memories.",
             alt: "Professional wedding reception bar setup with elegant drink stations",
-            animateData: "fade-in-up"
+            animateData: "fade-in-left"
         },
         {
             id: 2,
@@ -132,7 +130,7 @@ const Home = () => {
             subtitle: "Professional and Fun",
             description: "We bring professionalism and elegance to corporate events with our mobile bar service. Whether it's a company celebration, client appreciation event, or team gathering, we craft custom cocktails and create an inviting bar experience that enhances networking and leaves a lasting impression.",
             alt: "Corporate event bar service with professional tropical margaritas and signature cocktails",
-            animateData: "fade-in-up"
+            animateData: "fade-in-right"
         }
     ], []);
 

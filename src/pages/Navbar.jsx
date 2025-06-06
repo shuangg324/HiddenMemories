@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../App.css';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Logo from '../assets/logo.jpg';
+import Logo from '../assets/logo.png';
 import MobileLogo from '../assets/LogoHM.png';
 import DarkModeLogo from '../assets/logo2.png';
 import moveBackground from '../utils/moveBackground.js';
