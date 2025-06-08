@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import '../App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -14,9 +14,13 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import moveBackground from '../utils/moveBackground';
 import { useModal } from '../utils/modalContext';
+import { useSectionAnimations } from '../hooks/useScrollAnimations';
 
 const Packages = () => {
   const { openModal } = useModal();
+
+  // Use the enhanced section animations hook
+  useSectionAnimations();
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -27,48 +31,10 @@ const Packages = () => {
     openModal();
   };
 
-  // Enhanced mouse move with parallax
   const handleMouseMove = useCallback((event) => {
     if (typeof moveBackground === "function") {
       moveBackground(event);
     }
-  }, []);
-
-  // Initialize scroll animations
-  useEffect(() => {
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const element = entry.target;
-          const animationType = element.dataset.animate;
-          const delay = element.dataset.delay || '';
-          
-          if (animationType) {
-            element.classList.add(`animate-${animationType}`);
-            if (delay) {
-              element.classList.add(`animate-delay-${delay}`);
-            }
-          }
-          
-          observer.unobserve(element);
-        }
-      });
-    }, observerOptions);
-
-    const timer = setTimeout(() => {
-      const animatedElements = document.querySelectorAll('[data-animate]');
-      animatedElements.forEach(el => observer.observe(el));
-    }, 100);
-
-    return () => {
-      clearTimeout(timer);
-      observer.disconnect();
-    };
   }, []);
 
   return (
@@ -76,9 +42,8 @@ const Packages = () => {
       <section id="packages-page">
         <div className="container">
           <div className="row dark-mode-white">
-            {/* Enhanced Header */}
-            <div className="packages-header" data-animate="fade-in-up">
-              
+            {/* FIXED: Better sequenced header */}
+            <div className="packages-header" data-animate="fade-in-up" data-delay="0">
               <h1 className="section__title dark-mode-title">
                 Our Package
               </h1>
@@ -87,29 +52,29 @@ const Packages = () => {
               </p>
             </div>
 
-            {/* Enhanced How It Works */}
-            <div className="how-it-works enhanced-section" data-animate="fade-in-up" data-delay="2">
+            {/* FIXED: Sequential How It Works with proper delays */}
+            <div className="how-it-works enhanced-section" data-animate="fade-in-up" data-delay="1">
               <div className="section-header">
                 <FontAwesomeIcon icon={faMagic} className="section-icon" />
                 <p className="italic package__title enhanced-title">How It Works</p>
               </div>
               <div className="steps-container">
-                <div className="step-item" data-animate="fade-in-left" data-delay="3">
+                <div className="step-item" data-animate="fade-in-left" data-delay="2">
                   <div className="step-number">1</div>
                   <FontAwesomeIcon icon={faCheck} className="step-check" />
                   <div><b>Choose the Basic Package:</b> Every event starts with our dry hire package.</div>
                 </div>
-                <div className="step-item" data-animate="fade-in-left" data-delay="4">
+                <div className="step-item" data-animate="fade-in-left" data-delay="3">
                   <div className="step-number">2</div>
                   <FontAwesomeIcon icon={faCheck} className="step-check" />
                   <div><b>Select Add-ons:</b> Pick extras that suit your event needs.</div>
                 </div>
-                <div className="step-item" data-animate="fade-in-left" data-delay="5">
+                <div className="step-item" data-animate="fade-in-left" data-delay="4">
                   <div className="step-number">3</div>
                   <FontAwesomeIcon icon={faCheck} className="step-check" />
                   <div><b>Get a Quote:</b> Fill out our inquiry form and receive a personalized estimate.</div>
                 </div>
-                <div className="step-item" data-animate="fade-in-left" data-delay="6">
+                <div className="step-item" data-animate="fade-in-left" data-delay="5">
                   <div className="step-number">4</div>
                   <FontAwesomeIcon icon={faCheck} className="step-check" />
                   <div><b>Enjoy Your Event!</b> We handle the setup so you can focus on making memories.</div>
@@ -117,9 +82,13 @@ const Packages = () => {
               </div>
             </div>
             
-            {/* Enhanced Package List */}
-            <div className="package__list enhanced-packages" data-animate="fade-in-up" data-delay="3">
-              <div className="package enhanced-package basic-package" data-animate="scale-in" data-delay="4">
+            {/* FIXED: Package cards with better timing and no inline styles */}
+            <div className="package__list enhanced-packages">
+              <div 
+                className="package enhanced-package basic-package" 
+                data-animate="scale-in" 
+                data-delay="6"
+              >
                 <div className="package-icon-header">
                   <FontAwesomeIcon icon={faStar} className="package-main-icon" />
                   <span className="package-badge">Essential</span>
@@ -136,7 +105,11 @@ const Packages = () => {
                 </ul>
               </div>
               
-              <div className="package enhanced-package premium-package" data-animate="scale-in" data-delay="5">
+              <div 
+                className="package enhanced-package premium-package" 
+                data-animate="scale-in" 
+                data-delay="7"
+              >
                 <div className="package-icon-header">
                   <FontAwesomeIcon icon={faGem} className="package-main-icon premium-icon" />
                   <span className="package-badge premium-badge">Custom</span>
@@ -158,8 +131,8 @@ const Packages = () => {
               </div>
             </div>
 
-            {/* Enhanced Special Offer */}
-            <div className="special-offer" data-animate="bounce-in" data-delay="6">
+            {/* FIXED: Special offer with better sequencing */}
+            <div className="special-offer" data-animate="bounce-in" data-delay="8">
               <div className="special-offer-content">
                 <FontAwesomeIcon icon={faMagic} className="special-icon" />
                 <p className="italic package__items special-text">**ASK US ABOUT OUR WEDDING PLANNING SERVICES!</p>
@@ -181,8 +154,8 @@ const Packages = () => {
               ])}
             </div>
 
-            {/* Enhanced CTA */}
-            <div className="contact__cta" data-animate="fade-in-up" data-delay="6">
+            {/* FIXED: CTA with final timing */}
+            <div className="contact__cta" data-animate="fade-in-up" data-delay="9">
               <div className="packages-cta-enhanced">
                 <div className="packages-cta__header">
                   <h3 className="packages-cta__title">Ready to Create Your Perfect Event?</h3>
