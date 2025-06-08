@@ -118,8 +118,8 @@ const Packages = () => {
             </div>
             
             {/* Enhanced Package List */}
-            <div className="package__list enhanced-packages">
-              <div className="package enhanced-package basic-package" data-animate="scale-in" data-delay="3">
+            <div className="package__list enhanced-packages" data-animate="fade-in-up" data-delay="3">
+              <div className="package enhanced-package basic-package" data-animate="scale-in" data-delay="4">
                 <div className="package-icon-header">
                   <FontAwesomeIcon icon={faStar} className="package-main-icon" />
                   <span className="package-badge">Essential</span>
@@ -136,10 +136,10 @@ const Packages = () => {
                 </ul>
               </div>
               
-              <div className="package enhanced-package premium-package" data-animate="scale-in" data-delay="4">
+              <div className="package enhanced-package premium-package" data-animate="scale-in" data-delay="5">
                 <div className="package-icon-header">
                   <FontAwesomeIcon icon={faGem} className="package-main-icon premium-icon" />
-                  <span className="package-badge premium-badge">Premium</span>
+                  <span className="package-badge premium-badge">Custom</span>
                 </div>
                 <p className="italic package__title enhanced-package-title">Customize Your Event with Add-ons</p>
                 <p className="package__description">
@@ -153,12 +153,13 @@ const Packages = () => {
                   <li><FontAwesomeIcon icon={faCheck} className="item-check premium-check" /><b>Glassware Upgrade:</b> Swap disposable cups for elegant glassware.</li>
                   <li><FontAwesomeIcon icon={faCheck} className="item-check premium-check" /><b>Signature Cocktail Menu:</b> Custom cocktail list tailored to your event.</li>
                   <li><FontAwesomeIcon icon={faCheck} className="item-check premium-check" /><b>Extra Bartender(s):</b> Additional staff for larger gatherings.</li>
+                  <li><FontAwesomeIcon icon={faCheck} className="item-check premium-check" /><b>And More!</b> Ask us about additional options to enhance your event.</li>
                 </ul>
               </div>
             </div>
 
             {/* Enhanced Special Offer */}
-            <div className="special-offer" data-animate="bounce-in" data-delay="5">
+            <div className="special-offer" data-animate="bounce-in" data-delay="6">
               <div className="special-offer-content">
                 <FontAwesomeIcon icon={faMagic} className="special-icon" />
                 <p className="italic package__items special-text">**ASK US ABOUT OUR WEDDING PLANNING SERVICES!</p>

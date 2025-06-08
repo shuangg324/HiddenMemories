@@ -137,6 +137,7 @@ input:focus, textarea:focus {
   padding: 50px 0px 50px 0px;
   width: 100%;
   background-color: #fff8f3; /* Light emerald background */
+  z-index: 1;
 }
 
 .row {
@@ -250,6 +251,8 @@ nav,
 }
 
 .header__content {
+  position: relative;
+  z-index: 1;
   display: flex;
   width: 100%;
 }
@@ -1220,6 +1223,8 @@ body.dark-mode footer {
 }
 
 .contact__cta {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1343,11 +1348,15 @@ body.dark-mode .ticker-separator {
 
 /* CONTACT PAGE */
 .form-container {
+  position:relative;
+  z-index:1;
   max-width: 600px; /* Limit overall form width */
   margin: 0 auto;
 }
 
 .contact__header {
+  position: relative;
+  z-index:1;
   text-align: center;
   margin-bottom: 40px;
   color: #dda165;
@@ -2292,6 +2301,14 @@ body.lightbox-open {
   font-weight: bold;
 }
 
+.package {
+  z-index: 1;
+}
+
+.special-offer-content {
+  z-index: 1;
+}
+
 .packages-cta__buttons {
   display: flex;
   gap: 20px;
@@ -2453,6 +2470,8 @@ body.dark-mode .packages-cta__guarantee {
 
 /* Enhanced Header */
 .packages-header {
+  position: relative;
+  z-index:1;
   text-align: center;
   margin-bottom: 60px;
 }
@@ -2466,13 +2485,16 @@ body.dark-mode .packages-cta__guarantee {
 
 /* Enhanced Sections */
 .enhanced-section {
+  position: relative;
   background: linear-gradient(135deg, rgba(221, 161, 101, 0.1), rgba(132, 159, 79, 0.1));
   border-radius: 20px;
   padding: 40px;
   margin-bottom: 60px;
   border: 2px solid rgba(221, 161, 101, 0.2);
   transition: all 0.3s ease;
+  z-index: 1;
 }
+
 
 .enhanced-section:hover {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -2546,12 +2568,12 @@ body.dark-mode .packages-cta__guarantee {
 
 /* Enhanced Packages */
 .enhanced-packages {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 40px;
   margin-bottom: 60px;
-  opacity: 1; /* Ensure visibility */
-  visibility: visible;
 }
 
 .enhanced-package {
@@ -2603,8 +2625,7 @@ body.dark-mode .packages-cta__guarantee {
   color: white;
   padding: 8px 16px;
   border-radius: 20px;
-  font-size: 12px;
-  font-weight: bold;
+  font-size: 18px;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -2657,10 +2678,12 @@ body.dark-mode .packages-cta__guarantee {
 
 /* Enhanced Special Offer */
 .special-offer {
+  position: relative;
   text-align: center;
   margin-bottom: 60px;
   opacity: 1; /* Ensure visibility */
   visibility: visible; /* Ensure visibility */
+  z-index: 1;
 }
 
 .special-offer-content {
@@ -2810,6 +2833,7 @@ body.dark-mode .packages-cta__guarantee {
 body.dark-mode .enhanced-section {
   background: linear-gradient(135deg, rgba(54, 10, 5, 0.9), rgba(125, 51, 39, 0.9));
   border-color: rgba(212, 175, 55, 0.3);
+  z-index:1;
 }
 
 body.dark-mode .step-item {

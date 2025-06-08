@@ -368,7 +368,14 @@ Event Details:
           {[faGlassMartini, faCocktail, faWineGlass, faBeer].flatMap((icon, index) => [
             <FontAwesomeIcon key={`${index}-1`} icon={icon} className={`shape shape--${index * 2}`} />,
             <FontAwesomeIcon key={`${index}-2`} icon={icon} className={`shape shape--${index * 2 + 1}`} />
-          ])}
+          ]).concat([
+                      <FontAwesomeIcon 
+                        key="9" 
+                        icon={faGlassMartini} 
+                        className="shape shape--9"
+                        aria-hidden="true"
+                      />
+                    ])}
         </div>
       </div>
     </>
