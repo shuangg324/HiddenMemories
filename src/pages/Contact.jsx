@@ -214,7 +214,6 @@ Event Details:
           <form ref={formRef} id="contactForm" onSubmit={handleSubmit}>
             
             {/* ANIMATED: Name fields row */}
-            <div className="form-row">
               <div className="form-group" data-animate="fade-in-left" data-delay="2">
                 <label htmlFor="firstName" className="required">First Name</label>
                 <input 
@@ -228,19 +227,8 @@ Event Details:
                 />
               </div>
 
-              <div className="form-group" data-animate="fade-in-right" data-delay="3">
-                <label htmlFor="lastName" className="required">Last Name</label>
-                <input 
-                  type="text" 
-                  id="lastName" 
-                  placeholder="Please provide your last name" 
-                  required
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  disabled={isSubmitting}
-                />
-              </div>
-            </div>
+
+
 
             {/* ANIMATED: Partner name */}
             <div className="form-group" data-animate="fade-in-up" data-delay="4">
@@ -382,7 +370,7 @@ Event Details:
             </div>
 
             <div className="form-group" data-animate="fade-in-up" data-delay="12">
-              <label htmlFor="hearAbout" className="required">How did you hear about me?</label>
+              <label htmlFor="hearAbout" className="required">How did you hear about us?</label>
               <select 
                 id="hearAbout" 
                 required
