@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import '../App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -14,13 +14,63 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import moveBackground from '../utils/moveBackground';
 import { useModal } from '../utils/modalContext';
-import { useSectionAnimations } from '../hooks/useScrollAnimations';
 
 const Packages = () => {
   const { openModal } = useModal();
 
-  // Use the enhanced section animations hook
-  useSectionAnimations();
+  // Use the exact same animation system as Home page
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const element = entry.target;
+          const animationType = element.dataset.animate;
+          const delay = element.dataset.delay || '';
+          
+          if (animationType) {
+            const delayMs = delay ? parseInt(delay) * 100 : 0; // Use 100ms like Home page
+            
+            setTimeout(() => {
+              element.classList.add(`animate-${animationType}`);
+              if (delay) {
+                element.classList.add(`animate-delay-${delay}`);
+              }
+              
+              // Make sure element becomes visible
+              element.style.opacity = '';
+              element.style.visibility = '';
+            }, delayMs);
+          }
+          
+          observer.unobserve(element);
+        }
+      });
+    }, observerOptions);
+
+    // Initialize exactly like Home page
+    setTimeout(() => {
+      const animatedElements = document.querySelectorAll('[data-animate]');
+      console.log(`🎬 Found ${animatedElements.length} elements to animate`);
+      
+      animatedElements.forEach(el => {
+        // Set initial state for animation - exactly like Home page
+        if (!el.classList.contains('animate-fade-in-up') && 
+            !el.classList.contains('animate-fade-in-left') && 
+            !el.classList.contains('animate-fade-in-right')) {
+          el.style.opacity = '0';
+          el.style.visibility = 'hidden';
+        }
+        observer.observe(el);
+      });
+    }, 50);
+
+    return () => observer.disconnect();
+  }, []);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });

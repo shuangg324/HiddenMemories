@@ -1,7 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlassMartini, faCocktail, faWineGlass, faBeer, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
-import emailjs from 'emailjs-com'; // Make sure this is installed
+import emailjs from 'emailjs-com';
 import moveBackground from '../utils/moveBackground';
 import '../App.css';
 
@@ -25,6 +25,60 @@ const WeddingContactForm = () => {
   const dateInputRef = useRef(null);
   const formRef = useRef(null);
 
+  // Use the exact same animation system as Home page
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const element = entry.target;
+          const animationType = element.dataset.animate;
+          const delay = element.dataset.delay || '';
+          
+          if (animationType) {
+            const delayMs = delay ? parseInt(delay) * 100 : 0; // Use 100ms like Home page
+            
+            setTimeout(() => {
+              element.classList.add(`animate-${animationType}`);
+              if (delay) {
+                element.classList.add(`animate-delay-${delay}`);
+              }
+              
+              // Make sure element becomes visible
+              element.style.opacity = '';
+              element.style.visibility = '';
+            }, delayMs);
+          }
+          
+          observer.unobserve(element);
+        }
+      });
+    }, observerOptions);
+
+    // Initialize exactly like Home page
+    setTimeout(() => {
+      const animatedElements = document.querySelectorAll('[data-animate]');
+      console.log(`🎬 Found ${animatedElements.length} elements to animate`);
+      
+      animatedElements.forEach(el => {
+        // Set initial state for animation - exactly like Home page
+        if (!el.classList.contains('animate-fade-in-up') && 
+            !el.classList.contains('animate-fade-in-left') && 
+            !el.classList.contains('animate-fade-in-right')) {
+          el.style.opacity = '0';
+          el.style.visibility = 'hidden';
+        }
+        observer.observe(el);
+      });
+    }, 50);
+
+    return () => observer.disconnect();
+  }, []);
+
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData(prevState => ({
@@ -40,8 +94,6 @@ const WeddingContactForm = () => {
   };
 
   const validateAndScrollToError = () => {
-    console.log('Validation function called'); // This should show in console
-    
     const requiredFields = [
       { id: 'firstName', name: 'First Name' },
       { id: 'lastName', name: 'Last Name' },
@@ -55,44 +107,27 @@ const WeddingContactForm = () => {
   
     for (const field of requiredFields) {
       const value = formData[field.id];
-      console.log(`Checking field ${field.id}:`, value); // Debug log
       
       if (!value || value.trim() === '') {
-        console.log(`Field ${field.id} is empty!`); // Debug log
-        
-        // Find the input element
         const inputElement = document.getElementById(field.id);
         if (inputElement) {
-          console.log(`Found input element for ${field.id}`); // Debug log
-          
-          // Add error styling
           inputElement.parentElement.classList.add('error');
-          
-          // Scroll to element
           inputElement.scrollIntoView({ 
             behavior: 'smooth', 
             block: 'center' 
           });
-          
           inputElement.focus();
         }
-        
         return false;
       }
     }
     
-    console.log('All fields valid'); // Debug log
     return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('handleSubmit called!'); // This should show
-  console.log('Form data:', formData);
-
-  alert('Form submitted!');
     
-    // Validate required fields and scroll to first empty one
     if (!validateAndScrollToError()) {
       return;
     }
@@ -100,12 +135,10 @@ const WeddingContactForm = () => {
     setIsSubmitting(true);
 
     try {
-      // Using the same EmailJS configuration as your modal
-      const result = await emailjs.send(
-        'service_t3znxtz',    // Your service ID
-        'template_eph0ydf',   // Your template ID  
+      await emailjs.send(
+        'service_t3znxtz',
+        'template_eph0ydf',
         {
-          // Map form data to email template variables
           user_name: `${formData.firstName} ${formData.lastName}`,
           partner_name: formData.partnerName,
           user_email: formData.email,
@@ -133,13 +166,11 @@ Event Details:
           `,
           to_email: 'hiddenmemoriesbar@gmail.com'
         },
-        '7j7vJcTfHGJ0hv0R4'  // Your public key
+        '7j7vJcTfHGJ0hv0R4'
       );
 
-      console.log('Email sent successfully:', result);
       alert('Thank you! Your wedding inquiry has been sent successfully. We\'ll get back to you soon!');
       
-      // Reset form
       setFormData({
         firstName: '',
         lastName: '',
@@ -164,17 +195,21 @@ Event Details:
   };
   
   return (
-    <>
-      <div className="App" onMouseMove={(event) => moveBackground(event)}>
-        <div className="container">
-          <div className="header">
-            <h1 className="section__title dark-mode-title">Contact me!</h1>
-            <p className="contact__header">Please fill out the form and I will reach out to you shortly</p>
-          </div>
+    <div className="App" onMouseMove={(event) => moveBackground(event)}>
+      <div className="container">
+        
+        {/* ANIMATED: Header section - individual element animations */}
+        <div className="header">
+          <h1 className="section__title dark-mode-title" data-animate="fade-in-up" data-delay="0">Contact me!</h1>
+          <p className="contact__header" data-animate="fade-in-up" data-delay="2">Please fill out the form and I will reach out to you shortly</p>
+        </div>
 
-          <div className="form-container">
-            <form ref={formRef} id="contactForm" onSubmit={handleSubmit}>
-              <div className="form-group">
+        <div className="form-container" data-animate="fade-in-up" data-delay="1">
+          <form ref={formRef} id="contactForm" onSubmit={handleSubmit}>
+            
+            {/* ANIMATED: Name fields row */}
+            <div className="form-row">
+              <div className="form-group" data-animate="fade-in-left" data-delay="2">
                 <label htmlFor="firstName" className="required">First Name</label>
                 <input 
                   type="text" 
@@ -187,7 +222,7 @@ Event Details:
                 />
               </div>
 
-              <div className="form-group">
+              <div className="form-group" data-animate="fade-in-right" data-delay="3">
                 <label htmlFor="lastName" className="required">Last Name</label>
                 <input 
                   type="text" 
@@ -199,20 +234,24 @@ Event Details:
                   disabled={isSubmitting}
                 />
               </div>
+            </div>
 
-              <div className="form-group">
-                <label htmlFor="partnerName">Partner's Name</label>
-                <input 
-                  type="text" 
-                  id="partnerName" 
-                  placeholder="Please provide your partner's full name"
-                  value={formData.partnerName}
-                  onChange={handleChange}
-                  disabled={isSubmitting}
-                />
-              </div>
+            {/* ANIMATED: Partner name */}
+            <div className="form-group" data-animate="fade-in-up" data-delay="4">
+              <label htmlFor="partnerName">Partner's Name</label>
+              <input 
+                type="text" 
+                id="partnerName" 
+                placeholder="Please provide your partner's full name"
+                value={formData.partnerName}
+                onChange={handleChange}
+                disabled={isSubmitting}
+              />
+            </div>
 
-              <div className="form-group">
+            {/* ANIMATED: Contact info row */}
+            <div className="form-row">
+              <div className="form-group" data-animate="fade-in-left" data-delay="5">
                 <label htmlFor="email" className="required">Email</label>
                 <input 
                   type="email" 
@@ -225,7 +264,7 @@ Event Details:
                 />
               </div>
 
-              <div className="form-group">
+              <div className="form-group" data-animate="fade-in-right" data-delay="6">
                 <label htmlFor="phone" className="required">Phone Number</label>
                 <input 
                   type="tel" 
@@ -237,8 +276,11 @@ Event Details:
                   disabled={isSubmitting}
                 />
               </div>
+            </div>
 
-              <div className="form-group">
+            {/* ANIMATED: Event details row */}
+            <div className="form-row">
+              <div className="form-group" data-animate="fade-in-left" data-delay="7">
                 <label htmlFor="eventDate" className="required">Event Date</label>
                 <div className="date-input-container">
                   <input 
@@ -263,7 +305,7 @@ Event Details:
                 </div>
               </div>
 
-              <div className="form-group">
+              <div className="form-group" data-animate="fade-in-right" data-delay="8">
                 <label htmlFor="venue">Event Venue</label>
                 <input 
                   type="text" 
@@ -274,85 +316,90 @@ Event Details:
                   disabled={isSubmitting}
                 />
               </div>
+            </div>
 
-              <div className="form-group">
-                <label htmlFor="interested" className="required">I'm interested in:</label>
-                <select 
-                  id="interested" 
-                  required
-                  value={formData.interested}
-                  onChange={handleChange}
-                  disabled={isSubmitting}
-                >
-                  <option value="" disabled>Select</option>
-                  <option value="fullDay">Open Bar</option>
-                  <option value="halfDay">Custom Set Menu</option>
-                  <option value="elopement">Non-alcoholic Drinks</option>
-                  <option value="engagement">Beer/Wine</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
+            {/* ANIMATED: Dropdown selections */}
+            <div className="form-group" data-animate="fade-in-up" data-delay="9">
+              <label htmlFor="interested" className="required">I'm interested in:</label>
+              <select 
+                id="interested" 
+                required
+                value={formData.interested}
+                onChange={handleChange}
+                disabled={isSubmitting}
+              >
+                <option value="" disabled>Select</option>
+                <option value="fullDay">Open Bar</option>
+                <option value="halfDay">Custom Set Menu</option>
+                <option value="elopement">Non-alcoholic Drinks</option>
+                <option value="engagement">Beer/Wine</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
 
-              <div className="form-group">
-                <label htmlFor="stage" className="required">What stage of the process are you in?</label>
-                <select 
-                  id="stage" 
-                  required
-                  value={formData.stage}
-                  onChange={handleChange}
-                  disabled={isSubmitting}
-                >
-                  <option value="" disabled>Select</option>
-                  <option value="justEngaged">Just Exploring</option>
-                  <option value="startingPlanning">Starting to Plan</option>
-                  <option value="vendorShopping">Shopping for Vendors</option>
-                  <option value="finalTouches">I want you for my event</option>
-                </select>
-              </div>
+            <div className="form-group" data-animate="fade-in-up" data-delay="10">
+              <label htmlFor="stage" className="required">What stage of the process are you in?</label>
+              <select 
+                id="stage" 
+                required
+                value={formData.stage}
+                onChange={handleChange}
+                disabled={isSubmitting}
+              >
+                <option value="" disabled>Select</option>
+                <option value="justEngaged">Just Exploring</option>
+                <option value="startingPlanning">Starting to Plan</option>
+                <option value="vendorShopping">Shopping for Vendors</option>
+                <option value="finalTouches">I want you for my event</option>
+              </select>
+            </div>
 
-              <div className="form-group">
-                <label htmlFor="hearAbout" className="required">How did you hear about me?</label>
-                <select 
-                  id="hearAbout" 
-                  required
-                  value={formData.hearAbout}
-                  onChange={handleChange}
-                  disabled={isSubmitting}
-                >
-                  <option value="" disabled>Select</option>
-                  <option value="google">Google Search</option>
-                  <option value="instagram">Instagram</option>
-                  <option value="facebook">Facebook</option>
-                  <option value="theknot">The Knot/Thumbtack</option>
-                  <option value="referral">Friend/Vendor Referral</option>
-                  <option value="pastClient">Past Client</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
+            <div className="form-group" data-animate="fade-in-up" data-delay="11">
+              <label htmlFor="hearAbout" className="required">How did you hear about me?</label>
+              <select 
+                id="hearAbout" 
+                required
+                value={formData.hearAbout}
+                onChange={handleChange}
+                disabled={isSubmitting}
+              >
+                <option value="" disabled>Select</option>
+                <option value="google">Google Search</option>
+                <option value="instagram">Instagram</option>
+                <option value="facebook">Facebook</option>
+                <option value="theknot">The Knot/Thumbtack</option>
+                <option value="referral">Friend/Vendor Referral</option>
+                <option value="pastClient">Past Client</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
 
-              <div className="form-group">
-                <label htmlFor="moodboard">Do you have a mood board or Pinterest board for your event? I would love to see your vision.</label>
-                <input 
-                  type="text" 
-                  id="moodboard" 
-                  placeholder="Share a link to your inspiration"
-                  value={formData.moodboard}
-                  onChange={handleChange}
-                  disabled={isSubmitting}
-                />
-              </div>
+            {/* ANIMATED: Additional fields */}
+            <div className="form-group" data-animate="fade-in-up" data-delay="12">
+              <label htmlFor="moodboard">Do you have a mood board or Pinterest board for your event? I would love to see your vision.</label>
+              <input 
+                type="text" 
+                id="moodboard" 
+                placeholder="Share a link to your inspiration"
+                value={formData.moodboard}
+                onChange={handleChange}
+                disabled={isSubmitting}
+              />
+            </div>
 
-              <div className="form-group">
-                <label htmlFor="message">Anything you'd like to share or questions you might have:</label>
-                <textarea 
-                  id="message" 
-                  placeholder="Tell me more about your special day..."
-                  value={formData.message}
-                  onChange={handleChange}
-                  disabled={isSubmitting}
-                ></textarea>
-              </div>
+            <div className="form-group" data-animate="fade-in-up" data-delay="13">
+              <label htmlFor="message">Anything you'd like to share or questions you might have:</label>
+              <textarea 
+                id="message" 
+                placeholder="Tell me more about your special day..."
+                value={formData.message}
+                onChange={handleChange}
+                disabled={isSubmitting}
+              ></textarea>
+            </div>
 
+            {/* ANIMATED: Submit button */}
+            <div className="submit-container" data-animate="fade-in-up" data-delay="14">
               <button 
                 type="submit" 
                 className="submit-btn"
@@ -360,25 +407,26 @@ Event Details:
               >
                 {isSubmitting ? 'Sending...' : 'Send'}
               </button>
-            </form>
-          </div>
-        </div>
-
-        <div>
-          {[faGlassMartini, faCocktail, faWineGlass, faBeer].flatMap((icon, index) => [
-            <FontAwesomeIcon key={`${index}-1`} icon={icon} className={`shape shape--${index * 2}`} />,
-            <FontAwesomeIcon key={`${index}-2`} icon={icon} className={`shape shape--${index * 2 + 1}`} />
-          ]).concat([
-                      <FontAwesomeIcon 
-                        key="9" 
-                        icon={faGlassMartini} 
-                        className="shape shape--9"
-                        aria-hidden="true"
-                      />
-                    ])}
+            </div>
+          </form>
         </div>
       </div>
-    </>
+
+      {/* Background shapes */}
+      <div>
+        {[faGlassMartini, faCocktail, faWineGlass, faBeer].flatMap((icon, index) => [
+          <FontAwesomeIcon key={`${index}-1`} icon={icon} className={`shape shape--${index * 2}`} />,
+          <FontAwesomeIcon key={`${index}-2`} icon={icon} className={`shape shape--${index * 2 + 1}`} />
+        ]).concat([
+          <FontAwesomeIcon 
+            key="9" 
+            icon={faGlassMartini} 
+            className="shape shape--9"
+            aria-hidden="true"
+          />
+        ])}
+      </div>
+    </div>
   );
 };
 

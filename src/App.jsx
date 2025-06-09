@@ -6,7 +6,7 @@ import Packages from './pages/Packages.jsx';
 import Navbar from './pages/Navbar.jsx';
 import Gallery from './pages/Gallery';
 import Modal from './pages/Modal.jsx';
-import Contact from './pages/Contact.jsx';
+import WeddingContactForm from './pages/Contact.jsx';
 import MailButton from './pages/MailButton.jsx';
 import { ModalProvider } from './utils/modalContext.js';
 
@@ -23,7 +23,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/packages" element={<Packages />} />
         <Route path="/gallery" element={<Gallery />} /> 
-        <Route path="/contact" element={<Contact />} /> 
+        <Route path="/contact" element={<WeddingContactForm />} /> 
       </Routes>
       </ModalProvider>
       </Router>
