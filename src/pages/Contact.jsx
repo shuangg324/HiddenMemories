@@ -14,12 +14,15 @@ const WeddingContactForm = () => {
     phone: '',
     eventDate: '',
     venue: '',
+    guestCount: '',
     interested: '',
     stage: '',
     hearAbout: '',
     moodboard: '',
     message: ''
   });
+
+  console.log('Current form data:', formData); // Debug log
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const dateInputRef = useRef(null);
@@ -145,6 +148,7 @@ const WeddingContactForm = () => {
           phone: formData.phone,
           event_date: formData.eventDate,
           venue: formData.venue,
+          guest_count: formData.guestCount,
           interested_in: formData.interested,
           planning_stage: formData.stage,
           heard_about: formData.hearAbout,
@@ -158,6 +162,7 @@ Event Details:
 - Phone: ${formData.phone}
 - Event Date: ${formData.eventDate}
 - Venue: ${formData.venue}
+- Guest Count: ${formData.guestCount}
 - Interested In: ${formData.interested}
 - Planning Stage: ${formData.stage}
 - Heard About Us: ${formData.hearAbout}
@@ -179,6 +184,7 @@ Event Details:
         phone: '',
         eventDate: '',
         venue: '',
+        guestCount: '',
         interested: '',
         stage: '',
         hearAbout: '',
@@ -278,48 +284,69 @@ Event Details:
               </div>
             </div>
 
-            {/* ANIMATED: Event details row */}
-            <div className="form-row">
-              <div className="form-group" data-animate="fade-in-left" data-delay="7">
-                <label htmlFor="eventDate" className="required">Event Date</label>
-                <div className="date-input-container">
-                  <input 
-                    ref={dateInputRef}
-                    type="date" 
-                    id="eventDate" 
-                    placeholder="Select your event date"
-                    required
-                    min="2025-01-01"
-                    max="2030-12-31"
-                    value={formData.eventDate}
-                    onChange={handleChange}
-                    disabled={isSubmitting}
-                    className="date-input"
-                  />
-                  <FontAwesomeIcon 
-                    icon={faCalendarDays} 
-                    className="calendar-icon"
-                    onClick={handleCalendarClick}
-                    title="Select date from calendar"
-                  />
-                </div>
-              </div>
-
-              <div className="form-group" data-animate="fade-in-right" data-delay="8">
-                <label htmlFor="venue">Event Venue</label>
+            {/* ANIMATED: Event date */}
+            <div className="form-group" data-animate="fade-in-up" data-delay="7">
+              <label htmlFor="eventDate" className="required">Event Date</label>
+              <div className="date-input-container">
                 <input 
-                  type="text" 
-                  id="venue" 
-                  placeholder="Where will your special day take place?"
-                  value={formData.venue}
+                  ref={dateInputRef}
+                  type="date" 
+                  id="eventDate" 
+                  placeholder="Select your event date"
+                  required
+                  min="2025-01-01"
+                  max="2030-12-31"
+                  value={formData.eventDate}
                   onChange={handleChange}
                   disabled={isSubmitting}
+                  className="date-input"
+                />
+                <FontAwesomeIcon 
+                  icon={faCalendarDays} 
+                  className="calendar-icon"
+                  onClick={handleCalendarClick}
+                  title="Select date from calendar"
                 />
               </div>
             </div>
 
-            {/* ANIMATED: Dropdown selections */}
+            
+
+            {/* ANIMATED: Venue row */}
             <div className="form-group" data-animate="fade-in-up" data-delay="9">
+              <label htmlFor="venue">Event Venue</label>
+              <input 
+                type="text" 
+                id="venue" 
+                placeholder="Where will your special day take place?"
+                value={formData.venue}
+                onChange={handleChange}
+                disabled={isSubmitting}
+              />
+            </div>
+
+            {/* ANIMATED: Guest count */}
+            <div className="form-group" data-animate="fade-in-up" data-delay="8">
+              <label htmlFor="guestCount">Estimated Number of Guests</label>
+              <select 
+                id="guestCount" 
+                value={formData.guestCount}
+                onChange={handleChange}
+                disabled={isSubmitting}
+              >
+                <option value="">Select guest count</option>
+                <option value="1-25">1-25 guests</option>
+                <option value="26-50">26-50 guests</option>
+                <option value="51-75">51-75 guests</option>
+                <option value="76-100">76-100 guests</option>
+                <option value="101-150">101-150 guests</option>
+                <option value="151-200">151-200 guests</option>
+                <option value="200+">200+ guests</option>
+              </select>
+            </div>
+
+            {/* ANIMATED: Dropdown selections */}
+            <div className="form-group" data-animate="fade-in-up" data-delay="10">
               <label htmlFor="interested" className="required">I'm interested in:</label>
               <select 
                 id="interested" 
@@ -337,7 +364,7 @@ Event Details:
               </select>
             </div>
 
-            <div className="form-group" data-animate="fade-in-up" data-delay="10">
+            <div className="form-group" data-animate="fade-in-up" data-delay="11">
               <label htmlFor="stage" className="required">What stage of the process are you in?</label>
               <select 
                 id="stage" 
@@ -354,7 +381,7 @@ Event Details:
               </select>
             </div>
 
-            <div className="form-group" data-animate="fade-in-up" data-delay="11">
+            <div className="form-group" data-animate="fade-in-up" data-delay="12">
               <label htmlFor="hearAbout" className="required">How did you hear about me?</label>
               <select 
                 id="hearAbout" 
@@ -375,7 +402,7 @@ Event Details:
             </div>
 
             {/* ANIMATED: Additional fields */}
-            <div className="form-group" data-animate="fade-in-up" data-delay="12">
+            <div className="form-group" data-animate="fade-in-up" data-delay="13">
               <label htmlFor="moodboard">Do you have a mood board or Pinterest board for your event? I would love to see your vision.</label>
               <input 
                 type="text" 
@@ -387,7 +414,7 @@ Event Details:
               />
             </div>
 
-            <div className="form-group" data-animate="fade-in-up" data-delay="13">
+            <div className="form-group" data-animate="fade-in-up" data-delay="14">
               <label htmlFor="message">Anything you'd like to share or questions you might have:</label>
               <textarea 
                 id="message" 
@@ -399,7 +426,7 @@ Event Details:
             </div>
 
             {/* ANIMATED: Submit button */}
-            <div className="submit-container" data-animate="fade-in-up" data-delay="14">
+            <div className="submit-container" data-animate="fade-in-up" data-delay="15">
               <button 
                 type="submit" 
                 className="submit-btn"
