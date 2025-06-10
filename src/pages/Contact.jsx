@@ -215,11 +215,11 @@ Event Details:
             
             {/* ANIMATED: Name fields row */}
               <div className="form-group" data-animate="fade-in-left" data-delay="2">
-                <label htmlFor="firstName" className="required">First Name</label>
+                <label htmlFor="firstName" className="required">Your Name</label>
                 <input 
                   type="text" 
                   id="firstName" 
-                  placeholder="Please provide your first name" 
+                  placeholder="Please provide your full name" 
                   required
                   value={formData.firstName}
                   onChange={handleChange}
