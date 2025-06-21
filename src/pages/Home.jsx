@@ -2,9 +2,9 @@
 import React, { useEffect, useCallback, useMemo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlassMartini, faCocktail, faWineGlass, faChampagneGlasses } from '@fortawesome/free-solid-svg-icons';
-import drinksFallback from '../assets/drink_stations.jpg';
-import drinks2Fallback from '../assets/HMTrio.jpg';
-import drinks3Fallback from '../assets/margs.jpg';
+import drinksFallback from '../assets/Drink Stations.jpg';
+import drinks2Fallback from '../assets/Hidden Memories Trio.jpg';
+import drinks3Fallback from '../assets/Margaritas.jpg';
 import Logo from '../assets/LogoHM.png';
 import '../App.css';
 import moveBackground from '../utils/moveBackground.js';

@@ -1,25 +1,8 @@
-// Updated Gallery.jsx with lightbox functionality - FIXED
+// Updated Gallery.jsx with automatic image loading
 
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlassMartini, faCocktail, faWineGlass, faBeer, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import drink_stations from '../assets/drink_stations.jpg';
-import marshmallow from '../assets/marshmallow.jpg';
-import tray_service from '../assets/tray_service.jpg';
-import OF from '../assets/OF.jpg';
-import margs from '../assets/margs.jpg';
-import lychee from '../assets/lychee.jpg';
-import glasses from '../assets/glasses.jpg';
-import flower_drinks from '../assets/flower_drinks.jpg';
-import egg_top from '../assets/egg_top.jpg';
-import lemony from '../assets/lemony.jpg';
-import garnish from '../assets/garnish.jpg';
-import marshmallow2 from '../assets/marshmallow2.jpg';
-import marg from '../assets/marg.jpg';
-import clase from '../assets/Clase.jpg';
-import rimmed_cups from '../assets/rimmed_cups.jpg';
-import trio from '../assets/HMTrio.jpg';
-import grats from '../assets/Congrats.jpg';
 import '../App.css';
 import moveBackground from '../utils/moveBackground';
 import { useModal } from '../utils/modalContext';
@@ -60,6 +43,47 @@ const OptimizedImage = React.memo(({ src, alt, title, onClick, priority = false 
 
 OptimizedImage.displayName = 'OptimizedImage';
 
+// Function to automatically import all images from assets folder
+function importAll(r) {
+  let images = {};
+  r.keys().forEach((item, index) => {
+    images[item.replace('./', '')] = r(item);
+  });
+  return images;
+}
+
+// Automatically load all .jpg, .jpeg, .png images from assets folder
+const images = importAll(
+  require.context('../assets', false, /\.(png|jpe?g|svg)$/)
+);
+
+// Function to generate title from filename
+const generateTitle = (filename) => {
+  // Remove file extension and replace underscores/hyphens with spaces
+  return filename
+    .replace(/\.(jpg|jpeg|png|svg)$/i, '')
+    .replace(/[_-]/g, ' ')
+    .replace(/\b\w/g, l => l.toUpperCase()) // Capitalize first letter of each word
+    .trim();
+};
+
+// Function to generate alt text from filename
+const generateAlt = (filename) => {
+  const title = generateTitle(filename);
+  return `Gallery image: ${title}`;
+};
+
+// Function to check if image should be excluded
+const shouldExcludeImage = (filename) => {
+  const excludeFiles = [
+    '368kkk.png',
+    'logo.png',
+    'logo2.png',
+    'LogoHM.png'
+  ];
+  return excludeFiles.includes(filename);
+};
+
 const Gallery = () => {
   const { toggleModal } = useModal();
   const [visibleImages, setVisibleImages] = useState(6);
@@ -69,30 +93,22 @@ const Gallery = () => {
   const loadMoreRef = useRef(null);
   const containerRef = useRef(null);
 
-  // Memoized gallery images configuration with appealing titles
-  const galleryImages = useMemo(() => [
-    { id: 1, src: drink_stations, alt: 'Professional drink stations setup for events', title: 'Premium Bar Setup' },
-    { id: 2, src: marshmallow, alt: 'Corporate event bar setup with professional service', title: 'Elegant Service' },
-    { id: 3, src: tray_service, alt: 'Elegant tray service for wedding reception', title: 'Luxury Tray Service' },
-    { id: 4, src: trio, alt: 'A trio of martinis', title: 'Signature Martini Trio' },
-    { id: 5, src: grats, alt: 'Congrats celebration', title: 'Celebration Shots' },
-    { id: 6, src: clase, alt: 'Row of Clase Azul', title: 'Premium Tequila Selection' },
-    { id: 7, src: OF, alt: 'Classic old fashioned cocktail with garnish', title: 'Craft Old Fashioned' },
-    { id: 8, src: margs, alt: 'Triple margaritas with salt rim and lime', title: 'Perfect Margaritas' },
-    { id: 9, src: lychee, alt: 'Lychee cocktail setup with Asian-inspired garnish', title: 'Exotic Lychee Cocktails' },
-    { id: 10, src: glasses, alt: 'Premium cocktail glassware collection', title: 'Fine Glassware' },
-    { id: 11, src: flower_drinks, alt: 'Hibiscus spritz and floral infused vodka tonic', title: 'Floral Creations' },
-    { id: 12, src: egg_top, alt: 'Raspberry gin sour with egg white foam', title: 'Artisan Gin Sour' },
-    { id: 13, src: lemony, alt: 'Fresh citrus cocktails with lemon garnish', title: 'Fresh Citrus Blends' },
-    { id: 14, src: garnish, alt: 'Artistic cocktail garnish preparation', title: 'Garnish Artistry' },
-    { id: 15, src: marshmallow2, alt: 'Marshmallow and lychee specialty cocktails', title: 'Sweet Specialties' },
-    { id: 16, src: marg, alt: 'Signature margarita with premium ingredients', title: 'House Margarita' },
-    { id: 17, src: rimmed_cups, alt: 'Artfully rimmed cocktail cups with specialty salts', title: 'Specialty Rims' }
-  ], []);
+  // Automatically generate gallery images from imported assets
+  const galleryImages = useMemo(() => {
+    const imageEntries = Object.entries(images);
+    
+    return imageEntries
+      .filter(([filename]) => !shouldExcludeImage(filename)) // Filter out unwanted images
+      .map(([filename, src], index) => ({
+        id: index + 1,
+        src: src.default || src, // Handle both default exports and direct imports
+        alt: generateAlt(filename),
+        title: generateTitle(filename)
+      }));
+  }, []);
 
   // Handle lightbox opening - use batch update to prevent flash
   const openLightbox = useCallback((index) => {
-    // Use React's automatic batching to update both states together
     React.startTransition(() => {
       setLightboxIndex(index);
       setLightboxOpen(true);
@@ -104,7 +120,7 @@ const Gallery = () => {
     setLightboxOpen(false);
   }, []);
 
-  // Smooth scroll animations - now that images are optimized
+  // Use the exact same animation system as Contact/Home pages
   useEffect(() => {
     const observerOptions = {
       threshold: 0.1,
@@ -119,10 +135,17 @@ const Gallery = () => {
           const delay = element.dataset.delay || '';
           
           if (animationType) {
-            element.classList.add(`animate-${animationType}`);
-            if (delay) {
-              element.classList.add(`animate-delay-${delay}`);
-            }
+            const delayMs = delay ? parseInt(delay) * 100 : 0;
+            
+            setTimeout(() => {
+              element.classList.add(`animate-${animationType}`);
+              if (delay) {
+                element.classList.add(`animate-delay-${delay}`);
+              }
+              
+              element.style.opacity = '';
+              element.style.visibility = '';
+            }, delayMs);
           }
           
           observer.unobserve(element);
@@ -130,56 +153,28 @@ const Gallery = () => {
       });
     }, observerOptions);
 
-    // Wait for DOM to be ready
-    const timer = setTimeout(() => {
+    setTimeout(() => {
       const animatedElements = document.querySelectorAll('[data-animate]');
-      animatedElements.forEach(el => observer.observe(el));
-    }, 100);
+      console.log(`🎬 Found ${animatedElements.length} elements to animate`);
+      
+      animatedElements.forEach(el => {
+        if (!el.classList.contains('animate-fade-in-up') && 
+            !el.classList.contains('animate-fade-in-left') && 
+            !el.classList.contains('animate-fade-in-right')) {
+          el.style.opacity = '0';
+          el.style.visibility = 'hidden';
+        }
+        observer.observe(el);
+      });
+    }, 50);
 
-    return () => {
-      clearTimeout(timer);
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, [visibleImages]);
 
-  // Instant loading - no preloading at all
+  // Instant loading
   useEffect(() => {
     setLoading(false);
   }, []);
-
-  // Initialize scroll animations - Fixed version
-  useEffect(() => {
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const element = entry.target;
-          const animationType = element.dataset.animate;
-          
-          if (animationType) {
-            element.classList.add(`animate-${animationType}`);
-          }
-          
-          observer.unobserve(element);
-        }
-      });
-    }, observerOptions);
-
-    // Wait a bit for DOM to be ready, then observe all animated elements
-    const timer = setTimeout(() => {
-      const animatedElements = document.querySelectorAll('[data-animate]');
-      animatedElements.forEach(el => observer.observe(el));
-    }, 100);
-
-    return () => {
-      clearTimeout(timer);
-      observer.disconnect();
-    };
-  }, [visibleImages]); // Re-run when new images load
 
   // Optimized intersection observer for load more functionality
   useEffect(() => {
@@ -237,7 +232,7 @@ const Gallery = () => {
                 Our Gallery
               </h1>
               <p className="gallery__header" role="doc-subtitle" data-animate="fade-in-up" data-delay="2">
-                Explore our past events and signature cocktails
+                Explore our past events and signature cocktails ({galleryImages.length} photos)
               </p>
             </header>
 
@@ -259,7 +254,7 @@ const Gallery = () => {
                       alt={image.alt}
                       title={image.title}
                       onClick={() => openLightbox(index)}
-                      priority={index < 3} // First 3 images load immediately
+                      priority={index < 3}
                     />
                   </article>
                 ))}
@@ -319,9 +314,8 @@ const Gallery = () => {
         </div>
       </section>
 
-      {/* Lightbox Component - make sure it gets the full images array */}
       <Lightbox
-        images={galleryImages} // Full array, not sliced
+        images={galleryImages}
         isOpen={lightboxOpen}
         onClose={closeLightbox}
         initialIndex={lightboxIndex}
