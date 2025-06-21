@@ -984,7 +984,7 @@ body.dark-mode footer {
   }
 
   #personal-logo {
-    width: 78px;
+    width: 300px;
   }
 
 
@@ -1019,7 +1019,7 @@ body.dark-mode footer {
     font-size: 32px;
     color: #b87333; /* Copper color for menu icon */
     position: fixed;
-    top: 10px;
+    top: 36px;
     right: 20px;
     cursor: pointer;
     z-index: 2;
@@ -1072,7 +1072,7 @@ body.dark-mode footer {
   }
 
   #personal-logo {
-    width: 70px; /* Adjust this size as needed */
+    width: 300px; /* Adjust this size as needed */
   }
 
   /* navbar menu */
@@ -1102,7 +1102,7 @@ body.dark-mode footer {
     font-size: 32px;
     color: #b87333; /* Copper color for menu icon */
     position: fixed;
-    top: 10px;
+    top: 36px;
     right: 20px;
     cursor: pointer;
     z-index: 2;

@@ -3,7 +3,6 @@ import '../App.css';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Logo from '../assets/logo.png';
-import MobileLogo from '../assets/LogoHM.png';
 import DarkModeLogo from '../assets/logo2.png';
 import moveBackground from '../utils/moveBackground.js';
 import { useModal } from '../utils/modalContext';
@@ -67,7 +66,7 @@ function Navbar() {
                 <div className="navbar-logo">
                     <Link to="/">
                         <figure>
-                            <img id="personal-logo" src={isMobile ? MobileLogo : currentLogo} alt="Logo" onClick={() => window.scrollTo(0, 0)}/>
+                            <img id="personal-logo" src={isMobile ? Logo : currentLogo} alt="Logo" onClick={() => window.scrollTo(0, 0)}/>
                         </figure>
                     </Link>
                 </div>

@@ -5,7 +5,6 @@ import { faGlassMartini, faCocktail, faWineGlass, faChampagneGlasses } from '@fo
 import drinksFallback from '../assets/Setup.jpg';
 import drinks2Fallback from '../assets/Hidden Memories Trio.jpg';
 import drinks3Fallback from '../assets/Margaritas.jpg';
-import Logo from '../assets/LogoHM.png';
 import '../App.css';
 import moveBackground from '../utils/moveBackground.js';
 import { useModal } from '../utils/modalContext';
@@ -245,16 +244,6 @@ const Home = () => {
             <footer>
                 <div className="container footer__color">
                     <div className="row footer__row">
-                        <a href="/" className="footer__anchor hover-scale" aria-label="Return to top of page">
-                            <figure className="footer__logo">
-                                <img 
-                                    src={Logo}
-                                    className="footer__logo--img" 
-                                    alt="Hidden Memories Bar logo" 
-                                    loading="lazy"
-                                />
-                            </figure>
-                        </a>
                         <div className="footer__copyright dark-mode-white">
                             Copyright &copy; 2025 Hidden Memories Bar. All rights reserved.
                         </div>
