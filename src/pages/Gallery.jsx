@@ -232,7 +232,7 @@ const Gallery = () => {
                 Our Gallery
               </h1>
               <p className="gallery__header" role="doc-subtitle" data-animate="fade-in-up" data-delay="2">
-                Explore our past events and signature cocktails ({galleryImages.length} photos)
+                Explore our past events and signature cocktails
               </p>
             </header>
 
