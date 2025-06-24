@@ -8,7 +8,6 @@ import '../App.css';
 const WeddingContactForm = () => {
   const [formData, setFormData] = useState({
     firstName: '',
-    lastName: '',
     partnerName: '',
     email: '',
     phone: '',
@@ -97,9 +96,10 @@ const WeddingContactForm = () => {
   };
 
   const validateAndScrollToError = () => {
+    console.log('Starting validation...'); // Debug log
+    
     const requiredFields = [
-      { id: 'firstName', name: 'First Name' },
-      { id: 'lastName', name: 'Last Name' },
+      { id: 'firstName', name: 'Your Name' },
       { id: 'email', name: 'Email' },
       { id: 'phone', name: 'Phone Number' },
       { id: 'eventDate', name: 'Event Date' },
@@ -107,11 +107,13 @@ const WeddingContactForm = () => {
       { id: 'stage', name: 'Planning Stage' },
       { id: 'hearAbout', name: 'How did you hear about us' }
     ];
-  
+
     for (const field of requiredFields) {
       const value = formData[field.id];
+      console.log(`Checking ${field.name}: "${value}"`); // Debug log
       
       if (!value || value.trim() === '') {
+        console.log(`Validation failed on: ${field.name}`); // Debug log
         const inputElement = document.getElementById(field.id);
         if (inputElement) {
           inputElement.parentElement.classList.add('error');
@@ -125,38 +127,40 @@ const WeddingContactForm = () => {
       }
     }
     
+    console.log('All validation passed!'); // Debug log
     return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Form submitted!'); // Debug log
+    console.log('Form data:', formData); // Debug log
     
     if (!validateAndScrollToError()) {
+      console.log('Validation failed'); // Debug log
       return;
     }
     
+    console.log('Validation passed, sending email...'); // Debug log
+    
     setIsSubmitting(true);
 
-    try {
-      await emailjs.send(
-        'service_t3znxtz',
-        'template_eph0ydf',
-        {
-          user_name: `${formData.firstName} ${formData.lastName}`,
-          partner_name: formData.partnerName,
-          user_email: formData.email,
-          phone: formData.phone,
-          event_date: formData.eventDate,
-          venue: formData.venue,
-          guest_count: formData.guestCount,
-          interested_in: formData.interested,
-          planning_stage: formData.stage,
-          heard_about: formData.hearAbout,
-          moodboard_link: formData.moodboard,
-          message: `
+    // Debug: Log what we're sending
+    const emailData = {
+      user_name: formData.firstName, // Just use firstName since it contains full name
+      partner_name: formData.partnerName,
+      user_email: formData.email,
+      phone: formData.phone,
+      event_date: formData.eventDate,
+      venue: formData.venue,
+      guest_count: formData.guestCount,
+      interested_in: formData.interested,
+      planning_stage: formData.stage,
+      heard_about: formData.hearAbout,
+      moodboard_link: formData.moodboard,
+      message: `
 Event Details:
-- First Name: ${formData.firstName}
-- Last Name: ${formData.lastName}
+- Name: ${formData.firstName}
 - Partner: ${formData.partnerName}
 - Email: ${formData.email}
 - Phone: ${formData.phone}
@@ -168,17 +172,26 @@ Event Details:
 - Heard About Us: ${formData.hearAbout}
 - Moodboard: ${formData.moodboard}
 - Additional Message: ${formData.message}
-          `,
-          to_email: 'hiddenmemoriesbar@gmail.com'
-        },
+      `,
+      to_email: 'hiddenmemoriesbar@gmail.com'
+    };
+
+    console.log('Sending email with data:', emailData);
+
+    try {
+      const result = await emailjs.send(
+        'service_t3znxtz',
+        'template_eph0ydf',
+        emailData,
         '7j7vJcTfHGJ0hv0R4'
       );
 
+      console.log('EmailJS Success:', result);
       alert('Thank you! Your wedding inquiry has been sent successfully. We\'ll get back to you soon!');
       
+      // Reset form
       setFormData({
         firstName: '',
-        lastName: '',
         partnerName: '',
         email: '',
         phone: '',
@@ -193,8 +206,18 @@ Event Details:
       });
 
     } catch (error) {
-      console.error('Email send failed:', error);
-      alert('Sorry, there was an error sending your message. Please try again or contact us directly at hiddenmemoriesbar@gmail.com');
+      console.error('EmailJS Error Details:', error);
+      console.error('Error status:', error.status);
+      console.error('Error text:', error.text);
+      
+      // More specific error messages
+      if (error.status === 400) {
+        alert('Error: Invalid template or service ID. Please contact us directly at hiddenmemoriesbar@gmail.com');
+      } else if (error.status === 401) {
+        alert('Error: Authentication failed. Please contact us directly at hiddenmemoriesbar@gmail.com');
+      } else {
+        alert('Sorry, there was an error sending your message. Please try again or contact us directly at hiddenmemoriesbar@gmail.com');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -213,22 +236,19 @@ Event Details:
         <div className="form-container" data-animate="fade-in-up" data-delay="1">
           <form ref={formRef} id="contactForm" onSubmit={handleSubmit}>
             
-            {/* ANIMATED: Name fields row */}
-              <div className="form-group" data-animate="fade-in-left" data-delay="2">
-                <label htmlFor="firstName" className="required">Your Name</label>
-                <input 
-                  type="text" 
-                  id="firstName" 
-                  placeholder="Please provide your full name" 
-                  required
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  disabled={isSubmitting}
-                />
-              </div>
-
-
-
+            {/* ANIMATED: Name field */}
+            <div className="form-group" data-animate="fade-in-left" data-delay="2">
+              <label htmlFor="firstName" className="required">Your Name</label>
+              <input 
+                type="text" 
+                id="firstName" 
+                placeholder="Please provide your full name" 
+                required
+                value={formData.firstName}
+                onChange={handleChange}
+                disabled={isSubmitting}
+              />
+            </div>
 
             {/* ANIMATED: Partner name */}
             <div className="form-group" data-animate="fade-in-up" data-delay="4">
@@ -298,9 +318,7 @@ Event Details:
               </div>
             </div>
 
-            
-
-            {/* ANIMATED: Venue row */}
+            {/* ANIMATED: Venue */}
             <div className="form-group" data-animate="fade-in-up" data-delay="9">
               <label htmlFor="venue">Event Venue</label>
               <input 
