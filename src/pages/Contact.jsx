@@ -362,10 +362,10 @@ Event Details:
                 disabled={isSubmitting}
               >
                 <option value="" disabled>Select</option>
-                <option value="fullDay">Open Bar</option>
-                <option value="halfDay">Custom Set Menu</option>
-                <option value="elopement">Non-alcoholic Drinks</option>
-                <option value="engagement">Beer/Wine</option>
+                <option value="openBar">Open Bar</option>
+                <option value="CustomMenu">Custom Set Menu</option>
+                <option value="NoABV">Non-alcoholic Drinks</option>
+                <option value="Beer_Wine">Beer/Wine</option>
                 <option value="other">Other</option>
               </select>
             </div>
@@ -380,10 +380,10 @@ Event Details:
                 disabled={isSubmitting}
               >
                 <option value="" disabled>Select</option>
-                <option value="justEngaged">Just Exploring</option>
+                <option value="justExploring">Just Exploring</option>
                 <option value="startingPlanning">Starting to Plan</option>
                 <option value="vendorShopping">Shopping for Vendors</option>
-                <option value="finalTouches">I want you for my event</option>
+                <option value="final">I want you for my event</option>
               </select>
             </div>
 
