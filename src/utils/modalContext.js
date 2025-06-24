@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 // Create a context for modal state
 const ModalContext = createContext();
@@ -6,6 +7,19 @@ const ModalContext = createContext();
 export const ModalProvider = ({ children }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const location = useLocation();
+
+  // Close modal whenever route changes
+  useEffect(() => {
+    setIsAnimating(true);
+    document.body.classList.remove("modal--open");
+    resetModalContent();
+    
+    setTimeout(() => {
+      setIsModalOpen(false);
+      setIsAnimating(false);
+    }, 300);
+  }, [location.pathname]); // Only depend on location.pathname
 
   // Reset form and overlays
   const resetModalContent = () => {
@@ -102,3 +116,5 @@ export const useModal = () => {
 
   return context;
 };
+
+export default ModalContext;

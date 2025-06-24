@@ -187,7 +187,7 @@ Event Details:
       );
 
       console.log('EmailJS Success:', result);
-      alert('Thank you! Your wedding inquiry has been sent successfully. We\'ll get back to you soon!');
+      alert('Thank you! Your inquiry has been sent successfully. We\'ll get back to you soon!');
       
       // Reset form
       setFormData({
