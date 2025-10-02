@@ -14,7 +14,7 @@ const WeddingContactForm = () => {
     eventDate: '',
     venue: '',
     guestCount: '',
-    interested: '',
+    interested: [],
     stage: '',
     hearAbout: '',
     moodboard: '',
@@ -82,12 +82,24 @@ const WeddingContactForm = () => {
   }, []);
 
   const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [id]: value
-    }));
+    const { id, value, options, multiple } = e.target;
+  
+    if (multiple) {
+      const selectedValues = Array.from(options)
+        .filter(option => option.selected)
+        .map(option => option.value);
+      setFormData(prevState => ({
+        ...prevState,
+        [id]: selectedValues
+      }));
+    } else {
+      setFormData(prevState => ({
+        ...prevState,
+        [id]: value
+      }));
+    }
   };
+  
 
   const handleCalendarClick = () => {
     if (dateInputRef.current) {
@@ -237,12 +249,13 @@ Event Details:
           <form ref={formRef} id="contactForm" onSubmit={handleSubmit}>
             
             {/* ANIMATED: Name field */}
+            <div className="form-row">
             <div className="form-group" data-animate="fade-in-left" data-delay="2">
               <label htmlFor="firstName" className="required">Your Name</label>
               <input 
                 type="text" 
                 id="firstName" 
-                placeholder="Please provide your full name" 
+                placeholder="Please provide your name" 
                 required
                 value={formData.firstName}
                 onChange={handleChange}
@@ -251,21 +264,22 @@ Event Details:
             </div>
 
             {/* ANIMATED: Partner name */}
-            <div className="form-group" data-animate="fade-in-up" data-delay="4">
+            <div className="form-group" data-animate="fade-in-up" data-delay="2">
               <label htmlFor="partnerName">Partner's Name</label>
               <input 
                 type="text" 
                 id="partnerName" 
-                placeholder="Please provide your partner's full name"
+                placeholder="Please provide your partner's name"
                 value={formData.partnerName}
                 onChange={handleChange}
                 disabled={isSubmitting}
               />
             </div>
+            </div>
 
             {/* ANIMATED: Contact info row */}
             <div className="form-row">
-              <div className="form-group" data-animate="fade-in-left" data-delay="5">
+              <div className="form-group" data-animate="fade-in-left" data-delay="3">
                 <label htmlFor="email" className="required">Email</label>
                 <input 
                   type="email" 
@@ -278,7 +292,7 @@ Event Details:
                 />
               </div>
 
-              <div className="form-group" data-animate="fade-in-right" data-delay="6">
+              <div className="form-group" data-animate="fade-in-right" data-delay="3">
                 <label htmlFor="phone" className="required">Phone Number</label>
                 <input 
                   type="tel" 
@@ -332,7 +346,7 @@ Event Details:
             </div>
 
             {/* ANIMATED: Guest count */}
-            <div className="form-group" data-animate="fade-in-up" data-delay="8">
+            <div className="form-group" data-animate="fade-in-up" data-delay="9">
               <label htmlFor="guestCount">Estimated Number of Guests</label>
               <select 
                 id="guestCount" 
@@ -352,25 +366,25 @@ Event Details:
             </div>
 
             {/* ANIMATED: Dropdown selections */}
-            <div className="form-group" data-animate="fade-in-up" data-delay="10">
-              <label htmlFor="interested" className="required">I'm interested in:</label>
-              <select 
-                id="interested" 
-                required
-                value={formData.interested}
-                onChange={handleChange}
-                disabled={isSubmitting}
-              >
-                <option value="" disabled>Select</option>
-                <option value="openBar">Open Bar</option>
-                <option value="CustomMenu">Custom Set Menu</option>
-                <option value="NoABV">Non-alcoholic Drinks</option>
-                <option value="Beer_Wine">Beer/Wine</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
+              <div className="form-group" data-animate="fade-in-up" data-delay="7">
+                <label htmlFor="interested" className="required">I'm interested in:</label>
+                <select 
+                  id="interested" 
+                  required
+                  value={formData.interested}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                >
+                  <option value="" disabled>Select</option>
+                  <option value="openBar">Open Bar</option>
+                  <option value="CustomMenu">Custom Set Menu</option>
+                  <option value="NoABV">Non-alcoholic Drinks</option>
+                  <option value="Beer_Wine">Beer/Wine</option>
+                  <option value="other">Other -- Let me know below!</option>
+                </select>
+              </div>
 
-            <div className="form-group" data-animate="fade-in-up" data-delay="11">
+            <div className="form-group" data-animate="fade-in-up" data-delay="7">
               <label htmlFor="stage" className="required">What stage of the process are you in?</label>
               <select 
                 id="stage" 
@@ -387,7 +401,7 @@ Event Details:
               </select>
             </div>
 
-            <div className="form-group" data-animate="fade-in-up" data-delay="12">
+            <div className="form-group" data-animate="fade-in-up" data-delay="7">
               <label htmlFor="hearAbout" className="required">How did you hear about us?</label>
               <select 
                 id="hearAbout" 
@@ -408,7 +422,7 @@ Event Details:
             </div>
 
             {/* ANIMATED: Additional fields */}
-            <div className="form-group" data-animate="fade-in-up" data-delay="13">
+            <div className="form-group" data-animate="fade-in-up" data-delay="7">
               <label htmlFor="moodboard">Do you have a mood board or Pinterest board for your event? I would love to see your vision.</label>
               <input 
                 type="text" 
@@ -420,11 +434,11 @@ Event Details:
               />
             </div>
 
-            <div className="form-group" data-animate="fade-in-up" data-delay="14">
+            <div className="form-group" data-animate="fade-in-up" data-delay="7">
               <label htmlFor="message">Anything you'd like to share or questions you might have:</label>
               <textarea 
                 id="message" 
-                placeholder="Tell me more about your special day..."
+                placeholder="Tell me more about your special day or about yourselves"
                 value={formData.message}
                 onChange={handleChange}
                 disabled={isSubmitting}
@@ -432,7 +446,7 @@ Event Details:
             </div>
 
             {/* ANIMATED: Submit button */}
-            <div className="submit-container" data-animate="fade-in-up" data-delay="15">
+            <div className="submit-container" data-animate="fade-in-up" data-delay="7">
               <button 
                 type="submit" 
                 className="submit-btn"

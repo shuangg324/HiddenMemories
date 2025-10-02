@@ -146,12 +146,18 @@ const Packages = () => {
                 <p className="italic package__title enhanced-package-title">Basic Package</p>
                 <p className="package__description">
                   Our Basic Package is a dry hire model that provides everything you need for a stylish and professional bar setup.
+                  <br></br>
+                  Starting at $600 for 3 hours of service.
                 </p>
                 <ul className="package__items enhanced-items">
-                  <li><FontAwesomeIcon icon={faCheck} className="item-check" /><b>Bar setup</b></li>
-                  <li><FontAwesomeIcon icon={faCheck} className="item-check" /><b>Cups</b></li>
-                  <li><FontAwesomeIcon icon={faCheck} className="item-check" /><b>Napkins</b></li>
-                  <li><FontAwesomeIcon icon={faCheck} className="item-check" /><b>Straws</b></li>
+                  <li><FontAwesomeIcon icon={faCheck} className="item-check" />Bar setup</li>
+                  <li><FontAwesomeIcon icon={faCheck} className="item-check" />Cups</li>
+                  <li><FontAwesomeIcon icon={faCheck} className="item-check" />Napkins</li>
+                  <li><FontAwesomeIcon icon={faCheck} className="item-check" />Straws</li>
+                  <li><FontAwesomeIcon icon={faCheck} className="item-check" />Basic Mixers</li>
+                  <li><FontAwesomeIcon icon={faCheck} className="item-check" />Basic Garnishes</li>
+                  <li><FontAwesomeIcon icon={faCheck} className="item-check" />Custom Cocktail Menu</li>
+                  <li><FontAwesomeIcon icon={faCheck} className="item-check" />Certified and Insured Bartenders</li>
                 </ul>
               </div>
               
@@ -167,14 +173,15 @@ const Packages = () => {
                 <p className="italic package__title enhanced-package-title">Customize Your Event with Add-ons</p>
                 <p className="package__description">
                   Enhance your event with our selection of add-ons to tailor the experience to your needs.
+                  <br></br>
+                  Most options are $2-$5 per guest. Contact us for specific pricing based on your selections.
                 </p>
                 <ul className="package__items enhanced-items premium-items">
-                  <li><FontAwesomeIcon icon={faCheck} className="item-check premium-check" /><b>Mixers:</b> A variety of non-alcoholic options such as soda, juice, and tonic water.</li>
+                  <li><FontAwesomeIcon icon={faCheck} className="item-check premium-check" /><b>Mixers:</b> A variety of non-alcoholic options such as soda, juice, tonic water, etc.</li>
                   <li><FontAwesomeIcon icon={faCheck} className="item-check premium-check" /><b>Garnishes:</b> Fresh fruit, herbs, and specialty toppings.</li>
-                  <li><FontAwesomeIcon icon={faCheck} className="item-check premium-check" /><b>Water Station:</b> Keep guests hydrated.</li>
+                  <li><FontAwesomeIcon icon={faCheck} className="item-check premium-check" /><b>Water Station:</b> Water dispensers around the venue.</li>
                   <li><FontAwesomeIcon icon={faCheck} className="item-check premium-check" /><b>Ice Service:</b> Ice for perfectly cold drinks.</li>
                   <li><FontAwesomeIcon icon={faCheck} className="item-check premium-check" /><b>Glassware Upgrade:</b> Swap disposable cups for elegant glassware.</li>
-                  <li><FontAwesomeIcon icon={faCheck} className="item-check premium-check" /><b>Signature Cocktail Menu:</b> Custom cocktail list tailored to your event.</li>
                   <li><FontAwesomeIcon icon={faCheck} className="item-check premium-check" /><b>Extra Bartender(s):</b> Additional staff for larger gatherings.</li>
                   <li><FontAwesomeIcon icon={faCheck} className="item-check premium-check" /><b>And More!</b> Ask us about additional options to enhance your event.</li>
                 </ul>
@@ -215,11 +222,11 @@ const Packages = () => {
                 <div className="packages-cta__stats">
                   <div className="stat-item">
                     <span className="stat-number">5+</span>
-                    <span className="stat-label">Years</span>
+                    <span className="stat-label">Years of Experience</span>
                   </div>
                   <div className="stat-item">
                     <span className="stat-number">100%</span>
-                    <span className="stat-label">Happiness</span>
+                    <span className="stat-label">Unique</span>
                   </div>
                   <div className="stat-item">
                     <span className="stat-number">100%</span>
