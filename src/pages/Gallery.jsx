@@ -252,7 +252,7 @@ const Gallery = () => {
                     <OptimizedImage
                       src={image.src}
                       alt={image.alt}
-                      title={image.title}
+                      
                       onClick={() => openLightbox(index)}
                       priority={index < 3}
                     />
