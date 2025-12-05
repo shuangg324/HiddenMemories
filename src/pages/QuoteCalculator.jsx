@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo, useCallback, useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faCalculator, 
@@ -22,90 +22,89 @@ const QuoteCalculator = () => {
   const [showBreakdown, setShowBreakdown] = useState(false);
 
   // Pricing structure
-  const pricing = {
+  const pricing = useMemo(() => ({
     basePackage: 1000, // 5 hours
     baseHours: 5,
-    additionalHour: 200,
+    additionalHour: 150,
     addOns: {
       mixers: { price: 3, name: 'Premium Mixers', perGuest: true },
       garnishes: { price: 2, name: 'Specialty Garnishes', perGuest: true },
-      waterStation: { price: 2, name: 'Water Station*', perGuest: true },
+      waterStation: { price: 150, name: 'Water Station', perGuest: false },
       ice: { price: 2, name: 'Ice Service', perGuest: true },
       glassware: { price: 5, name: 'Glassware Upgrade', perGuest: true },
       extraBartender: { price: 300, name: 'Additional Bartender (per 75 guests)', perGuest: false, per75Guests: true }
     }
-  };
+  }), []);
 
   // Calculate quote whenever form changes
-  useEffect(() => {
-    calculateQuote();
-  }, [formData]);
+  
 
-  const calculateQuote = () => {
-    const guests = parseInt(formData.guestCount) || 0;
-    const hours = parseInt(formData.serviceHours) || 5;
-    
-    // Base package cost
-    let total = pricing.basePackage;
-    
-    // Additional hours beyond 5
-    if (hours > 5) {
-      total += (hours - 5) * pricing.additionalHour;
+// Wrap calculateQuote in useCallback so it can safely be a dependency
+const calculateQuote = useCallback(() => {
+  const guests = parseInt(formData.guestCount) || 0;
+  const hours = parseInt(formData.serviceHours) || 5;
+
+  // Base package cost
+  let total = pricing.basePackage;
+
+  // Additional hours beyond base
+  const additionalHoursCost = hours > pricing.baseHours ? (hours - pricing.baseHours) * pricing.additionalHour : 0;
+  total += additionalHoursCost;
+
+  // Add-ons
+  let addOnTotal = 0;
+  const breakdown = [];
+
+  formData.addOns.forEach((addOnKey) => {
+    const addOn = pricing.addOns[addOnKey];
+    if (!addOn) return;
+
+    let cost = 0;
+
+    if (addOn.per75Guests) {
+      // Extra bartenders: 1 per 75 guests AFTER the first included bartender
+      const extraBartenders = Math.floor(guests / 75);
+      cost = addOn.price * extraBartenders;
+
+      breakdown.push({
+        name: `${addOn.name} (${extraBartenders} extra)`,
+        cost,
+        perGuest: false
+      });
+
+    } else {
+      cost = addOn.perGuest ? addOn.price * guests : addOn.price;
+      breakdown.push({
+        name: addOn.name,
+        cost,
+        perGuest: addOn.perGuest
+      });
     }
-    
-    // Add-ons
-    let addOnTotal = 0;
-    const breakdown = [];
 
-    formData.addOns.forEach(addOnKey => {
-      const addOn = pricing.addOns[addOnKey];
-      if (addOn) {
-        let cost;
-        // inside formData.addOns.forEach(...)
-if (addOn.per75Guests) {
-    // Number of additional bartenders: 1 per 75 guests AFTER the first included bartender
-    // e.g. 1-74 => 0 extra, 75-149 => 1 extra, 150-224 => 2 extra, ...
-    const extraBartenders = Math.floor(guests / 75);
-  
-    const cost = addOn.price * extraBartenders;
-  
-    breakdown.push({
-      name: `${addOn.name} (${extraBartenders} extra)`,
-      cost,
-      perGuest: false
-    });
-  
     addOnTotal += cost;
-  } else {
-    // existing non-per75Guests logic
-    const cost = addOn.perGuest ? addOn.price * guests : addOn.price;
-    breakdown.push({
-      name: addOn.name,
-      cost,
-      perGuest: addOn.perGuest
-    });
-    addOnTotal += cost;
-  }}
-    });
-  
-  
+  });
 
-    total += addOnTotal;
+  total += addOnTotal;
 
-    // Recommend extra bartender for large events
-    const recommendExtraBartender = guests > 75 && !formData.addOns.includes('extraBartender');
+  const recommendExtraBartender = guests > 75 && !formData.addOns.includes('extraBartender');
 
-    setQuote({
-      basePackage: pricing.basePackage,
-      additionalHours: hours > 5 ? (hours - 5) * pricing.additionalHour : 0,
-      addOns: breakdown,
-      addOnTotal,
-      total,
-      guests,
-      hours,
-      recommendExtraBartender
-    });
-  };
+  setQuote({
+    basePackage: pricing.basePackage,
+    additionalHours: additionalHoursCost,
+    addOns: breakdown,
+    addOnTotal,
+    total,
+    guests,
+    hours,
+    recommendExtraBartender
+  });
+}, [formData, pricing, setQuote]);
+
+// useEffect now clean, no warnings
+useEffect(() => {
+  calculateQuote();
+}, [calculateQuote]);
+
 
   const handleGuestChange = (e) => {
     const value = e.target.value;
