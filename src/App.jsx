@@ -5,6 +5,7 @@ import Home from './pages/Home.jsx';
 import Packages from './pages/Packages.jsx';
 import Navbar from './pages/Navbar.jsx';
 import Gallery from './pages/Gallery';
+import QuoteCalculator from './pages/QuoteCalculator.jsx';
 import Modal from './pages/Modal.jsx';
 import WeddingContactForm from './pages/Contact.jsx';
 import MailButton from './pages/MailButton.jsx';
@@ -23,6 +24,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/packages" element={<Packages />} />
         <Route path="/gallery" element={<Gallery />} /> 
+        <Route path="/quote" element={<QuoteCalculator />} />
         <Route path="/contact" element={<WeddingContactForm />} /> 
       </Routes>
       </ModalProvider>

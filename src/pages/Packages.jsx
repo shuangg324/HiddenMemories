@@ -147,7 +147,7 @@ const Packages = () => {
                 <p className="package__description">
                   Our Basic Package is a dry hire model that provides everything you need for a stylish and professional bar setup.
                   <br></br>
-                  Starting at $600 for 3 hours of service.
+                  Starting at $1000 for 5 hours of service.
                 </p>
                 <ul className="package__items enhanced-items">
                   <li><FontAwesomeIcon icon={faCheck} className="item-check" />Bar setup</li>
@@ -174,7 +174,7 @@ const Packages = () => {
                 <p className="package__description">
                   Enhance your event with our selection of add-ons to tailor the experience to your needs.
                   <br></br>
-                  Most options are $2-$5 per guest. Contact us for specific pricing based on your selections.
+                  
                 </p>
                 <ul className="package__items enhanced-items premium-items">
                   <li><FontAwesomeIcon icon={faCheck} className="item-check premium-check" /><b>Mixers:</b> A variety of non-alcoholic options such as soda, juice, tonic water, etc.</li>

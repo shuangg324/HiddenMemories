@@ -15,6 +15,7 @@ function Navbar() {
     const { isModalOpen, openModal, closeModal } = useModal();
     const [currentLogo, setCurrentLogo] = useState(isDarkMode ? DarkModeLogo : Logo);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+    const [scrolled, setScrolled] = useState(false);
 
     const toggleContrast = () => {
         document.body.classList.toggle('dark-mode');
@@ -22,6 +23,7 @@ function Navbar() {
         setIsDarkMode(newDarkMode);
         setCurrentLogo(newDarkMode ? DarkModeLogo : Logo);
     };
+    
 
     useEffect(() => {
         const handleResize = () => {
@@ -90,6 +92,9 @@ function Navbar() {
                     </li>
                     <li className="nav__link" onClick={closeMenu}>
                         <Link to="./packages" className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black">Package</Link>
+                    </li>
+                    <li className="nav__link" onClick={closeMenu}>
+                        <Link to="./quote" className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black">Quote</Link>
                     </li>
                     <li className="nav__link" onClick={closeMenu}>
                         <Link to="./contact" className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black">Contact</Link>
