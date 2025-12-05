@@ -27,9 +27,9 @@ const QuoteCalculator = () => {
     baseHours: 5,
     additionalHour: 150,
     addOns: {
-      mixers: { price: 3, name: 'Premium Mixers', perGuest: true },
+      mixers: { price: 5, name: 'Premium Mixers*', perGuest: true },
       garnishes: { price: 2, name: 'Specialty Garnishes', perGuest: true },
-      waterStation: { price: 150, name: 'Water Station', perGuest: false },
+      waterStation: { price: 2, name: 'Water Station*', perGuest: true },
       ice: { price: 2, name: 'Ice Service', perGuest: true },
       glassware: { price: 5, name: 'Glassware Upgrade', perGuest: true },
       extraBartender: { price: 300, name: 'Additional Bartender (per 75 guests)', perGuest: false, per75Guests: true }
