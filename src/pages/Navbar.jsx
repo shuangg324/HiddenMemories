@@ -15,7 +15,7 @@ function Navbar() {
     const { isModalOpen, openModal, closeModal } = useModal();
     const [currentLogo, setCurrentLogo] = useState(isDarkMode ? DarkModeLogo : Logo);
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-    const [scrolled, setScrolled] = useState(false);
+    
 
     const toggleContrast = () => {
         document.body.classList.toggle('dark-mode');
@@ -23,7 +23,6 @@ function Navbar() {
         setIsDarkMode(newDarkMode);
         setCurrentLogo(newDarkMode ? DarkModeLogo : Logo);
     };
-    
 
     useEffect(() => {
         const handleResize = () => {
