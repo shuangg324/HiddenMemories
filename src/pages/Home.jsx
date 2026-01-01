@@ -1,257 +1,551 @@
-// Optimized Home.jsx with fixes
-import React, { useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGlassMartini, faCocktail, faWineGlass, faChampagneGlasses } from '@fortawesome/free-solid-svg-icons';
-import drinksFallback from '../assets/Setup.jpg';
-import drinks2Fallback from '../assets/Hidden Memories Trio.jpg';
-import drinks3Fallback from '../assets/Margaritas.jpg';
-import '../App.css';
-import moveBackground from '../utils/moveBackground.js';
-import { useModal } from '../utils/modalContext';
-import { initScrollAnimations } from '../utils/scrollAnimations';
+import { 
+  faCalendarCheck, 
+  faPhone,
+  faArrowRight,
+  faChevronDown,
+  faStar
+} from '@fortawesome/free-solid-svg-icons';
 
-// Optimized Image Component with animation
-const OptimizedProjectImage = React.memo(({ src, alt, className }) => {
-  return (
-    <img 
-      src={src} 
-      className={className} // Removed duplicate animate-fade-in since data-animate handles it
-      alt={alt}
-      loading="lazy"
-      decoding="async"
-      sizes="(max-width: 768px) 100vw, 50vw"
-    />
-  );
-});
+const ModernLandingPage = () => {
+  const [scrollY, setScrollY] = useState(0);
 
-OptimizedProjectImage.displayName = 'OptimizedProjectImage';
-
-// Enhanced Ticker component - REMOVED conflicting animation attributes
-const Ticker = React.memo(() => {
-  const tickerItems = useMemo(() => {
-    const items = [];
-    for (let i = 0; i < 16; i++) {
-      items.push(
-        <React.Fragment key={i}>
-          <div className="ticker-item">NOW BOOKING 2025</div>
-          <div className="ticker-separator">✦</div>
-        </React.Fragment>
-      );
-    }
-    return items;
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <div 
-      className="ticker-container" 
-      role="marquee" 
-      aria-label="Now booking for 2025"
-      // REMOVED: data-animate attributes that conflict with ticker CSS animation
-    >
-      <div className="ticker-wrap">
-        {tickerItems}
-      </div>
+    <div style={{
+      fontFamily: "'Roboto', sans-serif",
+      margin: 0,
+      padding: 0
+    }}>
+      {/* HERO SECTION WITH BACKGROUND IMAGE */}
+      <section style={{
+        position: 'relative',
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        background: '#1a1a1a'
+      }}>
+        {/* Background Image with Overlay */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          backgroundImage: 'url(https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=1920)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed',
+          transform: `scale(${1 + scrollY * 0.0005})`,
+          transition: 'transform 0.1s ease-out'
+        }}>
+          {/* Gradient Overlay - Warm Luxury Colors */}
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background: 'linear-gradient(135deg, rgba(26, 26, 26, 0.85) 0%, rgba(97, 64, 81, 0.75) 50%, rgba(26, 26, 26, 0.85) 100%)'
+          }} />
+        </div>
+
+        {/* Content */}
+        <div style={{
+          position: 'relative',
+          zIndex: 10,
+          textAlign: 'center',
+          padding: '40px 20px',
+          maxWidth: '900px',
+          width: '100%'
+        }}>
+          {/* Premium Badge */}
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: 'rgba(212, 175, 87, 0.15)',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(212, 175, 87, 0.3)',
+            borderRadius: '50px',
+            padding: '8px 20px',
+            marginBottom: '30px',
+            animation: 'fadeInDown 1s ease-out'
+          }}>
+            <FontAwesomeIcon icon={faStar} style={{ color: '#D4AF57', fontSize: '14px' }} />
+            <span style={{
+              color: '#D4AF57',
+              fontSize: '14px',
+              fontWeight: '600',
+              letterSpacing: '2px',
+              textTransform: 'uppercase'
+            }}>
+              Premium Mobile Bar Services
+            </span>
+            <FontAwesomeIcon icon={faStar} style={{ color: '#D4AF57', fontSize: '14px' }} />
+          </div>
+
+          {/* Main Headline */}
+          <h1 style={{
+            fontSize: 'clamp(42px, 8vw, 84px)',
+            fontWeight: '300',
+            color: '#FFFFFF',
+            marginBottom: '20px',
+            lineHeight: 1.1,
+            letterSpacing: '-1px',
+            animation: 'fadeInUp 1s ease-out 0.2s backwards',
+            fontFamily: "'Playfair Display', serif"
+          }}>
+            Elevate Every
+            <br />
+            <span style={{
+              fontWeight: '700',
+              background: 'linear-gradient(135deg, #D4AF57 0%, #C19A6B 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}>
+              Celebration
+            </span>
+          </h1>
+
+          {/* Subheadline */}
+          <p style={{
+            fontSize: 'clamp(20px, 3vw, 28px)',
+            color: 'rgba(255, 255, 255, 0.85)',
+            marginBottom: '40px',
+            lineHeight: 1.6,
+            fontWeight: '300',
+            letterSpacing: '0.5px',
+            animation: 'fadeInUp 1s ease-out 0.4s backwards'
+          }}>
+            Crafting unforgettable moments with bespoke cocktails
+            <br />
+            and sophisticated service across LA County
+          </p>
+
+          {/* CTA Buttons */}
+          <div style={{
+            display: 'flex',
+            gap: '16px',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+            marginBottom: '50px',
+            animation: 'fadeInUp 1s ease-out 0.6s backwards'
+          }}>
+            <button style={{
+              padding: '18px 45px',
+              fontSize: '18px',
+              fontWeight: '600',
+              letterSpacing: '1px',
+              border: 'none',
+              borderRadius: '4px',
+              background: 'linear-gradient(135deg, #D4AF57 0%, #C19A6B 100%)',
+              color: '#1a1a1a',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              boxShadow: '0 8px 30px rgba(212, 175, 87, 0.3)',
+              textTransform: 'uppercase'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 12px 40px rgba(212, 175, 87, 0.5)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 8px 30px rgba(212, 175, 87, 0.3)';
+            }}
+            >
+              <FontAwesomeIcon icon={faCalendarCheck} />
+              Book Your Event
+            </button>
+
+            <button style={{
+              padding: '18px 45px',
+              fontSize: '18px',
+              fontWeight: '600',
+              letterSpacing: '1px',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+              borderRadius: '4px',
+              background: 'rgba(255, 255, 255, 0.05)',
+              backdropFilter: 'blur(10px)',
+              color: '#FFFFFF',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              textTransform: 'uppercase'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+              e.currentTarget.style.borderColor = 'rgba(212, 175, 87, 0.5)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+            }}
+            >
+              <FontAwesomeIcon icon={faPhone} />
+              (626) 367-4586
+            </button>
+          </div>
+
+          {/* Trust Indicators */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '40px',
+            flexWrap: 'wrap',
+            animation: 'fadeInUp 1s ease-out 0.8s backwards'
+          }}>
+            {[
+              { label: 'Licensed & Insured', value: '✓' },
+              { label: '5+ Years', value: '500+' },
+              { label: 'Custom Menus', value: '✓' }
+            ].map((item, index) => (
+              <div key={index} style={{
+                textAlign: 'center'
+              }}>
+                <div style={{
+                  fontSize: '24px',
+                  fontWeight: '700',
+                  color: '#D4AF57',
+                  marginBottom: '5px'
+                }}>
+                  {item.value}
+                </div>
+                <div style={{
+                  fontSize: '13px',
+                  color: 'rgba(255, 255, 255, 0.7)',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px'
+                }}>
+                  {item.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div style={{
+          position: 'absolute',
+          bottom: '40px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          animation: 'bounce 2s infinite',
+          cursor: 'pointer',
+          zIndex: 10
+        }}>
+          <FontAwesomeIcon 
+            icon={faChevronDown} 
+            style={{
+              color: 'rgba(255, 255, 255, 0.5)',
+              fontSize: '24px'
+            }}
+          />
+        </div>
+      </section>
+
+      {/* FEATURED SECTION */}
+      <section style={{
+        padding: '100px 20px',
+        background: '#2A2A2A',
+        position: 'relative'
+      }}>
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto'
+        }}>
+          <div style={{
+            textAlign: 'center',
+            marginBottom: '80px'
+          }}>
+            <h2 style={{
+              fontSize: 'clamp(36px, 5vw, 60px)',
+              fontWeight: '300',
+              color: '#FFFFFF',
+              marginBottom: '20px',
+              fontFamily: "'Playfair Display', serif"
+            }}>
+              Signature Experiences
+            </h2>
+            <div style={{
+              width: '60px',
+              height: '2px',
+              background: 'linear-gradient(90deg, transparent, #D4AF57, transparent)',
+              margin: '0 auto'
+            }} />
+          </div>
+
+          {/* 3 Feature Cards */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '40px'
+          }}>
+            {[
+              {
+                title: 'Weddings',
+                description: 'Craft the perfect toast for your special day with our bespoke cocktail creations and elegant bar setups.',
+                image: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600'
+              },
+              {
+                title: 'Corporate Events',
+                description: 'Impress clients and colleagues with sophisticated service and premium beverages tailored to your brand.',
+                image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600'
+              },
+              {
+                title: 'Private Parties',
+                description: 'Transform your celebration into an unforgettable experience with custom cocktails and expert bartenders.',
+                image: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600'
+              }
+            ].map((item, index) => (
+              <div key={index} style={{
+                position: 'relative',
+                overflow: 'hidden',
+                borderRadius: '0',
+                background: '#1a1a1a',
+                cursor: 'pointer',
+                transition: 'all 0.5s ease',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.3)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-8px)';
+                e.currentTarget.style.boxShadow = '0 12px 40px rgba(212, 175, 87, 0.2)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.3)';
+              }}
+              >
+                <div style={{
+                  position: 'relative',
+                  paddingBottom: '75%',
+                  overflow: 'hidden'
+                }}>
+                  <img 
+                    src={item.image}
+                    alt={item.title}
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      transition: 'transform 0.5s ease'
+                    }}
+                  />
+                  <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    background: 'linear-gradient(180deg, transparent 0%, rgba(26,26,26,0.7) 100%)'
+                  }} />
+                </div>
+                <div style={{
+                  padding: '30px'
+                }}>
+                  <h3 style={{
+                    fontSize: '28px',
+                    fontWeight: '400',
+                    color: '#FFFFFF',
+                    marginBottom: '15px',
+                    fontFamily: "'Playfair Display', serif"
+                  }}>
+                    {item.title}
+                  </h3>
+                  <p style={{
+                    fontSize: '16px',
+                    color: 'rgba(255, 255, 255, 0.7)',
+                    lineHeight: 1.8,
+                    marginBottom: '20px'
+                  }}>
+                    {item.description}
+                  </p>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    color: '#D4AF57',
+                    fontSize: '15px',
+                    fontWeight: '600',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px',
+                    cursor: 'pointer'
+                  }}>
+                    Learn More
+                    <FontAwesomeIcon icon={faArrowRight} style={{ fontSize: '12px' }} />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA SECTION */}
+      <section style={{
+        padding: '120px 20px',
+        background: 'linear-gradient(135deg, #614051 0%, #1a1a1a 100%)',
+        textAlign: 'center',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        <div style={{
+          position: 'absolute',
+          top: '-50%',
+          right: '-20%',
+          width: '600px',
+          height: '600px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(212, 175, 87, 0.1) 0%, transparent 70%)',
+          filter: 'blur(40px)'
+        }} />
+
+        <div style={{
+          position: 'relative',
+          zIndex: 1,
+          maxWidth: '700px',
+          margin: '0 auto'
+        }}>
+          <h2 style={{
+            fontSize: 'clamp(40px, 6vw, 68px)',
+            fontWeight: '300',
+            color: '#FFFFFF',
+            marginBottom: '20px',
+            fontFamily: "'Playfair Display', serif"
+          }}>
+            Ready to Create
+            <br />
+            <span style={{
+              fontWeight: '700',
+              color: '#D4AF57'
+            }}>
+              Magic Together?
+            </span>
+          </h2>
+          <p style={{
+            fontSize: '20px',
+            color: 'rgba(255, 255, 255, 0.8)',
+            marginBottom: '40px',
+            lineHeight: 1.7
+          }}>
+            Book your free consultation today and let's bring your vision to life
+          </p>
+
+          <button style={{
+            padding: '20px 55px',
+            fontSize: '18px',
+            fontWeight: '600',
+            letterSpacing: '1px',
+            border: 'none',
+            borderRadius: '4px',
+            background: 'linear-gradient(135deg, #D4AF57 0%, #C19A6B 100%)',
+            color: '#1a1a1a',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '12px',
+            boxShadow: '0 10px 40px rgba(212, 175, 87, 0.4)',
+            textTransform: 'uppercase'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-3px)';
+            e.currentTarget.style.boxShadow = '0 15px 50px rgba(212, 175, 87, 0.6)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 10px 40px rgba(212, 175, 87, 0.4)';
+          }}
+          >
+            Get Your Free Quote
+            <FontAwesomeIcon icon={faArrowRight} />
+          </button>
+
+          <div style={{
+            marginTop: '30px',
+            fontSize: '14px',
+            color: 'rgba(255, 255, 255, 0.6)',
+            letterSpacing: '1px'
+          }}>
+            ✦ Free Consultation • Custom Pricing • No Obligations
+          </div>
+        </div>
+      </section>
+
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;700&family=Roboto:wght@300;400;600&display=swap');
+
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes fadeInDown {
+          from {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes bounce {
+          0%, 20%, 50%, 80%, 100% {
+            transform: translateX(-50%) translateY(0);
+          }
+          40% {
+            transform: translateX(-50%) translateY(-10px);
+          }
+          60% {
+            transform: translateX(-50%) translateY(-5px);
+          }
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        body {
+          margin: 0;
+          padding: 0;
+        }
+
+        @media (max-width: 768px) {
+          section {
+            padding: 60px 20px !important;
+          }
+        }
+      `}</style>
     </div>
   );
-});
-
-Ticker.displayName = 'Ticker';
-
-const Home = () => {
-    const { toggleModal } = useModal();
-
-    // Memoized mouse move handler
-    const handleMouseMove = useCallback((event) => {
-        if (typeof moveBackground === "function") {
-            moveBackground(event);
-        }
-    }, []);
-
-    const handleAboutUsClick = useCallback(() => {
-        toggleModal();
-    }, [toggleModal]);
-
-    // Initialize scroll animations
-    useEffect(() => {
-        const observer = initScrollAnimations();
-        
-        return () => {
-            if (observer) {
-                observer.disconnect();
-            }
-        };
-    }, []);
-
-    // REMOVED: Duplicate mouse move listener - onMouseMove in JSX is enough
-    // No need for document.addEventListener since you have onMouseMove on the div
-
-    // Memoized background shapes
-    const backgroundShapes = useMemo(() => {
-        const allIcons = [faGlassMartini, faCocktail, faWineGlass, faChampagneGlasses];
-        return [
-            <FontAwesomeIcon key="0" icon={allIcons[0]} className="shape shape--0" aria-hidden="true" />,
-            <FontAwesomeIcon key="1" icon={allIcons[0]} className="shape shape--1" aria-hidden="true" />,
-            <FontAwesomeIcon key="2" icon={allIcons[1]} className="shape shape--2" aria-hidden="true" />,
-            <FontAwesomeIcon key="3" icon={allIcons[1]} className="shape shape--3" aria-hidden="true" />,
-            <FontAwesomeIcon key="4" icon={allIcons[3]} className="shape shape--4" aria-hidden="true" />,
-            <FontAwesomeIcon key="5" icon={allIcons[2]} className="shape shape--5" aria-hidden="true" />,
-            <FontAwesomeIcon key="6" icon={allIcons[3]} className="shape shape--6" aria-hidden="true" />,
-            <FontAwesomeIcon key="7" icon={allIcons[2]} className="shape shape--7" aria-hidden="true" />,
-            <FontAwesomeIcon key="8" icon={faGlassMartini} className="shape shape--8" aria-hidden="true" />
-        ];
-    }, []);
-
-    // Memoized project data with FASTER, responsive delays
-    const projectData = useMemo(() => [
-        {
-            id: 1,
-            image: drinksFallback,
-            title: "Wedding Reception",
-            subtitle: "Elegant and Memorable",
-            description: "We specialize in bringing a unique and personalized touch to events like wedding receptions. Our mobile bar service includes crafting custom cocktails, creating a welcoming bar atmosphere, and ensuring guests enjoy an elevated experience that adds to the celebration's lasting memories.",
-            alt: "Professional wedding reception bar setup with elegant drink stations",
-            animateData: "fade-in-left",
-            delay: "1" // Reset to 1 when this section comes into view
-        },
-        {
-            id: 2,
-            image: drinks2Fallback,
-            title: "Private Party",
-            subtitle: "Exclusive and Personalized",
-            description: "We bring fun and flair to your private parties with our mobile bar service, tailored to create a memorable experience for you and your guests. Whether it's an intimate gathering or a lively celebration, we offer custom cocktails and impeccable service that adds a touch of excitement to your event. From the first drink to the last toast, we ensure every detail is perfect, leaving your guests talking about your party long after it ends.",
-            alt: "Private party bar service featuring signature espresso and lychee martinis",
-            animateData: "fade-in-up",
-            delay: "2"
-        },
-        {
-            id: 3,
-            image: drinks3Fallback,
-            title: "Corporate Event",
-            subtitle: "Professional and Fun",
-            description: "We bring professionalism and elegance to corporate events with our mobile bar service. Whether it's a company celebration, client appreciation event, or team gathering, we craft custom cocktails and create an inviting bar experience that enhances networking and leaves a lasting impression.",
-            alt: "Corporate event bar service with professional tropical margaritas and signature cocktails",
-            animateData: "fade-in-right",
-            delay: "3"
-        }
-    ], []);
-
-    return (
-        <div className="App" onMouseMove={handleMouseMove}>
-            <section id="landing-page">
-                <header className="header">
-                    <div className="container">
-                        <div className="row">
-                            <div className="header__content">
-                                <div className="header__content--left">
-                                    <h1 
-                                        className="big__title" 
-                                        data-animate="fade-in-up"
-                                    >
-                                        Mobile Bar Services
-                                    </h1>
-                                    <p 
-                                        className="header__para dark-mode-white" 
-                                        data-animate="fade-in-up" 
-                                        data-delay="2"
-                                    >
-                                        Elevate your event with our expert Mobile Bartenders. We craft custom cocktails and provide exceptional service to make your celebration unforgettable.
-                                        Let us bring your vision to life!
-                                        <br />
-                                        <br />
-                                        Here's a bit more{' '}
-                                        <button 
-                                            className="italic header__para link__hover-effect link__hover-effect--black click btn-animated text-glow"
-                                            onClick={handleAboutUsClick}
-                                            style={{ background: 'none', border: 'none', font: 'inherit', color: 'inherit', cursor: 'pointer' }}
-                                            aria-label="Learn more about Hidden Memories Bar"
-                                        >
-                                            <strong>about us</strong>
-                                        </button>
-                                        .
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <Ticker />
-                </header>
-                
-                <a 
-                    href="#projects" 
-                    className="scroll" 
-                    aria-label="Scroll to featured events section" 
-                    data-animate="bounce-in" 
-                    data-delay="4"
-                >
-                    <div className="scroll__icon click" aria-hidden="true"></div>
-                </a>
-            </section>
-
-            {/* Background decorative shapes */}
-            <div aria-hidden="true">
-                {backgroundShapes}
-            </div>
-
-            <main>
-                <section id="projects">
-                    <div className="container">
-                        <div className="row">
-                            <header>
-                                <h2 
-                                    className="section__title dark-mode-white" 
-                                    data-animate="fade-in-up"
-                                    // REMOVED delay - animate immediately when scrolled to
-                                >
-                                    Featured Events
-                                </h2>
-                            </header>
-                            
-                            <ul className="project__list">
-                                {projectData.map((project) => (
-                                    <li 
-                                        key={project.id} 
-                                        className="project" 
-                                        data-animate={project.animateData} 
-                                        data-delay={project.delay}
-                                    >
-                                        <article className="project__wrapper hover-lift">
-                                            <OptimizedProjectImage
-                                                src={project.image}
-                                                className="project__img"
-                                                alt={project.alt}
-                                            />
-                                            <div className="project__wrapper--bg" aria-hidden="true"></div>
-                                            <div className="project__description">
-                                                <h3 className="project__description--title text-glow">
-                                                    {project.title}
-                                                </h3>
-                                                <h4 className="project__description--sub-title">
-                                                    {project.subtitle}
-                                                </h4>
-                                                <p className="project__description--para">
-                                                    {project.description}
-                                                </p>
-                                            </div>
-                                        </article>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-            </main>
-
-            <footer>
-                <div className="container footer__color">
-                    <div className="row footer__row">
-                        <div className="footer__copyright dark-mode-white">
-                            Copyright &copy; 2025 Hidden Memories Bar. All rights reserved.
-                        </div>
-                    </div>
-                </div>
-            </footer>
-                </div>
-    );
 };
 
-export default React.memo(Home);
+export default ModernLandingPage;
