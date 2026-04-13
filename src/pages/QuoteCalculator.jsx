@@ -1,656 +1,264 @@
-import React, { useMemo, useCallback, useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faCalculator, 
-  faUsers, 
-  faClock, 
-  faGlassMartini,
-  faCheckCircle,
-  faInfoCircle,
-  faChevronDown,
-  faChevronUp
-} from '@fortawesome/free-solid-svg-icons';
+import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
+import '../App.css';
 
+/* ── Add-on definitions ───────────────────────────────────────── */
+const ADDONS = [
+  { key: 'mixers',         name: 'Premium Mixers',      desc: 'Soda, juice, tonic & more',       price: 5,   perGuest: true,  per75: false },
+  { key: 'garnishes',      name: 'Specialty Garnishes',  desc: 'Fresh fruit, herbs & flowers',    price: 2,   perGuest: true,  per75: false },
+  { key: 'waterStation',   name: 'Water Station',        desc: 'Chilled dispensers at venue',     price: 2,   perGuest: true,  per75: false },
+  { key: 'ice',            name: 'Ice Service',          desc: 'Specialty ice for cocktails',     price: 2,   perGuest: true,  per75: false },
+  { key: 'glassware',      name: 'Glassware Upgrade',    desc: 'Elegant stemware instead of cups',price: 5,   perGuest: true,  per75: false },
+  { key: 'extraBartender', name: 'Extra Bartender',      desc: 'Recommended for 75+ guests',     price: 300, perGuest: false, per75: true  },
+];
+
+/* ── SVG checkmark ────────────────────────────────────────────── */
+function CheckIcon({ checked }) {
+  return (
+    <svg
+      className={`qc-check-icon${checked ? ' qc-check-icon--on' : ''}`}
+      viewBox="0 0 18 18"
+      fill="none"
+      aria-hidden="true"
+    >
+      <rect className="qc-check-bg" x="0.5" y="0.5" width="17" height="17" rx="4.5" />
+      <path
+        className="qc-check-path"
+        d="M4.5 9l3 3 6-6"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/* ── Calculator ───────────────────────────────────────────────── */
 const QuoteCalculator = () => {
-  const [formData, setFormData] = useState({
-    guestCount: '',
-    serviceHours: '5',
-    addOns: []
-  });
+  const pageRef = useRef(null);
+  const [guests,  setGuests]  = useState('');
+  const [hours,   setHours]   = useState(5);
+  const [addOns,  setAddOns]  = useState([]);
 
-  const [quote, setQuote] = useState(null);
-  const [showBreakdown, setShowBreakdown] = useState(false);
+  /* Sequential stagger reveal */
+  useEffect(() => {
+    const items = pageRef.current?.querySelectorAll('.qc-item') ?? [];
+    items.forEach((el, i) => {
+      setTimeout(() => el.classList.add('qc-item--visible'), i * 110);
+    });
+  }, []);
 
-  // Pricing structure
-  const pricing = useMemo(() => ({
-    basePackage: 1000, // 5 hours
-    baseHours: 5,
-    additionalHour: 150,
-    addOns: {
-      mixers: { price: 5, name: 'Premium Mixers*', perGuest: true },
-      garnishes: { price: 2, name: 'Specialty Garnishes', perGuest: true },
-      waterStation: { price: 2, name: 'Water Station*', perGuest: true },
-      ice: { price: 2, name: 'Ice Service', perGuest: true },
-      glassware: { price: 5, name: 'Glassware Upgrade', perGuest: true },
-      extraBartender: { price: 300, name: 'Additional Bartender (per 75 guests)', perGuest: false, per75Guests: true }
-    }
-  }), []);
+  const BASE       = 1000;
+  const EXTRA_HOUR = 150;
 
-  // Calculate quote whenever form changes
-  
+  const fmt = useCallback((n) =>
+    new Intl.NumberFormat('en-US', {
+      style: 'currency', currency: 'USD',
+      minimumFractionDigits: 0, maximumFractionDigits: 0,
+    }).format(n),
+  []);
 
-// Wrap calculateQuote in useCallback so it can safely be a dependency
-const calculateQuote = useCallback(() => {
-  const guests = parseInt(formData.guestCount) || 0;
-  const hours = parseInt(formData.serviceHours) || 5;
+  const quote = useMemo(() => {
+    const g = parseInt(guests) || 0;
+    let total = BASE;
+    const items = [];
 
-  // Base package cost
-  let total = pricing.basePackage;
-
-  // Additional hours beyond base
-  const additionalHoursCost = hours > pricing.baseHours ? (hours - pricing.baseHours) * pricing.additionalHour : 0;
-  total += additionalHoursCost;
-
-  // Add-ons
-  let addOnTotal = 0;
-  const breakdown = [];
-
-  formData.addOns.forEach((addOnKey) => {
-    const addOn = pricing.addOns[addOnKey];
-    if (!addOn) return;
-
-    let cost = 0;
-
-    if (addOn.per75Guests) {
-      // Extra bartenders: 1 per 75 guests AFTER the first included bartender
-      const extraBartenders = Math.floor(guests / 75);
-      cost = addOn.price * extraBartenders;
-
-      breakdown.push({
-        name: `${addOn.name} (${extraBartenders} extra)`,
-        cost,
-        perGuest: false
-      });
-
-    } else {
-      cost = addOn.perGuest ? addOn.price * guests : addOn.price;
-      breakdown.push({
-        name: addOn.name,
-        cost,
-        perGuest: addOn.perGuest
-      });
+    if (hours > 5) {
+      const extra = (hours - 5) * EXTRA_HOUR;
+      total += extra;
+      items.push({ label: `+${hours - 5} extra hour${hours - 5 > 1 ? 's' : ''}`, amount: extra });
     }
 
-    addOnTotal += cost;
-  });
+    addOns.forEach((key) => {
+      const a = ADDONS.find(x => x.key === key);
+      if (!a) return;
+      if (a.per75) {
+        const n = Math.floor(g / 75);
+        const cost = a.price * n;
+        if (n > 0) { total += cost; items.push({ label: `${a.name} ×${n}`, amount: cost }); }
+      } else {
+        const cost = a.perGuest ? a.price * g : a.price;
+        total += cost;
+        items.push({ label: a.name, amount: cost });
+      }
+    });
 
-  total += addOnTotal;
+    return { total, items, guests: g };
+  }, [guests, hours, addOns]);
 
-  const recommendExtraBartender = guests > 75 && !formData.addOns.includes('extraBartender');
+  const toggleAddon = useCallback((key) => {
+    setAddOns(prev =>
+      prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]
+    );
+  }, []);
 
-  setQuote({
-    basePackage: pricing.basePackage,
-    additionalHours: additionalHoursCost,
-    addOns: breakdown,
-    addOnTotal,
-    total,
-    guests,
-    hours,
-    recommendExtraBartender
-  });
-}, [formData, pricing, setQuote]);
-
-// useEffect now clean, no warnings
-useEffect(() => {
-  calculateQuote();
-}, [calculateQuote]);
-
-
-  const handleGuestChange = (e) => {
-    const value = e.target.value;
-    if (value === '' || (parseInt(value) >= 0 && parseInt(value) <= 500)) {
-      setFormData(prev => ({ ...prev, guestCount: value }));
-    }
+  const step = (delta) => {
+    setGuests(prev => {
+      const next = Math.max(0, Math.min(500, (parseInt(prev) || 0) + delta));
+      return String(next);
+    });
   };
 
-  const handleHoursChange = (e) => {
-    setFormData(prev => ({ ...prev, serviceHours: e.target.value }));
-  };
-
-  const handleAddOnToggle = (addOnKey) => {
-    setFormData(prev => ({
-      ...prev,
-      addOns: prev.addOns.includes(addOnKey)
-        ? prev.addOns.filter(key => key !== addOnKey)
-        : [...prev.addOns, addOnKey]
-    }));
-  };
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(amount);
-  };
+  const hasGuests         = parseInt(guests) > 0;
+  const warnBartender     = hasGuests && parseInt(guests) > 75 && !addOns.includes('extraBartender');
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #fff8f3 0%, #ebddc9 100%)',
-      padding: '40px 20px',
-      fontFamily: "'Bebas Neue', sans-serif"
-    }}>
-      <div style={{
-        maxWidth: '1000px',
-        margin: '0 auto'
-      }}>
-        {/* Header */}
-        <div style={{
-          textAlign: 'center',
-          marginBottom: '40px',
-          animation: 'fadeInUp 0.8s ease-out'
-        }}>
-          <FontAwesomeIcon 
-            icon={faCalculator} 
-            style={{
-              fontSize: '3rem',
-              color: '#849f4f',
-              marginBottom: '20px',
-              animation: 'bounceIn 0.8s ease-out'
-            }}
-          />
-          <h1 style={{
-            fontSize: '48px',
-            color: '#7d3327',
-            marginBottom: '10px',
-            letterSpacing: '2px'
-          }}>
-            Free Quote Calculator
-          </h1>
-          <p style={{
-            fontSize: '20px',
-            color: '#dda165',
-            fontFamily: "'Roboto', sans-serif"
-          }}>
-            Get an instant estimate for your event
-          </p>
-        </div>
+    <div className="qc-page" ref={pageRef}>
 
-        {/* Main Calculator */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-          gap: '30px',
-          marginBottom: '30px'
-        }}>
-          {/* Input Section */}
-          <div style={{
-            background: 'white',
-            borderRadius: '20px',
-            padding: '30px',
-            boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-            border: '2px solid rgba(221, 161, 101, 0.2)',
-            animation: 'fadeInLeft 0.8s ease-out'
-          }}>
-            <h2 style={{
-              fontSize: '28px',
-              color: '#7d3327',
-              marginBottom: '25px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px'
-            }}>
-              <FontAwesomeIcon icon={faGlassMartini} />
-              Event Details
-            </h2>
+      {/* ── Header ── */}
+      <header className="qc-header qc-item">
+        <span className="eyebrow">Estimate</span>
+        <h1 className="qc-header__title">Quote calculator</h1>
+        <p className="qc-header__sub">
+          Adjust the details below to see your instant estimate.
+        </p>
+      </header>
 
-            {/* Guest Count */}
-            <div style={{ marginBottom: '25px' }}>
-              <label style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                fontSize: '18px',
-                color: '#7d3327',
-                marginBottom: '10px',
-                fontWeight: 'bold'
-              }}>
-                <FontAwesomeIcon icon={faUsers} />
-                Number of Guests
-              </label>
+      <div className="qc-grid">
+
+        {/* ── Inputs ── */}
+        <div className="qc-inputs qc-item">
+
+          {/* Guests */}
+          <div className="qc-block">
+            <span className="qc-block__label">Number of guests</span>
+            <div className="qc-stepper">
+              <button
+                className="qc-stepper__btn"
+                onClick={() => step(-5)}
+                aria-label="Decrease guests by 5"
+              >−</button>
               <input
                 type="number"
-                value={formData.guestCount}
-                onChange={handleGuestChange}
-                placeholder="Enter guest count"
-                min="1"
+                className="qc-stepper__input"
+                value={guests}
+                onChange={e => {
+                  const v = e.target.value;
+                  if (v === '' || (parseInt(v) >= 0 && parseInt(v) <= 500)) setGuests(v);
+                }}
+                placeholder="0"
+                min="0"
                 max="500"
-                style={{
-                  width: '100%',
-                  padding: '12px 16px',
-                  fontSize: '18px',
-                  border: '2px solid #dda165',
-                  borderRadius: '8px',
-                  background: '#fff8f3',
-                  color: '#360a05',
-                  fontFamily: "'Roboto', sans-serif"
-                }}
+                aria-label="Guest count"
               />
-            </div>
-
-            {/* Service Hours */}
-            <div style={{ marginBottom: '25px' }}>
-              <label style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                fontSize: '18px',
-                color: '#7d3327',
-                marginBottom: '10px',
-                fontWeight: 'bold'
-              }}>
-                <FontAwesomeIcon icon={faClock} />
-                Hours of Service
-              </label>
-              <select
-                value={formData.serviceHours}
-                onChange={handleHoursChange}
-                style={{
-                  width: '100%',
-                  padding: '12px 16px',
-                  fontSize: '18px',
-                  border: '2px solid #dda165',
-                  borderRadius: '8px',
-                  background: '#fff8f3',
-                  color: '#360a05',
-                  cursor: 'pointer',
-                  fontFamily: "'Roboto', sans-serif"
-                }}
-              >
-                {[5, 6, 7, 8].map(hour => (
-                  <option key={hour} value={hour}>
-                    {hour} {hour === 1 ? 'hour' : 'hours'} {hour === 5 ? '(Standard)' : ''}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Add-ons */}
-            <div>
-              <h3 style={{
-                fontSize: '20px',
-                color: '#7d3327',
-                marginBottom: '15px'
-              }}>
-                Select Add-ons
-              </h3>
-              {Object.entries(pricing.addOns).map(([key, addOn]) => (
-  <div
-    key={key}
-    onClick={() => handleAddOnToggle(key)}
-    style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: '12px',
-      marginBottom: '10px',
-      border: `2px solid ${
-        formData.addOns.includes(key) ? '#849f4f' : '#dda165'
-      }`,
-      borderRadius: '8px',
-      background: formData.addOns.includes(key)
-        ? 'rgba(132, 159, 79, 0.1)'
-        : '#fff8f3',
-      cursor: 'pointer',
-      transition: 'all 0.3s ease',
-    }}
-  >
-    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-      <FontAwesomeIcon
-        icon={faCheckCircle}
-        style={{
-          color: formData.addOns.includes(key) ? '#849f4f' : '#dda165',
-          fontSize: '20px',
-        }}
-      />
-      <span
-        style={{
-          fontSize: '16px',
-          color: '#7d3327',
-          fontFamily: "'Roboto', sans-serif",
-        }}
-      >
-        {addOn.name}
-      </span>
-    </div>
-
-    <span
-      style={{
-        fontSize: '16px',
-        color: '#849f4f',
-        fontWeight: 'bold',
-        fontFamily: "'Roboto', sans-serif",
-      }}
-    >
-      {addOn.perGuest
-        ? `$${addOn.price}/guest`
-        : addOn.per75Guests
-        ? `$${addOn.price}`
-        : formatCurrency(addOn.price)}
-    </span>
-  </div>
-))}
-
+              <button
+                className="qc-stepper__btn"
+                onClick={() => step(5)}
+                aria-label="Increase guests by 5"
+              >+</button>
             </div>
           </div>
 
-          {/* Quote Display */}
-          <div style={{
-            background: 'linear-gradient(135deg, #849f4f 0%, #7d3327 100%)',
-            borderRadius: '20px',
-            padding: '30px',
-            color: 'white',
-            boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
-            animation: 'fadeInRight 0.8s ease-out'
-          }}>
-            <h2 style={{
-              fontSize: '28px',
-              marginBottom: '25px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px'
-            }}>
-              <FontAwesomeIcon icon={faCalculator} />
-              Your Estimate
-            </h2>
-
-            {quote && formData.guestCount ? (
-              <>
-                {/* Total */}
-                <div style={{
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  borderRadius: '15px',
-                  padding: '25px',
-                  marginBottom: '20px',
-                  textAlign: 'center'
-                }}>
-                  <div style={{
-                    fontSize: '18px',
-                    marginBottom: '10px',
-                    opacity: 0.9
-                  }}>
-                    Estimated Total
-                  </div>
-                  <div style={{
-                    fontSize: '48px',
-                    fontWeight: 'bold',
-                    letterSpacing: '2px'
-                  }}>
-                    {formatCurrency(quote.total)}
-                  </div>
-                  <div style={{
-                    fontSize: '14px',
-                    marginTop: '10px',
-                    opacity: 0.8,
-                    fontFamily: "'Roboto', sans-serif"
-                  }}>
-                    For {quote.guests} guests • {quote.hours} hours
-                  </div>
-                </div>
-
-                {/* Breakdown Toggle */}
+          {/* Hours */}
+          <div className="qc-block">
+            <span className="qc-block__label">Hours of service</span>
+            <div className="qc-pills" role="group" aria-label="Service hours">
+              {[5, 6, 7, 8].map(h => (
                 <button
-                  onClick={() => setShowBreakdown(!showBreakdown)}
-                  style={{
-                    width: '100%',
-                    padding: '12px',
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    border: '2px solid rgba(255, 255, 255, 0.3)',
-                    borderRadius: '8px',
-                    color: 'white',
-                    fontSize: '20px',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginBottom: '20px',
-                    transition: 'all 0.3s ease'
-                  }}
+                  key={h}
+                  className={`qc-pill${hours === h ? ' qc-pill--on' : ''}`}
+                  onClick={() => setHours(h)}
+                  aria-pressed={hours === h}
                 >
-                  <span>Price Breakdown</span>
-                  <FontAwesomeIcon icon={showBreakdown ? faChevronUp : faChevronDown} />
+                  {h}h
+                  {h === 5 && <span className="qc-pill__tag">standard</span>}
+                  {h > 5 && <span className="qc-pill__tag">+{fmt((h - 5) * EXTRA_HOUR)}</span>}
                 </button>
+              ))}
+            </div>
+          </div>
 
-                {/* Breakdown Details */}
-                {showBreakdown && (
-                  <div style={{
-                    background: 'rgba(255, 255, 255, 0.1)',
-                    borderRadius: '12px',
-                    padding: '20px',
-                    marginBottom: '20px',
-                    fontFamily: "'Roboto', sans-serif"
-                  }}>
-                    <div style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      marginBottom: '10px',
-                      paddingBottom: '10px',
-                      borderBottom: '1px solid rgba(255, 255, 255, 0.2)'
-                    }}>
-                      <span>Base Package (5 hours)</span>
-                      <span>{formatCurrency(quote.basePackage)}</span>
+          {/* Add-ons */}
+          <div className="qc-block">
+            <span className="qc-block__label">
+              Add-ons <span className="qc-block__hint">— optional</span>
+            </span>
+            <div className="qc-addons">
+              {ADDONS.map(({ key, name, desc, price, perGuest, per75 }) => {
+                const on       = addOns.includes(key);
+                const priceStr = per75
+                  ? `$${price} / bartender`
+                  : perGuest
+                  ? `$${price} / guest`
+                  : fmt(price);
+                return (
+                  <button
+                    key={key}
+                    className={`qc-addon${on ? ' qc-addon--on' : ''}`}
+                    onClick={() => toggleAddon(key)}
+                    aria-pressed={on}
+                  >
+                    <CheckIcon checked={on} />
+                    <div className="qc-addon__body">
+                      <span className="qc-addon__name">{name}</span>
+                      <span className="qc-addon__desc">{desc}</span>
                     </div>
+                    <span className="qc-addon__price">{priceStr}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
 
-                    {quote.additionalHours > 0 && (
-                      <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        marginBottom: '10px',
-                        paddingBottom: '10px',
-                        borderBottom: '1px solid rgba(255, 255, 255, 0.2)'
-                      }}>
-                        <span>Additional Hours ({quote.hours - 5})</span>
-                        <span>{formatCurrency(quote.additionalHours)}</span>
-                      </div>
-                    )}
+        {/* ── Live estimate ── */}
+        <aside className="qc-result qc-item">
+          <div className="qc-result__inner">
 
-                    {quote.addOns.length > 0 && (
-                      <>
-                        <div style={{
-                          marginTop: '15px',
-                          marginBottom: '10px'
-                        }}>
-                          Add-ons:
-                        </div>
-                        {quote.addOns.map((addOn, index) => (
-                          <div
-                            key={index}
-                            style={{
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              marginBottom: '8px',
-                              paddingLeft: '15px',
-                              fontSize: '16px'
-                            }}
-                          >
-                            <span>{addOn.name}</span>
-                            <span>{formatCurrency(addOn.cost)}</span>
-                          </div>
-                        ))}
-                      </>
-                    )}
-                  </div>
-                )}
+            <span className="qc-result__eyebrow">Estimated total</span>
 
-                {/* Recommendation */}
-                {quote.recommendExtraBartender && (
-                  <div style={{
-                    background: 'rgba(212, 175, 55, 0.2)',
-                    border: '2px solid rgba(212, 175, 55, 0.5)',
-                    borderRadius: '12px',
-                    padding: '15px',
-                    marginBottom: '20px',
-                    display: 'flex',
-                    gap: '10px',
-                    fontFamily: "'Roboto', sans-serif"
-                  }}>
-                    <FontAwesomeIcon icon={faInfoCircle} style={{ fontSize: '20px', flexShrink: 0 }} />
-                    <div style={{ fontSize: '20px' }}>
-                      For {quote.guests} guests, we recommend adding additional bartender(s) for the best service experience.
-                    </div>
-                  </div>
-                )}
+            <div key={quote.total} className="qc-result__amount">
+              {hasGuests ? fmt(quote.total) : '—'}
+            </div>
 
-                {/* CTA */}
-                <div style={{
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  borderRadius: '12px',
-                  padding: '20px',
-                  textAlign: 'center',
-                  fontFamily: "'Roboto', sans-serif"
-                }}>
-                  <p style={{
-                    fontSize: '20px',
-                    marginBottom: '15px',
-                    opacity: 0.9
-                  }}>
-                    Ready to book your event? Contact us for a detailed quote and to discuss your custom needs.
-                  </p>
-                  <a
-  href="/contact"
-  style={{
-    display: 'block',
-    width: '100%',
-    padding: '14px',
-    background: 'white',
-    color: '#7d3327',
-    border: 'none',
-    borderRadius: '8px',
-    fontSize: '18px',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-    textAlign: 'center',
-    textDecoration: 'none',
-    transition: 'all 0.3s ease',
-    letterSpacing: '1px'
-  }}
->
-  Get Final Quote
-</a>
+            {hasGuests && (
+              <p className="qc-result__meta">
+                {quote.guests} guests · {hours} hours
+              </p>
+            )}
+
+            {/* Breakdown */}
+            {hasGuests && (
+              <div className="qc-breakdown">
+                <div className="qc-breakdown__row">
+                  <span>Base package (5 hrs)</span>
+                  <span>{fmt(BASE)}</span>
                 </div>
-              </>
-            ) : (
-              <div style={{
-                textAlign: 'center',
-                padding: '40px 20px',
-                opacity: 0.7,
-                fontFamily: "'Roboto', sans-serif"
-              }}>
-                <FontAwesomeIcon 
-                  icon={faGlassMartini} 
-                  style={{ fontSize: '48px', marginBottom: '20px', opacity: 0.5 }}
-                />
-                <p>Enter your event details to see an instant quote</p>
+                {quote.items.map((item, i) => (
+                  <div key={i} className="qc-breakdown__row qc-breakdown__row--addon">
+                    <span>{item.label}</span>
+                    <span>{fmt(item.amount)}</span>
+                  </div>
+                ))}
+                <div className="qc-breakdown__total">
+                  <span>Total</span>
+                  <span>{fmt(quote.total)}</span>
+                </div>
               </div>
             )}
+
+            {/* Bartender tip */}
+            {warnBartender && (
+              <p className="qc-tip">
+                For {quote.guests} guests, we recommend adding an extra bartender.
+              </p>
+            )}
+
+            {!hasGuests && (
+              <p className="qc-empty">
+                Enter your guest count to see an instant estimate.
+              </p>
+            )}
+
+            <a href="/contact" className="qc-cta">Book a consultation</a>
+
+            <p className="qc-disclaimer">
+              Final pricing may vary. Contact us for a personalized quote.
+            </p>
           </div>
-        </div>
+        </aside>
 
-        {/* Disclaimer */}
-        <div style={{
-          background: 'rgba(255, 255, 255, 0.9)',
-          borderRadius: '15px',
-          padding: '20px',
-          textAlign: 'center',
-          fontSize: '14px',
-          color: '#7d3327',
-          fontFamily: "'Roboto', sans-serif",
-          animation: 'fadeInUp 0.8s ease-out 0.3s backwards'
-        }}>
-          <FontAwesomeIcon icon={faInfoCircle} style={{ marginRight: '8px' }} />
-          <strong>Note:</strong> This is an estimated quote. Final pricing may vary based on specific event requirements, location, and availability. Contact us for a detailed, personalized quote.
-        </div>
       </div>
-
-      <style>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes fadeInLeft {
-          from {
-            opacity: 0;
-            transform: translateX(-30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        @keyframes fadeInRight {
-          from {
-            opacity: 0;
-            transform: translateX(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateX(0);
-          }
-        }
-
-        @keyframes bounceIn {
-          0% {
-            opacity: 0;
-            transform: scale(0.3);
-          }
-          50% {
-            opacity: 1;
-            transform: scale(1.05);
-          }
-          70% {
-            transform: scale(0.9);
-          }
-          100% {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-
-        input:focus, select:focus {
-          outline: none;
-          border-color: #849f4f;
-          box-shadow: 0 0 0 3px rgba(132, 159, 79, 0.2);
-        }
-
-        button:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        button:active {
-          transform: translateY(0);
-        }
-
-        @media (max-width: 768px) {
-          h1 {
-            font-size: 36px !important;
-          }
-          
-          h2 {
-            font-size: 24px !important;
-          }
-        }
-      `}</style>
     </div>
   );
 };

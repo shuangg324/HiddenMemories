@@ -1,303 +1,388 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGlassMartini, faCocktail, faWineGlass, faBeer, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import emailjs from 'emailjs-com';
-import moveBackground from '../utils/moveBackground';
 import '../App.css';
 
+/* ── Calendar icon ───────────────────────────────────────── */
+const CalIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="cal-svg-icon">
+    <rect x="1" y="3" width="14" height="12" rx="2" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M1 7h14" stroke="currentColor" strokeWidth="1.5"/>
+    <path d="M5 1v4M11 1v4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+
+/* ── Calendar picker ─────────────────────────────────────── */
+const MONTHS = [
+  'January','February','March','April','May','June',
+  'July','August','September','October','November','December',
+];
+const DAY_NAMES = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+
+const CalendarPicker = ({ value, onChange, disabled, id }) => {
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const selectedDate = value ? new Date(value + 'T00:00:00') : null;
+
+  const [open, setOpen] = useState(false);
+  const [view, setView] = useState(selectedDate || new Date());
+  const [pos,  setPos]  = useState({ top: 0, left: 0, width: 0 });
+  const triggerRef      = useRef(null);
+  const dropdownRef     = useRef(null);
+
+  /* Position dropdown below trigger */
+  const openCalendar = () => {
+    if (disabled) return;
+    if (!open && triggerRef.current) {
+      const r = triggerRef.current.getBoundingClientRect();
+      setPos({ top: r.bottom + 8, left: r.left, width: r.width });
+    }
+    setOpen(v => !v);
+  };
+
+  /* Close on outside click or scroll */
+  useEffect(() => {
+    if (!open) return;
+    const onMouse = (e) => {
+      if (
+        triggerRef.current  && !triggerRef.current.contains(e.target) &&
+        dropdownRef.current && !dropdownRef.current.contains(e.target)
+      ) setOpen(false);
+    };
+    const onScroll = () => setOpen(false);
+    document.addEventListener('mousedown', onMouse);
+    window.addEventListener('scroll', onScroll, true);
+    return () => {
+      document.removeEventListener('mousedown', onMouse);
+      window.removeEventListener('scroll', onScroll, true);
+    };
+  }, [open]);
+
+  const year        = view.getFullYear();
+  const month       = view.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const firstDay    = new Date(year, month, 1).getDay();
+
+  const prevMonth = () => setView(new Date(year, month - 1, 1));
+  const nextMonth = () => setView(new Date(year, month + 1, 1));
+
+  const handleDay = (day) => {
+    const d = new Date(year, month, day);
+    if (d < today) return;
+    const yyyy = d.getFullYear();
+    const mm   = String(d.getMonth() + 1).padStart(2, '0');
+    const dd   = String(d.getDate()).padStart(2, '0');
+    onChange(`${yyyy}-${mm}-${dd}`);
+    setOpen(false);
+  };
+
+  const displayValue = selectedDate
+    ? selectedDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+    : '';
+
+  const dropdown = (
+    <div
+      ref={dropdownRef}
+      className="cal-dropdown"
+      role="dialog"
+      aria-label="Date picker"
+      style={{ top: pos.top, left: pos.left, minWidth: Math.max(pos.width, 320) }}
+    >
+      <div className="cal-header">
+        <button type="button" className="cal-nav" onClick={prevMonth} aria-label="Previous month">‹</button>
+        <span className="cal-month-year">{MONTHS[month]} {year}</span>
+        <button type="button" className="cal-nav" onClick={nextMonth} aria-label="Next month">›</button>
+      </div>
+
+      <div className="cal-grid">
+        {DAY_NAMES.map(d => (
+          <span key={d} className="cal-day-name">{d}</span>
+        ))}
+
+        {Array.from({ length: firstDay }, (_, i) => (
+          <span key={`e${i}`} />
+        ))}
+
+        {Array.from({ length: daysInMonth }, (_, i) => {
+          const day        = i + 1;
+          const d          = new Date(year, month, day);
+          const isPast     = d < today;
+          const isToday    = d.toDateString() === today.toDateString();
+          const isSelected = selectedDate &&
+            d.getFullYear() === selectedDate.getFullYear() &&
+            d.getMonth()    === selectedDate.getMonth()    &&
+            d.getDate()     === selectedDate.getDate();
+
+          return (
+            <button
+              key={day}
+              type="button"
+              className={`cal-day${isPast ? ' cal-day--past' : ''}${isSelected ? ' cal-day--selected' : ''}${isToday ? ' cal-day--today' : ''}`}
+              onClick={() => handleDay(day)}
+              disabled={isPast}
+              tabIndex={isPast ? -1 : 0}
+            >
+              {day}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="cal-wrap">
+      <button
+        ref={triggerRef}
+        id={id}
+        type="button"
+        className={`cf-input cal-trigger${open ? ' cal-trigger--open' : ''}${!displayValue ? ' cal-trigger--empty' : ''}`}
+        onClick={openCalendar}
+        disabled={disabled}
+        aria-haspopup="true"
+        aria-expanded={open}
+      >
+        <span>{displayValue || 'Select a date'}</span>
+        <CalIcon />
+      </button>
+
+      {open && createPortal(dropdown, document.body)}
+    </div>
+  );
+};
+
+/* ── Toast notification ──────────────────────────────────── */
+const Toast = ({ toast, onClose }) => {
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(onClose, 6000);
+    return () => clearTimeout(t);
+  }, [toast, onClose]);
+
+  if (!toast) return null;
+
+  return (
+    <div className={`contact-toast contact-toast--${toast.type}`} role="alert" aria-live="polite">
+      <span className="contact-toast__icon" aria-hidden="true">
+        {toast.type === 'success' ? '✓' : '!'}
+      </span>
+      <div className="contact-toast__body">
+        <p className="contact-toast__title">
+          {toast.type === 'success' ? 'Message sent!' : 'Something went wrong'}
+        </p>
+        <p className="contact-toast__msg">{toast.message}</p>
+      </div>
+      <button className="contact-toast__close" onClick={onClose} aria-label="Dismiss">×</button>
+    </div>
+  );
+};
+
+/* ── Main form ───────────────────────────────────────────── */
 const WeddingContactForm = () => {
   const [formData, setFormData] = useState({
-    firstName: '',
+    firstName:   '',
     partnerName: '',
-    email: '',
-    phone: '',
-    eventDate: '',
-    venue: '',
-    guestCount: '',
-    interested: [],
-    stage: '',
-    hearAbout: '',
-    moodboard: '',
-    message: ''
+    email:       '',
+    phone:       '',
+    eventDate:   '',
+    venue:       '',
+    guestCount:  '',
+    interested:  '',
+    stage:       '',
+    hearAbout:   '',
+    moodboard:   '',
+    message:     '',
   });
 
-  console.log('Current form data:', formData); // Debug log
-
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const dateInputRef = useRef(null);
+  const [toast, setToast]               = useState(null);
   const formRef = useRef(null);
+  const pageRef = useRef(null);
 
-  // Use the exact same animation system as Home page
+  const closeToast = useCallback(() => setToast(null), []);
+
+  /* Sequential stagger reveal */
   useEffect(() => {
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const element = entry.target;
-          const animationType = element.dataset.animate;
-          const delay = element.dataset.delay || '';
-          
-          if (animationType) {
-            const delayMs = delay ? parseInt(delay) * 100 : 0; // Use 100ms like Home page
-            
-            setTimeout(() => {
-              element.classList.add(`animate-${animationType}`);
-              if (delay) {
-                element.classList.add(`animate-delay-${delay}`);
-              }
-              
-              // Make sure element becomes visible
-              element.style.opacity = '';
-              element.style.visibility = '';
-            }, delayMs);
-          }
-          
-          observer.unobserve(element);
-        }
-      });
-    }, observerOptions);
-
-    // Initialize exactly like Home page
-    setTimeout(() => {
-      const animatedElements = document.querySelectorAll('[data-animate]');
-      console.log(`🎬 Found ${animatedElements.length} elements to animate`);
-      
-      animatedElements.forEach(el => {
-        // Set initial state for animation - exactly like Home page
-        if (!el.classList.contains('animate-fade-in-up') && 
-            !el.classList.contains('animate-fade-in-left') && 
-            !el.classList.contains('animate-fade-in-right')) {
-          el.style.opacity = '0';
-          el.style.visibility = 'hidden';
-        }
-        observer.observe(el);
-      });
-    }, 50);
-
-    return () => observer.disconnect();
+    const items = pageRef.current?.querySelectorAll('.contact-item') ?? [];
+    items.forEach((el, i) => {
+      setTimeout(() => el.classList.add('contact-item--visible'), i * 85);
+    });
   }, []);
 
   const handleChange = (e) => {
-    const { id, value, options, multiple } = e.target;
-  
-    if (multiple) {
-      const selectedValues = Array.from(options)
-        .filter(option => option.selected)
-        .map(option => option.value);
-      setFormData(prevState => ({
-        ...prevState,
-        [id]: selectedValues
-      }));
-    } else {
-      setFormData(prevState => ({
-        ...prevState,
-        [id]: value
-      }));
-    }
+    const { id, value } = e.target;
+    setFormData(prev => ({ ...prev, [id]: value }));
   };
-  
 
-  const handleCalendarClick = () => {
-    if (dateInputRef.current) {
-      dateInputRef.current.showPicker();
-    }
+  const handleDateChange = (value) => {
+    setFormData(prev => ({ ...prev, eventDate: value }));
+    document.getElementById('eventDate')?.closest('.cf-field')?.classList.remove('cf-field--error');
   };
 
   const validateAndScrollToError = () => {
-    console.log('Starting validation...'); // Debug log
-    
-    const requiredFields = [
-      { id: 'firstName', name: 'Your Name' },
-      { id: 'email', name: 'Email' },
-      { id: 'phone', name: 'Phone Number' },
-      { id: 'eventDate', name: 'Event Date' },
-      { id: 'interested', name: 'I\'m interested in' },
-      { id: 'stage', name: 'Planning Stage' },
-      { id: 'hearAbout', name: 'How did you hear about us' }
+    const required = [
+      { id: 'firstName',  label: 'Your name' },
+      { id: 'email',      label: 'Email' },
+      { id: 'phone',      label: 'Phone' },
+      { id: 'eventDate',  label: 'Event date' },
+      { id: 'interested', label: 'Interested in' },
+      { id: 'stage',      label: 'Planning stage' },
+      { id: 'hearAbout',  label: 'How you found us' },
     ];
 
-    for (const field of requiredFields) {
+    for (const field of required) {
       const value = formData[field.id];
-      console.log(`Checking ${field.name}: "${value}"`); // Debug log
-      
-      if (!value || value.trim() === '') {
-        console.log(`Validation failed on: ${field.name}`); // Debug log
-        const inputElement = document.getElementById(field.id);
-        if (inputElement) {
-          inputElement.parentElement.classList.add('error');
-          inputElement.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'center' 
-          });
-          inputElement.focus();
+      if (!value || (typeof value === 'string' && value.trim() === '')) {
+        const el = document.getElementById(field.id);
+        if (el) {
+          el.closest('.cf-field')?.classList.add('cf-field--error');
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          el.focus();
         }
         return false;
       }
     }
-    
-    console.log('All validation passed!'); // Debug log
     return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted!'); // Debug log
-    console.log('Form data:', formData); // Debug log
-    
-    if (!validateAndScrollToError()) {
-      console.log('Validation failed'); // Debug log
-      return;
-    }
-    
-    console.log('Validation passed, sending email...'); // Debug log
-    
+    if (!validateAndScrollToError()) return;
     setIsSubmitting(true);
 
-    // Debug: Log what we're sending
-    const emailData = {
-      user_name: formData.firstName, // Just use firstName since it contains full name
-      partner_name: formData.partnerName,
-      user_email: formData.email,
-      phone: formData.phone,
-      event_date: formData.eventDate,
-      venue: formData.venue,
-      guest_count: formData.guestCount,
-      interested_in: formData.interested,
-      planning_stage: formData.stage,
-      heard_about: formData.hearAbout,
-      moodboard_link: formData.moodboard,
-      message: `
-Event Details:
-- Name: ${formData.firstName}
-- Partner: ${formData.partnerName}
-- Email: ${formData.email}
-- Phone: ${formData.phone}
-- Event Date: ${formData.eventDate}
-- Venue: ${formData.venue}
-- Guest Count: ${formData.guestCount}
-- Interested In: ${formData.interested}
-- Planning Stage: ${formData.stage}
-- Heard About Us: ${formData.hearAbout}
-- Moodboard: ${formData.moodboard}
-- Additional Message: ${formData.message}
-      `,
-      to_email: 'hiddenmemoriesbar@gmail.com'
-    };
-
-    console.log('Sending email with data:', emailData);
-
     try {
-      const result = await emailjs.send(
+      await emailjs.send(
         'service_t3znxtz',
         'template_eph0ydf',
-        emailData,
+        {
+          user_name:      formData.firstName,
+          partner_name:   formData.partnerName,
+          user_email:     formData.email,
+          phone:          formData.phone,
+          event_date:     formData.eventDate,
+          venue:          formData.venue,
+          guest_count:    formData.guestCount,
+          interested_in:  formData.interested,
+          planning_stage: formData.stage,
+          heard_about:    formData.hearAbout,
+          moodboard_link: formData.moodboard,
+          message: `Name: ${formData.firstName} | Partner: ${formData.partnerName} | Email: ${formData.email} | Phone: ${formData.phone} | Date: ${formData.eventDate} | Venue: ${formData.venue} | Guests: ${formData.guestCount} | Interested: ${formData.interested} | Stage: ${formData.stage} | Found us: ${formData.hearAbout} | Moodboard: ${formData.moodboard} | Message: ${formData.message}`,
+          to_email: 'hiddenmemoriesbar@gmail.com',
+        },
         '7j7vJcTfHGJ0hv0R4'
       );
-
-      console.log('EmailJS Success:', result);
-      alert('Thank you! Your inquiry has been sent successfully. We\'ll get back to you soon!');
-      
-      // Reset form
+      setToast({ type: 'success', message: 'We received your inquiry and will be in touch soon.' });
       setFormData({
-        firstName: '',
-        partnerName: '',
-        email: '',
-        phone: '',
-        eventDate: '',
-        venue: '',
-        guestCount: '',
-        interested: '',
-        stage: '',
-        hearAbout: '',
-        moodboard: '',
-        message: ''
+        firstName: '', partnerName: '', email: '', phone: '',
+        eventDate: '', venue: '', guestCount: '', interested: '',
+        stage: '', hearAbout: '', moodboard: '', message: '',
       });
-
-    } catch (error) {
-      console.error('EmailJS Error Details:', error);
-      console.error('Error status:', error.status);
-      console.error('Error text:', error.text);
-      
-      // More specific error messages
-      if (error.status === 400) {
-        alert('Error: Invalid template or service ID. Please contact us directly at hiddenmemoriesbar@gmail.com');
-      } else if (error.status === 401) {
-        alert('Error: Authentication failed. Please contact us directly at hiddenmemoriesbar@gmail.com');
-      } else {
-        alert('Sorry, there was an error sending your message. Please try again or contact us directly at hiddenmemoriesbar@gmail.com');
-      }
+    } catch {
+      setToast({ type: 'error', message: 'Please email us directly at hiddenmemoriesbar@gmail.com' });
     } finally {
       setIsSubmitting(false);
     }
   };
-  
+
   return (
-    <div className="App" onMouseMove={(event) => moveBackground(event)}>
-      <div className="container">
-        
-        {/* ANIMATED: Header section - individual element animations */}
-        <div className="header">
-          <h1 className="section__title dark-mode-title" data-animate="fade-in-up" data-delay="0">Contact me!</h1>
-          <p className="contact__header" data-animate="fade-in-up" data-delay="2">Please fill out the form and I will reach out to you shortly</p>
+    <div className="contact-page" ref={pageRef}>
+      <Toast toast={toast} onClose={closeToast} />
+
+      {/* ── Left panel ── */}
+      <aside className="contact-panel contact-item">
+        <div className="contact-panel__inner">
+          <span className="eyebrow">Get in touch</span>
+          <h1 className="contact-panel__title">
+            Let's make your event unforgettable
+          </h1>
+          <p className="contact-panel__sub">
+            Tell us about your vision. We'll craft a custom experience tailored to your event.
+          </p>
+
+          <div className="contact-panel__details">
+            <a href="tel:+16263674586" className="contact-panel__detail">
+              <span className="contact-panel__detail-label">Phone</span>
+              <span className="contact-panel__detail-value">(626) 367-4586</span>
+            </a>
+            <a href="mailto:hiddenmemoriesbar@gmail.com" className="contact-panel__detail">
+              <span className="contact-panel__detail-label">Email</span>
+              <span className="contact-panel__detail-value">hiddenmemoriesbar@gmail.com</span>
+            </a>
+            <div className="contact-panel__detail">
+              <span className="contact-panel__detail-label">Service area</span>
+              <span className="contact-panel__detail-value">Los Angeles County &amp; beyond</span>
+            </div>
+          </div>
         </div>
+      </aside>
 
-        <div className="form-container" data-animate="fade-in-up" data-delay="1">
-          <form ref={formRef} id="contactForm" onSubmit={handleSubmit}>
-            
-            {/* ANIMATED: Name field */}
-            <div className="form-row">
-            <div className="form-group" data-animate="fade-in-left" data-delay="2">
-              <label htmlFor="firstName" className="required">Your Name</label>
-              <input 
-                type="text" 
-                id="firstName" 
-                placeholder="Please provide your name" 
-                required
-                value={formData.firstName}
-                onChange={handleChange}
-                disabled={isSubmitting}
-              />
+      {/* ── Form ── */}
+      <main className="contact-form-side">
+        <form ref={formRef} id="contactForm" onSubmit={handleSubmit} noValidate>
+
+          {/* 01 — About you */}
+          <fieldset className="cf-section contact-item">
+            <legend className="cf-section__legend">
+              <span className="cf-section__num">01</span>
+              About you
+            </legend>
+
+            <div className="cf-row">
+              <div className="cf-field">
+                <label htmlFor="firstName" className="cf-label">
+                  Your name <span className="cf-required" aria-hidden="true">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  className="cf-input"
+                  placeholder="First and last name"
+                  required
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                />
+              </div>
+              <div className="cf-field">
+                <label htmlFor="partnerName" className="cf-label">
+                  Partner's name
+                </label>
+                <input
+                  type="text"
+                  id="partnerName"
+                  className="cf-input"
+                  placeholder="If applicable"
+                  value={formData.partnerName}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                />
+              </div>
             </div>
 
-            {/* ANIMATED: Partner name */}
-            <div className="form-group" data-animate="fade-in-up" data-delay="2">
-              <label htmlFor="partnerName">Partner's Name</label>
-              <input 
-                type="text" 
-                id="partnerName" 
-                placeholder="Please provide your partner's name"
-                value={formData.partnerName}
-                onChange={handleChange}
-                disabled={isSubmitting}
-              />
-            </div>
-            </div>
-
-            {/* ANIMATED: Contact info row */}
-            <div className="form-row">
-              <div className="form-group" data-animate="fade-in-left" data-delay="3">
-                <label htmlFor="email" className="required">Email</label>
-                <input 
-                  type="email" 
-                  id="email" 
-                  placeholder="Please provide your email address" 
+            <div className="cf-row">
+              <div className="cf-field">
+                <label htmlFor="email" className="cf-label">
+                  Email <span className="cf-required" aria-hidden="true">*</span>
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  className="cf-input"
+                  placeholder="you@example.com"
                   required
                   value={formData.email}
                   onChange={handleChange}
                   disabled={isSubmitting}
                 />
               </div>
-
-              <div className="form-group" data-animate="fade-in-right" data-delay="3">
-                <label htmlFor="phone" className="required">Phone Number</label>
-                <input 
-                  type="tel" 
-                  id="phone" 
-                  placeholder="Please provide your phone number" 
+              <div className="cf-field">
+                <label htmlFor="phone" className="cf-label">
+                  Phone <span className="cf-required" aria-hidden="true">*</span>
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  className="cf-input"
+                  placeholder="(000) 000-0000"
                   required
                   value={formData.phone}
                   onChange={handleChange}
@@ -305,128 +390,148 @@ Event Details:
                 />
               </div>
             </div>
+          </fieldset>
 
-            {/* ANIMATED: Event date */}
-            <div className="form-group" data-animate="fade-in-up" data-delay="7">
-              <label htmlFor="eventDate" className="required">Event Date</label>
-              <div className="date-input-container">
-                <input 
-                  ref={dateInputRef}
-                  type="date" 
-                  id="eventDate" 
-                  placeholder="Select your event date"
-                  required
-                  min="2025-01-01"
-                  max="2030-12-31"
+          {/* 02 — Your event */}
+          <fieldset className="cf-section contact-item">
+            <legend className="cf-section__legend">
+              <span className="cf-section__num">02</span>
+              Your event
+            </legend>
+
+            <div className="cf-row">
+              <div className="cf-field">
+                <label htmlFor="eventDate" className="cf-label">
+                  Event date <span className="cf-required" aria-hidden="true">*</span>
+                </label>
+                <CalendarPicker
+                  id="eventDate"
                   value={formData.eventDate}
+                  onChange={handleDateChange}
+                  disabled={isSubmitting}
+                />
+              </div>
+              <div className="cf-field">
+                <label htmlFor="guestCount" className="cf-label">Estimated guests</label>
+                <select
+                  id="guestCount"
+                  className="cf-input"
+                  value={formData.guestCount}
                   onChange={handleChange}
                   disabled={isSubmitting}
-                  className="date-input"
-                />
-                <FontAwesomeIcon 
-                  icon={faCalendarDays} 
-                  className="calendar-icon"
-                  onClick={handleCalendarClick}
-                  title="Select date from calendar"
-                />
+                >
+                  <option value="">Select a range</option>
+                  <option value="1-25">1–25</option>
+                  <option value="26-50">26–50</option>
+                  <option value="51-75">51–75</option>
+                  <option value="76-100">76–100</option>
+                  <option value="101-150">101–150</option>
+                  <option value="151-200">151–200</option>
+                  <option value="200+">200+</option>
+                </select>
               </div>
             </div>
 
-            {/* ANIMATED: Venue */}
-            <div className="form-group" data-animate="fade-in-up" data-delay="9">
-              <label htmlFor="venue">Event Venue</label>
-              <input 
-                type="text" 
-                id="venue" 
-                placeholder="Where will your special day take place?"
+            <div className="cf-field">
+              <label htmlFor="venue" className="cf-label">Venue</label>
+              <input
+                type="text"
+                id="venue"
+                className="cf-input"
+                placeholder="Where will your event take place?"
                 value={formData.venue}
                 onChange={handleChange}
                 disabled={isSubmitting}
               />
             </div>
+          </fieldset>
 
-            {/* ANIMATED: Guest count */}
-            <div className="form-group" data-animate="fade-in-up" data-delay="9">
-              <label htmlFor="guestCount">Estimated Number of Guests</label>
-              <select 
-                id="guestCount" 
-                value={formData.guestCount}
-                onChange={handleChange}
-                disabled={isSubmitting}
-              >
-                <option value="">Select guest count</option>
-                <option value="1-25">1-25 guests</option>
-                <option value="26-50">26-50 guests</option>
-                <option value="51-75">51-75 guests</option>
-                <option value="76-100">76-100 guests</option>
-                <option value="101-150">101-150 guests</option>
-                <option value="151-200">151-200 guests</option>
-                <option value="200+">200+ guests</option>
-              </select>
-            </div>
+          {/* 03 — What you need */}
+          <fieldset className="cf-section contact-item">
+            <legend className="cf-section__legend">
+              <span className="cf-section__num">03</span>
+              What you need
+            </legend>
 
-            {/* ANIMATED: Dropdown selections */}
-              <div className="form-group" data-animate="fade-in-up" data-delay="7">
-                <label htmlFor="interested" className="required">I'm interested in:</label>
-                <select 
-                  id="interested" 
+            <div className="cf-row">
+              <div className="cf-field">
+                <label htmlFor="interested" className="cf-label">
+                  Interested in <span className="cf-required" aria-hidden="true">*</span>
+                </label>
+                <select
+                  id="interested"
+                  className="cf-input"
                   required
                   value={formData.interested}
                   onChange={handleChange}
                   disabled={isSubmitting}
                 >
                   <option value="" disabled>Select</option>
-                  <option value="openBar">Open Bar</option>
-                  <option value="CustomMenu">Custom Set Menu</option>
-                  <option value="NoABV">Non-alcoholic Drinks</option>
-                  <option value="Beer_Wine">Beer/Wine</option>
-                  <option value="other">Other -- Let me know below!</option>
+                  <option value="openBar">Open bar</option>
+                  <option value="CustomMenu">Custom set menu</option>
+                  <option value="NoABV">Non-alcoholic drinks</option>
+                  <option value="Beer_Wine">Beer / wine</option>
+                  <option value="other">Other — let me know below</option>
                 </select>
               </div>
-
-            <div className="form-group" data-animate="fade-in-up" data-delay="7">
-              <label htmlFor="stage" className="required">What stage of the process are you in?</label>
-              <select 
-                id="stage" 
-                required
-                value={formData.stage}
-                onChange={handleChange}
-                disabled={isSubmitting}
-              >
-                <option value="" disabled>Select</option>
-                <option value="justExploring">Just Exploring</option>
-                <option value="startingPlanning">Starting to Plan</option>
-                <option value="vendorShopping">Shopping for Vendors</option>
-                <option value="final">I want you for my event</option>
-              </select>
+              <div className="cf-field">
+                <label htmlFor="stage" className="cf-label">
+                  Planning stage <span className="cf-required" aria-hidden="true">*</span>
+                </label>
+                <select
+                  id="stage"
+                  className="cf-input"
+                  required
+                  value={formData.stage}
+                  onChange={handleChange}
+                  disabled={isSubmitting}
+                >
+                  <option value="" disabled>Select</option>
+                  <option value="justExploring">Just exploring</option>
+                  <option value="startingPlanning">Starting to plan</option>
+                  <option value="vendorShopping">Shopping for vendors</option>
+                  <option value="final">Ready to book</option>
+                </select>
+              </div>
             </div>
+          </fieldset>
 
-            <div className="form-group" data-animate="fade-in-up" data-delay="7">
-              <label htmlFor="hearAbout" className="required">How did you hear about us?</label>
-              <select 
-                id="hearAbout" 
+          {/* 04 — Anything else */}
+          <fieldset className="cf-section contact-item">
+            <legend className="cf-section__legend">
+              <span className="cf-section__num">04</span>
+              Anything else
+            </legend>
+
+            <div className="cf-field">
+              <label htmlFor="hearAbout" className="cf-label">
+                How did you find us? <span className="cf-required" aria-hidden="true">*</span>
+              </label>
+              <select
+                id="hearAbout"
+                className="cf-input"
                 required
                 value={formData.hearAbout}
                 onChange={handleChange}
                 disabled={isSubmitting}
               >
                 <option value="" disabled>Select</option>
-                <option value="google">Google Search</option>
+                <option value="google">Google</option>
                 <option value="instagram">Instagram</option>
                 <option value="facebook">Facebook</option>
-                <option value="theknot">The Knot/Thumbtack</option>
-                <option value="referral">Friend/Vendor Referral</option>
-                <option value="pastClient">Past Client</option>
+                <option value="theknot">The Knot / Thumbtack</option>
+                <option value="referral">Friend or vendor referral</option>
+                <option value="pastClient">Past client</option>
                 <option value="other">Other</option>
               </select>
             </div>
 
-            {/* ANIMATED: Additional fields */}
-            <div className="form-group" data-animate="fade-in-up" data-delay="7">
-              <label htmlFor="moodboard">Do you have a mood board or Pinterest board for your event? I would love to see your vision.</label>
-              <input 
-                type="text" 
-                id="moodboard" 
+            <div className="cf-field">
+              <label htmlFor="moodboard" className="cf-label">Mood board or Pinterest link</label>
+              <input
+                type="text"
+                id="moodboard"
+                className="cf-input"
                 placeholder="Share a link to your inspiration"
                 value={formData.moodboard}
                 onChange={handleChange}
@@ -434,45 +539,33 @@ Event Details:
               />
             </div>
 
-            <div className="form-group" data-animate="fade-in-up" data-delay="7">
-              <label htmlFor="message">Anything you'd like to share or questions you might have:</label>
-              <textarea 
-                id="message" 
-                placeholder="Tell me more about your special day or about yourselves"
+            <div className="cf-field">
+              <label htmlFor="message" className="cf-label">Message</label>
+              <textarea
+                id="message"
+                className="cf-input cf-textarea"
+                placeholder="Tell us more about your event, your style, or any questions you have"
                 value={formData.message}
                 onChange={handleChange}
                 disabled={isSubmitting}
-              ></textarea>
+              />
             </div>
+          </fieldset>
 
-            {/* ANIMATED: Submit button */}
-            <div className="submit-container" data-animate="fade-in-up" data-delay="7">
-              <button 
-                type="submit" 
-                className="submit-btn"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? 'Sending...' : 'Send'}
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
+          {/* Submit */}
+          <div className="cf-submit-row contact-item">
+            <p className="cf-note">Fields marked * are required</p>
+            <button
+              type="submit"
+              className="cf-submit"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Sending…' : 'Send inquiry'}
+            </button>
+          </div>
 
-      {/* Background shapes */}
-      <div>
-        {[faGlassMartini, faCocktail, faWineGlass, faBeer].flatMap((icon, index) => [
-          <FontAwesomeIcon key={`${index}-1`} icon={icon} className={`shape shape--${index * 2}`} />,
-          <FontAwesomeIcon key={`${index}-2`} icon={icon} className={`shape shape--${index * 2 + 1}`} />
-        ]).concat([
-          <FontAwesomeIcon 
-            key="9" 
-            icon={faGlassMartini} 
-            className="shape shape--9"
-            aria-hidden="true"
-          />
-        ])}
-      </div>
+        </form>
+      </main>
     </div>
   );
 };

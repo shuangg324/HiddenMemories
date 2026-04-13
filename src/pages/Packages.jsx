@@ -1,262 +1,237 @@
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import '../App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faGlassMartini, 
-  faCocktail, 
-  faWineGlass, 
-  faBeer, 
+import {
   faCheck,
   faMagic,
   faStar,
   faGem,
-  faPhone
+  faPhone,
 } from '@fortawesome/free-solid-svg-icons';
-import moveBackground from '../utils/moveBackground';
 import { useModal } from '../utils/modalContext';
 
-const Packages = () => {
-  const { openModal } = useModal();
-
-  // Use the exact same animation system as Home page
+/* Shared scroll-reveal — same pattern as Home */
+function useScrollReveal() {
   useEffect(() => {
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el    = entry.target;
+          const type  = el.dataset.animate;
+          const delay = el.dataset.delay ? parseInt(el.dataset.delay, 10) * 80 : 0;
+          setTimeout(() => {
+            el.classList.add(`animate-${type}`);
+            el.style.opacity = '';
+          }, delay);
+          observer.unobserve(el);
+        });
+      },
+      { threshold: 0.08, rootMargin: '0px 0px -48px 0px' }
+    );
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const element = entry.target;
-          const animationType = element.dataset.animate;
-          const delay = element.dataset.delay || '';
-          
-          if (animationType) {
-            const delayMs = delay ? parseInt(delay) * 100 : 0; // Use 100ms like Home page
-            
-            setTimeout(() => {
-              element.classList.add(`animate-${animationType}`);
-              if (delay) {
-                element.classList.add(`animate-delay-${delay}`);
-              }
-              
-              // Make sure element becomes visible
-              element.style.opacity = '';
-              element.style.visibility = '';
-            }, delayMs);
-          }
-          
-          observer.unobserve(element);
-        }
-      });
-    }, observerOptions);
-
-    // Initialize exactly like Home page
-    setTimeout(() => {
-      const animatedElements = document.querySelectorAll('[data-animate]');
-      console.log(`🎬 Found ${animatedElements.length} elements to animate`);
-      
-      animatedElements.forEach(el => {
-        // Set initial state for animation - exactly like Home page
-        if (!el.classList.contains('animate-fade-in-up') && 
-            !el.classList.contains('animate-fade-in-left') && 
-            !el.classList.contains('animate-fade-in-right')) {
-          el.style.opacity = '0';
-          el.style.visibility = 'hidden';
-        }
-        observer.observe(el);
-      });
-    }, 50);
+    const els = document.querySelectorAll('[data-animate]');
+    els.forEach((el) => {
+      el.style.opacity = '0';
+      observer.observe(el);
+    });
 
     return () => observer.disconnect();
   }, []);
+}
 
-  const scrollToTop = () => {
+const HOW_IT_WORKS = [
+  { step: '1', text: <><b>Choose the Basic Package:</b> Every event starts with our dry hire package.</> },
+  { step: '2', text: <><b>Select add-ons:</b> Pick extras that suit your event needs.</> },
+  { step: '3', text: <><b>Get a quote:</b> Fill out our inquiry form and receive a personalised estimate.</> },
+  { step: '4', text: <><b>Enjoy your event:</b> We handle the setup so you can focus on making memories.</> },
+];
+
+const BASIC_ITEMS = [
+  'Bar setup & breakdown',
+  'Cups, napkins & straws',
+  'Basic mixers',
+  'Basic garnishes',
+  'Custom cocktail menu',
+  'Certified & insured bartenders',
+  '5 hours of service',
+];
+
+const ADDON_ITEMS = [
+  { label: 'Mixers',            desc: 'A variety of non-alcoholic options — soda, juice, tonic water and more.' },
+  { label: 'Garnishes',         desc: 'Fresh fruit, herbs, edible flowers and specialty toppings.' },
+  { label: 'Water Station',     desc: 'Chilled water dispensers placed around your venue.' },
+  { label: 'Ice Service',       desc: 'Specialty ice for perfectly crafted drinks.' },
+  { label: 'Glassware Upgrade', desc: 'Swap disposable cups for elegant stemware.' },
+  { label: 'Extra Bartender',   desc: 'Additional staff recommended for 75+ guests.' },
+  { label: 'And more',          desc: 'Ask us about additional options to enhance your event.' },
+];
+
+/* ═══════════════════════════════════════════════════════════ */
+const Packages = () => {
+  const { openModal } = useModal();
+
+  useScrollReveal();
+
+  const handleContactClick = useCallback(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleContactClick = () => {
-    scrollToTop();
     openModal();
-  };
-
-  const handleMouseMove = useCallback((event) => {
-    if (typeof moveBackground === "function") {
-      moveBackground(event);
-    }
-  }, []);
+  }, [openModal]);
 
   return (
-    <div className="App" onMouseMove={handleMouseMove}>
+    <div className="App">
       <section id="packages-page">
+
         <div className="container">
           <div className="row dark-mode-white">
-            {/* FIXED: Better sequenced header */}
-            <div className="packages-header" data-animate="fade-in-up" data-delay="0">
-              <h1 className="section__title dark-mode-title">
-                Our Package
-              </h1>
+
+            {/* ── Header ── */}
+            <div className="packages-header" data-animate="fade-in-up">
+
+              <span className="eyebrow">Our Offering</span>
+              <h1 className="section__title">Packages &amp; pricing</h1>
               <p className="packages__header">
-                Take out the guesswork and customize your event to your liking!
+                Take the guesswork out of planning. Start with our essentials,
+                then build exactly the bar experience your event deserves.
               </p>
             </div>
 
-            {/* FIXED: Sequential How It Works with proper delays */}
-            <div className="how-it-works enhanced-section" data-animate="fade-in-up" data-delay="1">
+            {/* ── How It Works ── */}
+            <div
+              className="how-it-works enhanced-section"
+              data-animate="fade-in-up"
+              data-delay="1"
+            >
               <div className="section-header">
                 <FontAwesomeIcon icon={faMagic} className="section-icon" />
-                <p className="italic package__title enhanced-title">How It Works</p>
+                <p className="italic package__title enhanced-title">How it works</p>
               </div>
               <div className="steps-container">
-                <div className="step-item" data-animate="fade-in-left" data-delay="2">
-                  <div className="step-number">1</div>
-                  <FontAwesomeIcon icon={faCheck} className="step-check" />
-                  <div><b>Choose the Basic Package:</b> Every event starts with our dry hire package.</div>
-                </div>
-                <div className="step-item" data-animate="fade-in-left" data-delay="3">
-                  <div className="step-number">2</div>
-                  <FontAwesomeIcon icon={faCheck} className="step-check" />
-                  <div><b>Select Add-ons:</b> Pick extras that suit your event needs.</div>
-                </div>
-                <div className="step-item" data-animate="fade-in-left" data-delay="4">
-                  <div className="step-number">3</div>
-                  <FontAwesomeIcon icon={faCheck} className="step-check" />
-                  <div><b>Get a Quote:</b> Fill out our inquiry form and receive a personalized estimate.</div>
-                </div>
-                <div className="step-item" data-animate="fade-in-left" data-delay="5">
-                  <div className="step-number">4</div>
-                  <FontAwesomeIcon icon={faCheck} className="step-check" />
-                  <div><b>Enjoy Your Event!</b> We handle the setup so you can focus on making memories.</div>
-                </div>
+                {HOW_IT_WORKS.map(({ step, text }, i) => (
+                  <div
+                    key={i}
+                    className="step-item"
+                    data-animate="fade-in-left"
+                    data-delay={i + 2}
+                  >
+                    <span className="step-number">{step}</span>
+                    <FontAwesomeIcon icon={faCheck} className="step-check" />
+                    <div>{text}</div>
+                  </div>
+                ))}
               </div>
             </div>
-            
-            {/* FIXED: Package cards with better timing and no inline styles */}
+
+            {/* ── Package Cards ── */}
             <div className="package__list enhanced-packages">
-              <div 
-                className="package enhanced-package basic-package" 
-                data-animate="scale-in" 
+
+              {/* Basic */}
+              <div
+                className="package enhanced-package basic-package"
+                data-animate="scale-in"
                 data-delay="6"
               >
                 <div className="package-icon-header">
                   <FontAwesomeIcon icon={faStar} className="package-main-icon" />
                   <span className="package-badge">Essential</span>
                 </div>
+
                 <p className="italic package__title enhanced-package-title">Basic Package</p>
                 <p className="package__description">
-                  Our Basic Package is a dry hire model that provides everything you need for a stylish and professional bar setup.
-                  <br></br>
-                  Starting at $1000 for 5 hours of service.
+                  Our foundational dry hire model — everything you need for a stylish,
+                  professional bar setup.
+                  <br />
+                  <strong style={{ color: 'var(--accent)' }}>Starting at $1,000</strong> for 5 hours of service.
                 </p>
+
                 <ul className="package__items enhanced-items">
-                  <li><FontAwesomeIcon icon={faCheck} className="item-check" />Bar setup</li>
-                  <li><FontAwesomeIcon icon={faCheck} className="item-check" />Cups</li>
-                  <li><FontAwesomeIcon icon={faCheck} className="item-check" />Napkins</li>
-                  <li><FontAwesomeIcon icon={faCheck} className="item-check" />Straws</li>
-                  <li><FontAwesomeIcon icon={faCheck} className="item-check" />Basic Mixers</li>
-                  <li><FontAwesomeIcon icon={faCheck} className="item-check" />Basic Garnishes</li>
-                  <li><FontAwesomeIcon icon={faCheck} className="item-check" />Custom Cocktail Menu</li>
-                  <li><FontAwesomeIcon icon={faCheck} className="item-check" />Certified and Insured Bartenders</li>
+                  {BASIC_ITEMS.map((item, i) => (
+                    <li key={i} style={{ '--i': i }}>
+                      <FontAwesomeIcon icon={faCheck} className="item-check" />
+                      {item}
+                    </li>
+                  ))}
                 </ul>
               </div>
-              
-              <div 
-                className="package enhanced-package premium-package" 
-                data-animate="scale-in" 
+
+              {/* Add-ons */}
+              <div
+                className="package enhanced-package premium-package"
+                data-animate="scale-in"
                 data-delay="7"
               >
                 <div className="package-icon-header">
                   <FontAwesomeIcon icon={faGem} className="package-main-icon premium-icon" />
-                  <span className="package-badge premium-badge">Custom</span>
+                  <span className="package-badge premium-badge">Customise</span>
                 </div>
-                <p className="italic package__title enhanced-package-title">Customize Your Event with Add-ons</p>
-                <p className="package__description">
-                  Enhance your event with our selection of add-ons to tailor the experience to your needs.
-                  <br></br>
-                  
+
+                <p className="italic package__title enhanced-package-title">
+                  Tailor your event with add-ons
                 </p>
+                <p className="package__description">
+                  Layer on exactly what your event needs — nothing more, nothing less.
+                </p>
+
                 <ul className="package__items enhanced-items premium-items">
-                  <li><FontAwesomeIcon icon={faCheck} className="item-check premium-check" /><b>Mixers:</b> A variety of non-alcoholic options such as soda, juice, tonic water, etc.</li>
-                  <li><FontAwesomeIcon icon={faCheck} className="item-check premium-check" /><b>Garnishes:</b> Fresh fruit, herbs, and specialty toppings.</li>
-                  <li><FontAwesomeIcon icon={faCheck} className="item-check premium-check" /><b>Water Station:</b> Water dispensers around the venue.</li>
-                  <li><FontAwesomeIcon icon={faCheck} className="item-check premium-check" /><b>Ice Service:</b> Ice for perfectly cold drinks.</li>
-                  <li><FontAwesomeIcon icon={faCheck} className="item-check premium-check" /><b>Glassware Upgrade:</b> Swap disposable cups for elegant glassware.</li>
-                  <li><FontAwesomeIcon icon={faCheck} className="item-check premium-check" /><b>Extra Bartender(s):</b> Additional staff for larger gatherings.</li>
-                  <li><FontAwesomeIcon icon={faCheck} className="item-check premium-check" /><b>And More!</b> Ask us about additional options to enhance your event.</li>
+                  {ADDON_ITEMS.map(({ label, desc }, i) => (
+                    <li key={i} style={{ '--i': i }}>
+                      <FontAwesomeIcon icon={faCheck} className="item-check premium-check" />
+                      <span><b>{label}:</b> {desc}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
+
             </div>
 
-            {/* FIXED: Special offer with better sequencing */}
-            <div className="special-offer" data-animate="bounce-in" data-delay="8">
-              <div className="special-offer-content">
-                <FontAwesomeIcon icon={faMagic} className="special-icon" />
-                <p className="italic package__items special-text">**ASK US ABOUT OUR WEDDING PLANNING SERVICES!</p>
-              </div>
-            </div>
-
-            {/* Background Shapes */}
-            <div>
-              {[faGlassMartini, faCocktail, faWineGlass, faBeer].flatMap((icon, index) => [
-                <FontAwesomeIcon key={`${index}-1`} icon={icon} className={`shape shape--${index * 2}`} />,
-                <FontAwesomeIcon key={`${index}-2`} icon={icon} className={`shape shape--${index * 2 + 1}`} />
-              ]).concat([
-                <FontAwesomeIcon 
-                  key="9" 
-                  icon={faGlassMartini} 
-                  className="shape shape--9"
-                  aria-hidden="true"
-                />
-              ])}
-            </div>
-
-            {/* FIXED: CTA with final timing */}
+            {/* ── CTA ── */}
             <div className="contact__cta" data-animate="fade-in-up" data-delay="9">
               <div className="packages-cta-enhanced">
+
                 <div className="packages-cta__header">
-                  <h3 className="packages-cta__title">Ready to Create Your Perfect Event?</h3>
-                  <p className="packages-cta__subtitle">Book your 2025 date before they're gone!</p>
+                  <h3 className="packages-cta__title">Ready to build your perfect bar?</h3>
+                  <p className="packages-cta__subtitle">Book your 2025 date before they're gone</p>
                 </div>
-                
+
                 <div className="packages-cta__stats">
                   <div className="stat-item">
                     <span className="stat-number">5+</span>
-                    <span className="stat-label">Years of Experience</span>
+                    <span className="stat-label">Years experience</span>
                   </div>
                   <div className="stat-item">
-                    <span className="stat-number">100%</span>
-                    <span className="stat-label">Unique</span>
+                    <span className="stat-number">LA</span>
+                    <span className="stat-label">County &amp; beyond</span>
                   </div>
                   <div className="stat-item">
-                    <span className="stat-number">100%</span>
-                    <span className="stat-label">Satisfaction</span>
+                    <span className="stat-number">✓</span>
+                    <span className="stat-label">Licensed &amp; insured</span>
                   </div>
                 </div>
-                
+
                 <div className="packages-cta__buttons">
                   <button
                     onClick={handleContactClick}
                     className="packages-cta__button packages-cta__button--primary"
                   >
                     <FontAwesomeIcon icon={faMagic} />
-                    <span>Get Your Free Quote</span>
+                    <span>Get your free quote</span>
                   </button>
-                  
-                  <a 
-                    href="tel:+16263674586" 
+                  <a
+                    href="tel:+16263674586"
                     className="packages-cta__button packages-cta__button--secondary"
                   >
                     <FontAwesomeIcon icon={faPhone} />
-                    <span>Call or Text (626) 367-4586</span>
+                    <span>Call or text (626) 367-4586</span>
                   </a>
                 </div>
-                
-                <div className="packages-cta__guarantee">
-                  ✨ Free consultation • Custom pricing • No hidden fees
-                </div>
+
+                <p className="packages-cta__guarantee">
+                  Free consultation · Custom pricing · No hidden fees
+                </p>
+
               </div>
             </div>
+
           </div>
         </div>
       </section>

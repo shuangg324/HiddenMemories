@@ -46,6 +46,7 @@
     "@svgr/plugin-jsx": "^8.1.0",
     "@svgr/webpack": "^8.1.0",
     "file-loader": "^6.2.0",
+    "sharp": "^0.34.5",
     "url-loader": "^4.1.1"
   }
 }

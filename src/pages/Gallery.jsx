@@ -1,316 +1,229 @@
-// Updated Gallery.jsx with automatic image loading
-
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGlassMartini, faCocktail, faWineGlass, faBeer, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import '../App.css';
-import moveBackground from '../utils/moveBackground';
 import { useModal } from '../utils/modalContext';
 import Lightbox from '../components/Lightbox';
 
-// Ultra-fast Image Component - minimal overhead
-const OptimizedImage = React.memo(({ src, alt, title, onClick, priority = false }) => {
-  const [imageLoaded, setImageLoaded] = useState(false);
+/* ── Image imports ─────────────────────────────────────── */
+function importAll(r) {
+  const images = {};
+  r.keys().forEach((key) => { images[key.replace('./', '')] = r(key); });
+  return images;
+}
 
-  const handleClick = useCallback(() => {
-    if (onClick) {
+const rawImages = importAll(
+  require.context('../assets', false, /\.(png|jpe?g|svg)$/)
+);
+
+const EXCLUDE = new Set(['368kkk.png', 'logo.png', 'logo2.png', 'LogoHM.png']);
+
+const PX = (id, title) => ({
+  id: `px-${id}`,
+  src: `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=800`,
+  alt: title,
+  title,
+});
+
+const EXTRA_IMAGES = [
+  PX(10331392, 'Signature pour'),
+  PX(34913279, 'Garden in bloom'),
+  PX(34358624, 'Café rose'),
+  PX(2466321,  'Florals & spirits'),
+  PX(10595450, 'Evening service'),
+];
+
+const toTitle = (filename) =>
+  filename
+    .replace(/\.(jpg|jpeg|png|svg)$/i, '')
+    .replace(/[_-]/g, ' ')
+    .replace(/\b\w/g, (l) => l.toUpperCase())
+    .trim();
+
+/* ── GalleryItem ────────────────────────────────────────── */
+const GalleryItem = React.memo(({ src, alt, title, index, onClick }) => {
+  const [loaded, setLoaded] = useState(false);
+
+  const handleKeyDown = useCallback((e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
       onClick();
     }
   }, [onClick]);
 
   return (
-    <div className="gallery__wrapper" onClick={handleClick}>
-      {!imageLoaded && (
-        <div className="image-loading-placeholder" aria-label="Loading image">
-          <FontAwesomeIcon icon={faSpinner} spin aria-hidden="true" />
+    <figure
+      className="gallery__item"
+      onClick={onClick}
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      role="button"
+      aria-label={`View ${title}`}
+    >
+      <div className="gallery__frame">
+        <img
+          src={src}
+          alt={alt}
+          className={`gallery__img${loaded ? ' gallery__img--loaded' : ''}`}
+          loading={index < 6 ? 'eager' : 'lazy'}
+          decoding="async"
+          onLoad={() => setLoaded(true)}
+        />
+        <div className="gallery__overlay" aria-hidden="true">
+          <p className="gallery__caption">{title}</p>
         </div>
-      )}
-      <img 
-        src={src} 
-        className={`gallery__img ${imageLoaded ? 'loaded' : 'loading'}`}
-        alt={alt} 
-        loading={priority ? "eager" : "lazy"}
-        onLoad={() => setImageLoaded(true)}
-        decoding="async"
-        sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw"
-      />
-      <div className="gallery__overlay">
-        <h3 className="gallery__title">{title}</h3>
       </div>
-    </div>
+    </figure>
   );
 });
 
-OptimizedImage.displayName = 'OptimizedImage';
+GalleryItem.displayName = 'GalleryItem';
 
-// Function to automatically import all images from assets folder
-function importAll(r) {
-  let images = {};
-  r.keys().forEach((item, index) => {
-    images[item.replace('./', '')] = r(item);
-  });
-  return images;
-}
-
-// Automatically load all .jpg, .jpeg, .png images from assets folder
-const images = importAll(
-  require.context('../assets', false, /\.(png|jpe?g|svg)$/)
-);
-
-// Function to generate title from filename
-const generateTitle = (filename) => {
-  // Remove file extension and replace underscores/hyphens with spaces
-  return filename
-    .replace(/\.(jpg|jpeg|png|svg)$/i, '')
-    .replace(/[_-]/g, ' ')
-    .replace(/\b\w/g, l => l.toUpperCase()) // Capitalize first letter of each word
-    .trim();
-};
-
-// Function to generate alt text from filename
-const generateAlt = (filename) => {
-  const title = generateTitle(filename);
-  return `Gallery image: ${title}`;
-};
-
-// Function to check if image should be excluded
-const shouldExcludeImage = (filename) => {
-  const excludeFiles = [
-    '368kkk.png',
-    'logo.png',
-    'logo2.png',
-    'LogoHM.png'
-  ];
-  return excludeFiles.includes(filename);
-};
-
+/* ── Gallery ────────────────────────────────────────────── */
 const Gallery = () => {
-  const { toggleModal } = useModal();
-  const [visibleImages, setVisibleImages] = useState(6);
-  const [loading, setLoading] = useState(true);
-  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const { openModal } = useModal();
+  const [visibleImages, setVisibleImages] = useState(9);
+  const [loading, setLoading]             = useState(false);
+  const [lightboxOpen, setLightboxOpen]   = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const loadMoreRef = useRef(null);
-  const containerRef = useRef(null);
 
-  // Automatically generate gallery images from imported assets
   const galleryImages = useMemo(() => {
-    const imageEntries = Object.entries(images);
-    
-    return imageEntries
-      .filter(([filename]) => !shouldExcludeImage(filename)) // Filter out unwanted images
-      .map(([filename, src], index) => ({
-        id: index + 1,
-        src: src.default || src, // Handle both default exports and direct imports
-        alt: generateAlt(filename),
-        title: generateTitle(filename)
+    const local = Object.entries(rawImages)
+      .filter(([filename]) => !EXCLUDE.has(filename))
+      .map(([filename, src], i) => ({
+        id: i + 1,
+        src: src.default || src,
+        alt: toTitle(filename),
+        title: toTitle(filename),
       }));
+    return [...local, ...EXTRA_IMAGES];
   }, []);
 
-  // Handle lightbox opening - use batch update to prevent flash
-  const openLightbox = useCallback((index) => {
-    React.startTransition(() => {
-      setLightboxIndex(index);
-      setLightboxOpen(true);
-    });
-  }, []);
+  const openLightbox  = useCallback((index) => { setLightboxIndex(index); setLightboxOpen(true); }, []);
+  const closeLightbox = useCallback(() => setLightboxOpen(false), []);
 
-  // Handle lightbox closing
-  const closeLightbox = useCallback(() => {
-    setLightboxOpen(false);
-  }, []);
-
-  // Use the exact same animation system as Contact/Home pages
+  /* Header scroll reveal */
   useEffect(() => {
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el    = entry.target;
+          const type  = el.dataset.animate;
+          const delay = el.dataset.delay ? parseInt(el.dataset.delay, 10) * 80 : 0;
+          setTimeout(() => {
+            el.classList.add(`animate-${type}`);
+            el.style.opacity = '';
+          }, delay);
+          observer.unobserve(el);
+        });
+      },
+      { threshold: 0.08, rootMargin: '0px 0px -48px 0px' }
+    );
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const element = entry.target;
-          const animationType = element.dataset.animate;
-          const delay = element.dataset.delay || '';
-          
-          if (animationType) {
-            const delayMs = delay ? parseInt(delay) * 100 : 0;
-            
-            setTimeout(() => {
-              element.classList.add(`animate-${animationType}`);
-              if (delay) {
-                element.classList.add(`animate-delay-${delay}`);
-              }
-              
-              element.style.opacity = '';
-              element.style.visibility = '';
-            }, delayMs);
-          }
-          
-          observer.unobserve(element);
-        }
-      });
-    }, observerOptions);
+    document.querySelectorAll('[data-animate]').forEach((el) => {
+      el.style.opacity = '0';
+      observer.observe(el);
+    });
 
-    setTimeout(() => {
-      const animatedElements = document.querySelectorAll('[data-animate]');
-      console.log(`🎬 Found ${animatedElements.length} elements to animate`);
-      
-      animatedElements.forEach(el => {
-        if (!el.classList.contains('animate-fade-in-up') && 
-            !el.classList.contains('animate-fade-in-left') && 
-            !el.classList.contains('animate-fade-in-right')) {
-          el.style.opacity = '0';
-          el.style.visibility = 'hidden';
-        }
-        observer.observe(el);
-      });
-    }, 50);
+    return () => observer.disconnect();
+  }, []);
+
+  /* Staggered grid reveal — left→right column stagger */
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el  = entry.target;
+          const col = parseInt(el.dataset.col || 0);
+          setTimeout(() => el.classList.add('is-visible'), col * 60);
+          observer.unobserve(el);
+        });
+      },
+      { threshold: 0.05, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    document.querySelectorAll('.gallery__item:not(.is-visible)').forEach((el, i) => {
+      el.dataset.col = i % 3;
+      observer.observe(el);
+    });
 
     return () => observer.disconnect();
   }, [visibleImages]);
 
-  // Instant loading
-  useEffect(() => {
-    setLoading(false);
-  }, []);
-
-  // Optimized intersection observer for load more functionality
+  /* Infinite scroll */
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries;
+      ([entry]) => {
         if (entry.isIntersecting && visibleImages < galleryImages.length && !loading) {
           setLoading(true);
           setTimeout(() => {
-            setVisibleImages(prev => Math.min(prev + 4, galleryImages.length));
+            setVisibleImages((prev) => Math.min(prev + 6, galleryImages.length));
             setLoading(false);
-          }, 100);
+          }, 120);
         }
       },
-      { 
-        threshold: 0.1,
-        rootMargin: '100px'
-      }
+      { rootMargin: '200px' }
     );
 
-    const currentRef = loadMoreRef.current;
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
+    const ref = loadMoreRef.current;
+    if (ref) observer.observe(ref);
+    return () => { if (ref) observer.unobserve(ref); };
   }, [visibleImages, loading, galleryImages.length]);
 
-  // Mouse move handler
-  const handleMouseMove = useCallback((event) => {
-    if (typeof moveBackground === 'function') {
-      moveBackground(event);
-    }
-  }, []);
-
-  // Keyboard navigation
-  const handleKeyDown = useCallback((event) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      toggleModal();
-    }
-  }, [toggleModal]);
-
   return (
-    <div className="App" onMouseMove={handleMouseMove}>
-      <section id="gallery-page" ref={containerRef}>
-        <div className="container">
-          <div className="row dark-mode-white">
-            <header>
-              <h1 className="section__title dark-mode-title" data-animate="fade-in-up">
-                Our Gallery
-              </h1>
-              <p className="gallery__header" role="doc-subtitle" data-animate="fade-in-up" data-delay="2">
-                Explore our past events and signature cocktails
-              </p>
-            </header>
+    <div className="gallery-page">
 
-            <main>
-              <div 
-                className="gallery__grid" 
-                role="grid" 
-                aria-label="Gallery of cocktail and event photos"
-              >
-                {galleryImages.slice(0, visibleImages).map((image, index) => (
-                  <article 
-                    key={image.id} 
-                    className="gallery__item hover-lift"
-                    role="gridcell"
-                    aria-label={`Gallery item ${index + 1} of ${galleryImages.length}`}
-                  >
-                    <OptimizedImage
-                      src={image.src}
-                      alt={image.alt}
-                      
-                      onClick={() => openLightbox(index)}
-                      priority={index < 3}
-                    />
-                  </article>
-                ))}
-              </div>
-
-              <div 
-                ref={loadMoreRef} 
-                style={{ height: '20px', width: '100%' }}
-                aria-hidden="true"
-              />
-
-              {loading && (
-                <div className="loading-indicator" role="status" aria-live="polite">
-                  <FontAwesomeIcon icon={faSpinner} spin aria-hidden="true" />
-                  <span className="sr-only">Loading more images...</span>
-                </div>
-              )}
-            </main>
-
-            <aside className="contact__cta">
-              <p className="gallery__footer">Want us to create memorable moments at your next event?</p>
-              <button
-                onClick={toggleModal}
-                onKeyDown={handleKeyDown}
-                className="dark-mode-white nav__link--anchor link__hover-effect link__hover-effect--black gallery__contact-btn btn-animated hover-glow"
-                aria-label="Contact us about your event"
-                type="button"
-              >
-                <span className="italic gallery__contact text-glow">Contact Us Today!</span>
-              </button>
-            </aside>
-          </div>
+      {/* ── Header ── */}
+      <header className="gallery-header">
+        <div className="gallery-header__inner">
+          <span className="eyebrow" data-animate="fade-in-up">Portfolio</span>
+          <h1 className="gallery-header__title" data-animate="fade-in-up" data-delay="1">
+            The gallery
+          </h1>
+          <p className="gallery-header__sub" data-animate="fade-in-up" data-delay="2">
+            A selection of moments from events we've had the privilege of serving
+          </p>
         </div>
+      </header>
 
-        <div aria-hidden="true">
-          {[faGlassMartini, faCocktail, faWineGlass, faBeer].flatMap((icon, index) => [
-            <FontAwesomeIcon 
-              key={`${index}-1`} 
-              icon={icon} 
-              className={`shape shape--${index * 2}`}
-              aria-hidden="true"
-            />,
-            <FontAwesomeIcon 
-              key={`${index}-2`} 
-              icon={icon} 
-              className={`shape shape--${index * 2 + 1}`}
-              aria-hidden="true"
-            />
-          ]).concat([
-            <FontAwesomeIcon 
-              key="9" 
-              icon={faGlassMartini} 
-              className="shape shape--9"
-              aria-hidden="true"
-            />
-          ])}
+      {/* ── Grid ── */}
+      <section className="gallery-section" aria-label="Photo gallery">
+        <div className="container">
+          <div className="gallery__grid" role="list" aria-label="Gallery of cocktail and event photos">
+            {galleryImages.slice(0, visibleImages).map((image, index) => (
+              <GalleryItem
+                key={image.id}
+                src={image.src}
+                alt={image.alt}
+                title={image.title}
+                index={index}
+                onClick={() => openLightbox(index)}
+              />
+            ))}
+          </div>
+
+          <div ref={loadMoreRef} style={{ height: '1px' }} aria-hidden="true" />
+
+          {loading && (
+            <div className="gallery-loading" role="status" aria-label="Loading more images">
+              <span className="gallery-loading__dot" />
+              <span className="gallery-loading__dot" />
+              <span className="gallery-loading__dot" />
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ── CTA ── */}
+      <section className="gallery-cta" aria-label="Book your event">
+        <div className="container">
+          <div className="gallery-cta__inner" data-animate="fade-in-up">
+            <p className="gallery-cta__text">Ready to create your own moments?</p>
+            <button className="btn-primary" onClick={openModal}>
+              Book your event
+            </button>
+          </div>
         </div>
       </section>
 

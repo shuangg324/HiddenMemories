@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import { createContext, useState, useContext, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 // Create a context for modal state
@@ -93,10 +93,9 @@ export const ModalProvider = ({ children }) => {
   }, []);
 
   return (
-    <ModalContext.Provider value={{ 
-      isModalOpen, 
-      isAnimating,
-      toggleModal, 
+    <ModalContext.Provider value={{
+      isModalOpen,
+      toggleModal,
       openModal,
       closeModal,
       setIsModalOpen
@@ -106,14 +105,9 @@ export const ModalProvider = ({ children }) => {
   );
 };
 
-// Custom hook to use modal context
 export const useModal = () => {
   const context = useContext(ModalContext);
-  
-  if (!context) {
-    throw new Error('useModal must be used within a ModalProvider');
-  }
-
+  if (!context) throw new Error('useModal must be used within a ModalProvider');
   return context;
 };
 

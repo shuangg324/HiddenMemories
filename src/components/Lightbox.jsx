@@ -1,62 +1,69 @@
-// Ultra-fast Lightbox - uses already loaded images
-
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef, memo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
+const Thumbnails = memo(({ images, currentIndex, onSelect }) => (
+  <div className="lightbox-thumbnails">
+    {images.map((image, index) => (
+      <img
+        key={image.id}
+        src={image.src}
+        alt={`Thumbnail ${index + 1}`}
+        className={`lightbox-thumbnail ${index === currentIndex ? 'active' : ''}`}
+        onClick={() => onSelect(index)}
+      />
+    ))}
+  </div>
+));
+Thumbnails.displayName = 'Thumbnails';
+
 const Lightbox = ({ images, isOpen, onClose, initialIndex = 0 }) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
-  const [showHint, setShowHint] = useState(true);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [imgLoaded, setImgLoaded]       = useState(false);
+  const [showHint, setShowHint]         = useState(true);
+  const preloadedRef                    = useRef(new Set());
 
-  // Update current index when initialIndex changes
+  useEffect(() => { setCurrentIndex(initialIndex); }, [initialIndex]);
+
+  // Aggressive preload — 5 ahead, 2 behind
   useEffect(() => {
-    setCurrentIndex(initialIndex);
-  }, [initialIndex]);
+    if (!isOpen || !images.length) return;
+    const toPreload = [];
+    for (let i = 1; i <= 5; i++) {
+      toPreload.push(images[(currentIndex + i) % images.length]);
+    }
+    for (let i = 1; i <= 2; i++) {
+      toPreload.push(images[(currentIndex - i + images.length) % images.length]);
+    }
+    toPreload.forEach(({ src }) => {
+      if (preloadedRef.current.has(src)) return;
+      preloadedRef.current.add(src);
+      const img = new Image();
+      img.src = src;
+    });
+  }, [currentIndex, images, isOpen]);
 
-  // Hide hint after 3 seconds
+  // Hint auto-hide
   useEffect(() => {
     if (isOpen && showHint) {
-      const timer = setTimeout(() => setShowHint(false), 3000);
-      return () => clearTimeout(timer);
+      const t = setTimeout(() => setShowHint(false), 3000);
+      return () => clearTimeout(t);
     }
   }, [isOpen, showHint]);
-  
-  const goToNext = useCallback(() => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentIndex((prev) => (prev + 1) % images.length);
-      setIsTransitioning(false);
-    }, 150);
-  }, [images.length, isTransitioning]);
 
-  const goToPrevious = useCallback(() => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
-      setIsTransitioning(false);
-    }, 150);
-  }, [images.length, isTransitioning]);
+  // Reset imgLoaded when src changes so the fade plays
+  useEffect(() => {
+    setImgLoaded(false);
+  }, [currentIndex]);
 
-  // Keyboard navigation
+  const goToNext     = useCallback(() => setCurrentIndex(p => (p + 1) % images.length), [images.length]);
+  const goToPrevious = useCallback(() => setCurrentIndex(p => (p - 1 + images.length) % images.length), [images.length]);
+
   const handleKeyPress = useCallback((e) => {
     if (!isOpen) return;
-    
-    switch (e.key) {
-      case 'Escape':
-        onClose();
-        break;
-      case 'ArrowLeft':
-        goToPrevious();
-        break;
-      case 'ArrowRight':
-        goToNext();
-        break;
-      default:
-        break;
-    }
+    if (e.key === 'Escape')     onClose();
+    if (e.key === 'ArrowLeft')  goToPrevious();
+    if (e.key === 'ArrowRight') goToNext();
   }, [isOpen, onClose, goToNext, goToPrevious]);
 
   useEffect(() => {
@@ -64,65 +71,33 @@ const Lightbox = ({ images, isOpen, onClose, initialIndex = 0 }) => {
     return () => document.removeEventListener('keydown', handleKeyPress);
   }, [handleKeyPress]);
 
-  // Prevent body scroll when lightbox is open
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
   }, [isOpen]);
-
-  const goToImage = (index) => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentIndex(index);
-      setIsTransitioning(false);
-    }, 150);
-  };
-
-  const handleOverlayClick = (e) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
 
   if (!isOpen || !images.length) return null;
 
   const currentImage = images[currentIndex];
 
   return (
-    <div 
-      className={`lightbox-overlay ${isOpen ? 'active' : ''}`}
-      onClick={handleOverlayClick}
+    <div
+      className="lightbox-overlay active"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
       role="dialog"
       aria-modal="true"
       aria-label="Image gallery lightbox"
     >
       <div className="lightbox-container">
-        {/* Keyboard hint */}
         {showHint && (
-          <div className="lightbox-hint">
-            Use arrow keys to navigate • ESC to close
-          </div>
+          <div className="lightbox-hint">Arrow keys to navigate · ESC to close</div>
         )}
 
-        {/* Close button */}
-        <button 
-          className="lightbox-close"
-          onClick={onClose}
-          aria-label="Close lightbox"
-        >
+        <button className="lightbox-close" onClick={onClose} aria-label="Close lightbox">
           <FontAwesomeIcon icon={faTimes} />
         </button>
 
-        {/* Navigation arrows */}
-        <button 
+        <button
           className="lightbox-nav lightbox-prev"
           onClick={goToPrevious}
           disabled={images.length <= 1}
@@ -131,7 +106,7 @@ const Lightbox = ({ images, isOpen, onClose, initialIndex = 0 }) => {
           <FontAwesomeIcon icon={faChevronLeft} />
         </button>
 
-        <button 
+        <button
           className="lightbox-nav lightbox-next"
           onClick={goToNext}
           disabled={images.length <= 1}
@@ -140,40 +115,21 @@ const Lightbox = ({ images, isOpen, onClose, initialIndex = 0 }) => {
           <FontAwesomeIcon icon={faChevronRight} />
         </button>
 
-        {/* Main image - smooth transition */}
-        <img
-          src={currentImage.src}
-          alt={currentImage.alt}
-          className="lightbox-image"
-          style={{ 
-            display: 'block',
-            opacity: isTransitioning ? 0.3 : 1,
-            transform: isTransitioning ? 'scale(0.95)' : 'scale(1)',
-            transition: 'opacity 0.3s ease, transform 0.3s ease'
-          }}
-        />
-
-        {/* Image title */}
-        <h3 className="lightbox-title">{currentImage.title}</h3>
-
-        {/* Image counter */}
-        <div className="lightbox-counter">
-          {currentIndex + 1} of {images.length}
+        <div className="lightbox-img-wrap">
+          {!imgLoaded && <div className="lightbox-img-skeleton" aria-hidden="true" />}
+          <img
+            src={currentImage.src}
+            alt={currentImage.alt}
+            className={`lightbox-image${imgLoaded ? ' lightbox-image--loaded' : ''}`}
+            decoding="async"
+            onLoad={() => setImgLoaded(true)}
+          />
         </div>
 
-        {/* Thumbnail navigation */}
+        <div className="lightbox-counter">{currentIndex + 1} / {images.length}</div>
+
         {images.length > 1 && (
-          <div className="lightbox-thumbnails">
-            {images.map((image, index) => (
-              <img
-                key={image.id}
-                src={image.src}
-                alt={`Thumbnail ${index + 1}`}
-                className={`lightbox-thumbnail ${index === currentIndex ? 'active' : ''}`}
-                onClick={() => goToImage(index)}
-              />
-            ))}
-          </div>
+          <Thumbnails images={images} currentIndex={currentIndex} onSelect={setCurrentIndex} />
         )}
       </div>
     </div>
