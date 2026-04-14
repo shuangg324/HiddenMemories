@@ -179,7 +179,7 @@ const Gallery = () => {
         <div className="gallery-header__inner">
           <span className="eyebrow" data-animate="fade-in-up">Portfolio</span>
           <h1 className="gallery-header__title" data-animate="fade-in-up" data-delay="1">
-            The gallery
+            The Gallery
           </h1>
           <p className="gallery-header__sub" data-animate="fade-in-up" data-delay="2">
             A selection of moments from events we've had the privilege of serving
