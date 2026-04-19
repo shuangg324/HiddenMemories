@@ -139,7 +139,7 @@ const Modal = () => {
                     </div>
                     <div className="form__item">
                         <label className="form__item--label" htmlFor="message">Tell us about your event</label>
-                        <textarea className="input modal__textarea" id="message" name="message" placeholder="Date, location, number of guests, vibe — anything helps!" required></textarea>
+                        <textarea className="input modal__textarea" id="message" name="message" placeholder="Date, location, number of guests, mood - anything helps!" required></textarea>
                     </div>
                     <button id="contact__submit" className="form__submit">Send it our way →</button>
                 </form>
