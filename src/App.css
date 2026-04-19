@@ -3925,9 +3925,8 @@ select.cf-input option {
     border-radius: 0 0 var(--r-xl) var(--r-xl);
   }
 
-  /* Name + email stacked, gap only between items not within them */
+  /* Name + email stacked */
   .modal__form-row { grid-template-columns: 1fr; gap: 0; }
-  .modal__form-row .form__item + .form__item { margin-top: var(--sp-5); }
 
   /* Shimmer + background-clip breaks on mobile — use solid color */
   .hero__title {
@@ -4240,27 +4239,29 @@ select.cf-input option {
 .bubble--14 { width:15px; height:15px; left:92%; animation-duration:13s, 4.3s; animation-delay:8.5s, 0.9s; }
 .bubble--15 { width:11px; height:11px; left:21%; animation-duration:10s, 3.7s; animation-delay:5s,   3.2s; }
 
-/* ── Hero title shimmer on load ── */
-.hero__title {
-  background: linear-gradient(
-    105deg,
-    var(--text-primary) 20%,
-    var(--accent-warm) 40%,
-    var(--accent) 50%,
-    var(--accent-warm) 60%,
-    var(--text-primary) 80%
-  );
-  background-size: 300% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: fadeInUp 800ms var(--ease-expo) 350ms forwards,
-             shimmerSweep 3.6s var(--ease-out) 1200ms infinite;
-}
+/* ── Hero title shimmer on load (desktop only — breaks on mobile) ── */
+@media (min-width: 901px) {
+  .hero__title {
+    background: linear-gradient(
+      105deg,
+      var(--text-primary) 20%,
+      var(--accent-warm) 40%,
+      var(--accent) 50%,
+      var(--accent-warm) 60%,
+      var(--text-primary) 80%
+    );
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: fadeInUp 800ms var(--ease-expo) 350ms forwards,
+               shimmerSweep 3.6s var(--ease-out) 1200ms infinite;
+  }
 
-.hero__title em {
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  .hero__title em {
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
 }
 
 /* ── Buttons: liquid fill from bottom on hover ── */
