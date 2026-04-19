@@ -7,13 +7,19 @@ function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled]     = useState(false);
   const [menuMounted, setMenuMounted] = useState(false);
+  const [progress, setProgress]     = useState(0);
 
   const { isModalOpen, openModal, closeModal } = useModal();
   const location = useLocation();
 
-  /* Scroll detection */
+  /* Scroll detection + progress */
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 24);
+      const el  = document.documentElement;
+      const pct = el.scrollTop / (el.scrollHeight - el.clientHeight) || 0;
+      setProgress(pct);
+    };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -54,6 +60,7 @@ function Navbar() {
 
   return (
     <>
+      <div className="scroll-progress" style={{ transform: `scaleX(${progress})` }} aria-hidden="true" />
       {/* ── Floating pill wrapper ── */}
       <header className={`nav-wrapper${scrolled ? ' nav-wrapper--scrolled' : ''}`}>
         <nav className="nav-pill" role="navigation" aria-label="Main navigation">

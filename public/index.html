@@ -28,6 +28,12 @@
     <meta property="og:image" content="%PUBLIC_URL%/logo.jpg">
     <meta property="og:url" content="https://hiddenmemoriesbar.netlify.app">
     <meta property="og:type" content="website">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Hidden Memories | Mobile Bartending LA">
+    <meta name="twitter:description" content="Bespoke cocktails and sophisticated bartending for weddings, corporate events & private parties across Los Angeles County.">
+    <meta name="twitter:image" content="%PUBLIC_URL%/logo.jpg">
     
     
     <!-- Google Search Console Verification - Replace with your verification code -->
@@ -50,13 +56,14 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "EventService",
+      "@type": ["LocalBusiness", "CateringService"],
       "name": "Hidden Memories Bar",
       "image": "https://hiddenmemoriesbar.netlify.app/logo.jpg",
       "url": "https://hiddenmemoriesbar.netlify.app",
       "telephone": "+1-626-367-4586",
-      "priceRange": "600-2000+",
+      "priceRange": "$$",
       "description": "Elegant mobile bartending for weddings, parties, and events throughout Los Angeles County. Fine-dining trained bartenders creating unforgettable experiences.",
+      "serviceType": ["Mobile Bartending", "Wedding Bar Service", "Corporate Bar Service", "Private Party Bartending", "Custom Cocktail Menus"],
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "1145 Dunswell Ave",
@@ -117,6 +124,16 @@
         "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
         "opens": "00:00",
         "closes": "23:59"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Mobile Bar Services",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Dry Hire Bar Package" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Wedding Bartending" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Corporate Event Bar" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Private Party Bartending" } }
+        ]
       }
     }
     </script>

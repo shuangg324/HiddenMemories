@@ -16,6 +16,12 @@ body::after {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='280' height='280' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 180px 180px;
+  animation: grainPulse 5s ease-in-out infinite alternate;
+}
+
+@keyframes grainPulse {
+  from { opacity: 0.025; }
+  to   { opacity: 0.055; }
 }
 
 /* ==========================================
@@ -78,6 +84,20 @@ body::after {
 /* ==========================================
    NAVBAR — Floating Pill
    ========================================== */
+
+/* Scroll progress bar */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-warm));
+  z-index: 9999;
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 80ms linear;
+  box-shadow: 0 0 8px rgba(197, 164, 106, 0.5);
+}
 
 /* Outer positioning wrapper */
 .nav-wrapper {
@@ -771,12 +791,20 @@ textarea.input {
   object-fit: cover;
   object-position: center;
   opacity: 0;
-  animation: heroImgReveal 1200ms var(--ease-expo) 100ms forwards;
+  transform-origin: center center;
+  animation:
+    heroImgReveal 1200ms var(--ease-expo) 100ms forwards,
+    kenBurns 22s ease-in-out 1300ms infinite alternate;
 }
 
 @keyframes heroImgReveal {
   from { opacity: 0; transform: scale(1.06); }
   to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes kenBurns {
+  from { transform: scale(1)    translateX(0)     translateY(0); }
+  to   { transform: scale(1.08) translateX(-1.5%) translateY(-1%); }
 }
 
 .hero__img-overlay {
@@ -844,6 +872,8 @@ textarea.input {
   overflow: hidden;
   padding: var(--sp-4) 0;
   background: var(--bg-surface);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
 }
 
 .marquee-track {
@@ -1304,6 +1334,7 @@ textarea.input {
 
   .gallery__item:hover .gallery__overlay {
     opacity: 1;
+    background: linear-gradient(180deg, rgba(197, 164, 106, 0.08) 0%, transparent 40%, rgba(5, 4, 3, 0.82) 100%);
   }
 
   .gallery__item:hover .gallery__caption {
@@ -1316,6 +1347,7 @@ textarea.input {
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg, transparent 42%, rgba(5, 4, 3, 0.82) 100%);
+  transition: background 350ms var(--ease-out);
   display: flex;
   align-items: flex-end;
   padding: var(--sp-4);
@@ -3609,11 +3641,18 @@ select.cf-input option {
   .qc-result__inner {
     position: static;
   }
+
+  .qc-header__title { font-size: clamp(36px, 8vw, 52px); }
+  .qc-stepper        { height: 60px; }
+  .qc-stepper__btn   { width: 60px; font-size: 24px; }
+  .qc-stepper__input { font-size: 28px; }
+  .qc-result__amount { font-size: clamp(44px, 10vw, 64px); }
 }
 
 @media (max-width: 540px) {
   .qc-pills { gap: var(--sp-1); }
   .qc-pill  { padding: 12px 6px; font-size: 14px; }
+  .qc-page  { padding-left: var(--sp-4); padding-right: var(--sp-4); }
 }
 
 /* ==========================================
@@ -3834,18 +3873,45 @@ select.cf-input option {
   .modal {
     flex-direction: column;
     width: 95vw;
-    max-height: 88vh;
+    height: 92dvh;
+    max-height: 92dvh;
     overflow-y: auto;
+    overflow-x: hidden;
   }
 
+  /* Each half stacks and doesn't clip internally */
   .modal__half {
     width: 100%;
-    padding: var(--sp-8) var(--sp-6);
+    padding: var(--sp-6) var(--sp-5);
+    overflow-y: visible;
+    flex-shrink: 0;
+    justify-content: flex-start;
+  }
+
+  /* About section: compact on mobile */
+  .modal__about {
+    padding-top: var(--sp-10);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  /* Pin X to top-right of the modal regardless of scroll */
+  .modal__exit {
+    position: fixed;
+    top: calc(4dvh + var(--sp-3));
+    right: calc(2.5vw + var(--sp-3));
+    z-index: calc(var(--z-modal) + 1);
+    width: 36px;
+    height: 36px;
+    font-size: 15px;
   }
 
   .modal__form-row {
     grid-template-columns: 1fr;
   }
+
+  .modal__title   { font-size: 22px; margin-bottom: var(--sp-3); }
+  .modal__para    { font-size: 15px; line-height: 1.65; }
+  .modal__sub-title { font-size: 15px; margin-bottom: var(--sp-4); }
 
   .gallery-header { padding: var(--sp-20) 0 var(--sp-12); }
   .gallery-header__title { font-size: clamp(40px, 10vw, 64px); }
@@ -4165,7 +4231,7 @@ select.cf-input option {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   animation: fadeInUp 800ms var(--ease-expo) 350ms forwards,
-             shimmerSweep 2.4s var(--ease-out) 1200ms 1 forwards;
+             shimmerSweep 3.6s var(--ease-out) 1200ms infinite;
 }
 
 .hero__title em {

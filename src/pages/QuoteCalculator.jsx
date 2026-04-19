@@ -1,6 +1,30 @@
 import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
 import '../App.css';
 
+function useAnimatedValue(target, duration = 400) {
+  const [display, setDisplay] = useState(target);
+  const rafRef  = useRef(null);
+  const fromRef = useRef(target);
+
+  useEffect(() => {
+    cancelAnimationFrame(rafRef.current);
+    const from  = fromRef.current;
+    const start = performance.now();
+    const tick  = (now) => {
+      const t = Math.min((now - start) / duration, 1);
+      const ease = 1 - Math.pow(1 - t, 3);
+      setDisplay(Math.round(from + (target - from) * ease));
+      if (t < 1) rafRef.current = requestAnimationFrame(tick);
+      else fromRef.current = target;
+    };
+    rafRef.current = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [target, duration]);
+
+  return display;
+}
+
+
 /* ── Add-on definitions ───────────────────────────────────────── */
 const ADDONS = [
   { key: 'mixers',         name: 'Premium Mixers',      desc: 'Soda, juice, tonic & more',       price: 5,   perGuest: true,  per75: false },
@@ -101,6 +125,7 @@ const QuoteCalculator = () => {
 
   const hasGuests         = parseInt(guests) > 0;
   const warnBartender     = hasGuests && parseInt(guests) > 75 && !addOns.includes('extraBartender');
+  const animatedTotal     = useAnimatedValue(quote.total);
 
   return (
     <div className="qc-page" ref={pageRef}>
@@ -207,8 +232,8 @@ const QuoteCalculator = () => {
 
             <span className="qc-result__eyebrow">Estimated total</span>
 
-            <div key={quote.total} className="qc-result__amount">
-              {hasGuests ? fmt(quote.total) : '—'}
+            <div className="qc-result__amount">
+              {hasGuests ? fmt(animatedTotal) : '—'}
             </div>
 
             {hasGuests && (
