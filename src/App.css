@@ -690,14 +690,14 @@ textarea.input {
 .hero__title-hidden {
   display: inline-block;
   opacity: 0;
-  animation: blurReveal 1.2s var(--ease-expo) 200ms forwards;
+  animation: blurReveal 1.4s var(--ease-expo) 1400ms forwards;
 }
 
 .hero__title em {
   display: inline-block;
   font-style: italic;
   opacity: 0;
-  animation: fadeInUp 900ms var(--ease-expo) 900ms forwards;
+  animation: fadeInUp 900ms var(--ease-expo) 450ms forwards;
 }
 
 .hero__sub {
@@ -4498,14 +4498,17 @@ select.cf-input option {
     background: none;
     color: var(--text-primary);
   }
-  .hero__title-hidden,
-  .hero__title em {
-    opacity: 1;
-    animation: none !important;
-  }
   /* Restore hero entry animations — elements start at opacity 0 so they'd stay invisible */
   .hero__eyebrow {
     animation-duration: 700ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  .hero__title-hidden {
+    animation-duration: 1200ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  .hero__title em {
+    animation-duration: 900ms !important;
     animation-iteration-count: 1 !important;
   }
   .hero__sub {
