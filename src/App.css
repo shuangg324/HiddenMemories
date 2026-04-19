@@ -4471,7 +4471,7 @@ select.cf-input option {
     transform: none !important;
     transition: none !important;
   }
-  .bubble, .float-icon, .package-main-icon, .special-offer::before,
+  .float-icon, .package-main-icon, .special-offer::before,
   .hero__title, .btn-primary, .home-cta .btn-primary {
     animation: none !important;
   }
@@ -4480,6 +4480,14 @@ select.cf-input option {
     background: none;
     color: var(--text-primary);
     opacity: 1;
+  }
+  /* Keep bubbles and marquee animating — core visual identity */
+  .bubble {
+    opacity: 0.45;
+  }
+  .marquee-track {
+    animation-duration: 28s !important;
+    animation-iteration-count: infinite !important;
   }
 }
 
