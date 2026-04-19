@@ -4013,6 +4013,8 @@ select.cf-input option {
   /* Name + email stacked */
   .modal__form-row { grid-template-columns: 1fr; gap: 0; }
 
+  .hero__scroll { display: none; }
+
   /* Shimmer + background-clip breaks on mobile — use solid color */
   .hero__title {
     background: none;
