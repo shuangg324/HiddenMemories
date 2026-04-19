@@ -170,29 +170,37 @@ body::after {
   background: none;
   border: none;
   cursor: pointer;
-  transition: color 180ms var(--ease-out), background 180ms var(--ease-out);
+  transition: color 180ms var(--ease-out);
   white-space: nowrap;
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background: var(--accent);
+  transition: width 240ms var(--ease-expo), left 240ms var(--ease-expo);
 }
 
 .nav-link:hover {
   color: var(--text-primary);
-  background: var(--bg-highlight);
+}
+
+.nav-link:hover::after {
+  width: calc(100% - 26px);
+  left: 13px;
 }
 
 .nav-link--active {
   color: var(--accent);
-  position: relative;
 }
 .nav-link--active::after {
-  content: '';
-  position: absolute;
-  bottom: -3px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--accent);
+  width: calc(100% - 26px);
+  left: 13px;
 }
 
 /* Hamburger button */
@@ -690,8 +698,6 @@ textarea.input {
 .hero__title-hidden {
   display: inline-block;
   opacity: 0;
-  will-change: filter, opacity;
-  transform: translateZ(0);
   animation: blurReveal 2.8s var(--ease-out) 1400ms forwards;
 }
 
@@ -4317,30 +4323,7 @@ select.cf-input option {
 .bubble--14 { width:15px; height:15px; left:92%; animation-duration:13s, 4.3s; animation-delay:8.5s, 0.9s; }
 .bubble--15 { width:11px; height:11px; left:21%; animation-duration:10s, 3.7s; animation-delay:5s,   3.2s; }
 
-/* ── Hero title shimmer on load (desktop only — breaks on mobile) ── */
-@media (min-width: 901px) {
-  .hero__title {
-    background: linear-gradient(
-      105deg,
-      var(--text-primary) 20%,
-      var(--accent-warm) 40%,
-      var(--accent) 50%,
-      var(--accent-warm) 60%,
-      var(--text-primary) 80%
-    );
-    background-size: 300% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: fadeInUp 800ms var(--ease-expo) 350ms forwards,
-               shimmerSweep 3.6s var(--ease-out) 1200ms infinite;
-  }
-
-  .hero__title em {
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-  }
-}
+/* ── Hero title — desktop keeps solid color, blur/fade animations only ── */
 
 /* ── Buttons: liquid fill from bottom on hover ── */
 .btn-primary,
@@ -4534,6 +4517,23 @@ select.cf-input option {
     animation-duration: 28s !important;
     animation-iteration-count: infinite !important;
   }
+}
+
+
+/* ══════════════════════════════
+   RIPPLE
+   ══════════════════════════════ */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(197, 164, 106, 0.18);
+  transform: scale(0);
+  animation: rippleEffect 550ms var(--ease-expo) forwards;
+  pointer-events: none;
+}
+
+@keyframes rippleEffect {
+  to { transform: scale(1); opacity: 0; }
 }
 
 /* ==========================================

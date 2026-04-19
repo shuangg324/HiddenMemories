@@ -10,12 +10,16 @@ import WeddingContactForm from './pages/Contact.jsx';
 import MailButton from './pages/MailButton.jsx';
 import NotFound from './pages/NotFound.jsx';
 import Footer from './components/Footer.jsx';
+import ScrollToTop from './utils/ScrollToTop.js';
+import useRipple from './utils/useRipple.js';
 import { ModalProvider } from './utils/modalContext.js';
 
 function App() {
+  useRipple();
   return (
     <Router>
       <ModalProvider>
+        <ScrollToTop />
         <a href="#main-content" className="skip-link">Skip to content</a>
         <Navbar />
         <Modal />

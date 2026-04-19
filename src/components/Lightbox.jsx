@@ -59,6 +59,15 @@ const Lightbox = ({ images, isOpen, onClose, initialIndex = 0 }) => {
   const goToNext     = useCallback(() => setCurrentIndex(p => (p + 1) % images.length), [images.length]);
   const goToPrevious = useCallback(() => setCurrentIndex(p => (p - 1 + images.length) % images.length), [images.length]);
 
+  const touchStartX = useRef(null);
+  const handleTouchStart = useCallback((e) => { touchStartX.current = e.touches[0].clientX; }, []);
+  const handleTouchEnd   = useCallback((e) => {
+    if (touchStartX.current === null) return;
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) diff > 0 ? goToNext() : goToPrevious();
+    touchStartX.current = null;
+  }, [goToNext, goToPrevious]);
+
   const handleKeyPress = useCallback((e) => {
     if (!isOpen) return;
     if (e.key === 'Escape')     onClose();
@@ -84,6 +93,8 @@ const Lightbox = ({ images, isOpen, onClose, initialIndex = 0 }) => {
     <div
       className="lightbox-overlay active"
       onClick={(e) => e.target === e.currentTarget && onClose()}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
       role="dialog"
       aria-modal="true"
       aria-label="Image gallery lightbox"
