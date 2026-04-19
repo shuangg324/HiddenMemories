@@ -4483,7 +4483,8 @@ select.cf-input option {
   }
   /* Keep bubbles and marquee animating — core visual identity */
   .bubble {
-    opacity: 0.45;
+    animation-duration: 12s, 4s !important;
+    animation-iteration-count: infinite !important;
   }
   .marquee-track {
     animation-duration: 28s !important;
