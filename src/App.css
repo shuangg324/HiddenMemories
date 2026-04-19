@@ -3886,21 +3886,19 @@ select.cf-input option {
     position: sticky;
     top: 0;
     width: 100%;
-    height: 52px;
+    height: 48px;
     border-radius: var(--r-xl) var(--r-xl) 0 0;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 0 var(--sp-5);
+    padding: 0 var(--sp-8);
     background: var(--bg-elevated);
-    border-bottom: 1px solid var(--border-subtle);
+    border-bottom: none;
     font-size: 20px;
     color: var(--text-secondary);
     flex-shrink: 0;
     z-index: 10;
     margin: 0;
-    width: 100%;
-    height: 52px;
   }
 
   /* Each half stacks with proper side padding */
@@ -3925,7 +3923,14 @@ select.cf-input option {
 
   .modal__title     { font-size: 22px; margin-bottom: var(--sp-3); }
   .modal__para      { font-size: 15px; line-height: 1.65; }
-  .modal__sub-title { font-size: 15px; margin-bottom: var(--sp-4); }
+  .modal__sub-title { font-size: 15px; margin-bottom: var(--sp-3); }
+
+  /* Compact form so submit is reachable without scrolling */
+  .modal__contact .form__item        { margin-bottom: var(--sp-3); }
+  .modal__contact .form__item--label { font-size: 11px; margin-bottom: 4px; }
+  .modal__contact .input             { height: 44px; font-size: 15px; padding: 0 var(--sp-3); }
+  .modal__contact .modal__textarea   { height: 80px !important; padding: var(--sp-2) var(--sp-3) !important; font-size: 15px; }
+  .modal__contact .form__submit      { padding: 10px; font-size: 14px; margin-top: var(--sp-2); }
 
   .gallery-header { padding: var(--sp-20) 0 var(--sp-12); }
   .gallery-header__title { font-size: clamp(40px, 10vw, 64px); }
