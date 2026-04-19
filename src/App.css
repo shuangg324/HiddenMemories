@@ -3873,48 +3873,52 @@ select.cf-input option {
 
   .modal {
     flex-direction: column;
-    width: 95vw;
+    width: 92vw;
     height: 92dvh;
     max-height: 92dvh;
     overflow-y: auto;
     overflow-x: hidden;
+    border-radius: var(--r-xl);
   }
 
-  /* X: top-right of modal box, large tap target */
+  /* Full-width sticky close bar — rounds with the modal top */
   .modal__exit {
     position: sticky;
     top: 0;
-    align-self: flex-end;
-    margin: var(--sp-3) var(--sp-3) 0 auto;
-    width: 44px;
-    height: 44px;
-    font-size: 18px;
+    width: 100%;
+    height: 52px;
+    border-radius: var(--r-xl) var(--r-xl) 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 var(--sp-5);
     background: var(--bg-elevated);
-    border: 1px solid var(--border);
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: 20px;
+    color: var(--text-secondary);
     flex-shrink: 0;
     z-index: 10;
+    margin: 0;
+    width: 100%;
+    height: 52px;
   }
 
-  /* Each half stacks */
+  /* Each half stacks with proper side padding */
   .modal__half {
     width: 100%;
-    padding: var(--sp-5) var(--sp-5);
+    padding: var(--sp-6) var(--sp-6);
     overflow-y: visible;
     flex-shrink: 0;
     justify-content: flex-start;
   }
 
-  /* About: equal weight with contact */
   .modal__about {
-    flex: 1;
     border-right: none;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: var(--sp-6);
+    border-bottom: 1px solid var(--border-subtle);
   }
 
   .modal__contact {
-    flex: 1;
-    padding-top: var(--sp-6);
+    border-radius: 0 0 var(--r-xl) var(--r-xl);
   }
 
   .modal__form-row { grid-template-columns: 1fr; }
