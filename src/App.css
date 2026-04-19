@@ -690,7 +690,7 @@ textarea.input {
 .hero__title-hidden {
   display: inline-block;
   opacity: 0;
-  animation: blurReveal 1.4s var(--ease-expo) 1400ms forwards;
+  animation: blurReveal 2.8s var(--ease-out) 1400ms forwards;
 }
 
 .hero__title em {
