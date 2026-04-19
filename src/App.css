@@ -690,6 +690,8 @@ textarea.input {
 .hero__title-hidden {
   display: inline-block;
   opacity: 0;
+  will-change: filter, opacity;
+  transform: translateZ(0);
   animation: blurReveal 2.8s var(--ease-out) 1400ms forwards;
 }
 
@@ -3706,8 +3708,8 @@ select.cf-input option {
 }
 
 @keyframes blurReveal {
-  from { filter: blur(14px); opacity: 0; }
-  to   { filter: blur(0);    opacity: 1; }
+  from { filter: blur(14px); -webkit-filter: blur(14px); opacity: 0; }
+  to   { filter: blur(0);    -webkit-filter: blur(0);    opacity: 1; }
 }
 
 @keyframes scrollBounce {
