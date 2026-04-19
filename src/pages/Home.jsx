@@ -293,8 +293,8 @@ const Home = () => {
               Let's make it<br /><em>unforgettable</em>
             </h2>
             <p className="home-cta__sub">
-              Tell us about your event and we'll craft a custom package —
-              no cookie-cutter menus, no hidden fees.
+              Tell us about your event and we'll craft a custom package.
+              
             </p>
             <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
               <button className="btn-primary" onClick={handleBook}>
