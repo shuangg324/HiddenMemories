@@ -125,7 +125,7 @@ const Home = () => {
           </div>
 
           <h1 className="hero__title">
-            Hidden<br />
+            <span className="hero__title-hidden">Hidden</span><br />
             <em>Memories</em>
           </h1>
 
@@ -294,7 +294,6 @@ const Home = () => {
             </h2>
             <p className="home-cta__sub">
               Tell us about your event and we'll craft a custom package.
-              
             </p>
             <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
               <button className="btn-primary" onClick={handleBook}>

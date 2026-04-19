@@ -685,11 +685,19 @@ textarea.input {
   line-height: 0.92;
   letter-spacing: 0.01em;
   margin-bottom: var(--sp-8);
+}
+
+.hero__title-hidden {
+  display: inline-block;
   opacity: 0;
+  animation: blurReveal 1.2s var(--ease-expo) 200ms forwards;
 }
 
 .hero__title em {
+  display: inline-block;
   font-style: italic;
+  opacity: 0;
+  animation: fadeInUp 900ms var(--ease-expo) 900ms forwards;
 }
 
 .hero__sub {
@@ -3697,6 +3705,11 @@ select.cf-input option {
   opacity: 0;
 }
 
+@keyframes blurReveal {
+  from { filter: blur(14px); opacity: 0; }
+  to   { filter: blur(0);    opacity: 1; }
+}
+
 @keyframes scrollBounce {
   0%, 100% { transform: translateY(0); opacity: 0.7; }
   50%       { transform: translateY(6px); opacity: 1; }
@@ -3997,7 +4010,6 @@ select.cf-input option {
     background: none;
     -webkit-text-fill-color: var(--text-primary);
     color: var(--text-primary);
-    animation: fadeInUp 900ms var(--ease-expo) 450ms forwards;
   }
 
   .gallery-header { padding: var(--sp-20) 0 var(--sp-12); }
@@ -4486,13 +4498,14 @@ select.cf-input option {
     background: none;
     color: var(--text-primary);
   }
+  .hero__title-hidden,
+  .hero__title em {
+    opacity: 1;
+    animation: none !important;
+  }
   /* Restore hero entry animations — elements start at opacity 0 so they'd stay invisible */
   .hero__eyebrow {
     animation-duration: 700ms !important;
-    animation-iteration-count: 1 !important;
-  }
-  .hero__title {
-    animation-duration: 800ms !important;
     animation-iteration-count: 1 !important;
   }
   .hero__sub {
