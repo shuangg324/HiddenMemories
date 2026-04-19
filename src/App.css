@@ -3952,6 +3952,7 @@ select.cf-input option {
   }
 
   .modal__about .modal__para {
+    text-align: left;
     font-size: 16px;
     line-height: 1.7;
   }
@@ -4477,14 +4478,13 @@ select.cf-input option {
     transition: none !important;
   }
   .float-icon, .package-main-icon, .special-offer::before,
-  .hero__title, .btn-primary, .home-cta .btn-primary {
+  .btn-primary, .home-cta .btn-primary {
     animation: none !important;
   }
   .hero__title {
     -webkit-text-fill-color: var(--text-primary);
     background: none;
     color: var(--text-primary);
-    opacity: 1;
   }
   /* Restore hero entry animations — elements start at opacity 0 so they'd stay invisible */
   .hero__eyebrow {
