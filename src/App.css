@@ -3925,8 +3925,11 @@ select.cf-input option {
 
   .modal__logo {
     display: block;
+    position: absolute;
+    top: var(--sp-4);
+    left: 50%;
+    transform: translateX(-50%);
     width: 80px;
-    margin: 0 auto var(--sp-4);
     object-fit: contain;
     opacity: 0.75;
   }
