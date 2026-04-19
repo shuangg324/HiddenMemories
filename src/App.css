@@ -517,23 +517,24 @@ body::after {
   position: absolute;
   top: var(--sp-4);
   right: var(--sp-4);
+  z-index: 10;
   background: var(--bg-highlight);
-  border: none;
+  border: 1px solid var(--border);
   border-radius: var(--r-pill);
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--text-secondary);
   cursor: pointer;
-  font-size: 13px;
+  font-size: 14px;
   transition: color 150ms var(--ease-out), background 150ms var(--ease-out);
 }
 
 .modal__exit:hover {
   color: var(--text-primary);
-  background: var(--bg-highlight);
+  background: var(--bg-elevated);
 }
 
 .modal__overlay {
@@ -3879,38 +3880,47 @@ select.cf-input option {
     overflow-x: hidden;
   }
 
-  /* Each half stacks and doesn't clip internally */
+  /* X: top-right of modal box, large tap target */
+  .modal__exit {
+    position: sticky;
+    top: 0;
+    align-self: flex-end;
+    margin: var(--sp-3) var(--sp-3) 0 auto;
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+    z-index: 10;
+  }
+
+  /* Each half stacks */
   .modal__half {
     width: 100%;
-    padding: var(--sp-6) var(--sp-5);
+    padding: var(--sp-5) var(--sp-5);
     overflow-y: visible;
     flex-shrink: 0;
     justify-content: flex-start;
   }
 
-  /* About section: compact on mobile */
+  /* About: equal weight with contact */
   .modal__about {
-    padding-top: var(--sp-10);
-    border-bottom: 1px solid var(--border-subtle);
+    flex: 1;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--sp-6);
   }
 
-  /* Pin X to top-right of the modal regardless of scroll */
-  .modal__exit {
-    position: fixed;
-    top: calc(4dvh + var(--sp-3));
-    right: calc(2.5vw + var(--sp-3));
-    z-index: calc(var(--z-modal) + 1);
-    width: 36px;
-    height: 36px;
-    font-size: 15px;
+  .modal__contact {
+    flex: 1;
+    padding-top: var(--sp-6);
   }
 
-  .modal__form-row {
-    grid-template-columns: 1fr;
-  }
+  .modal__form-row { grid-template-columns: 1fr; }
 
-  .modal__title   { font-size: 22px; margin-bottom: var(--sp-3); }
-  .modal__para    { font-size: 15px; line-height: 1.65; }
+  .modal__title     { font-size: 22px; margin-bottom: var(--sp-3); }
+  .modal__para      { font-size: 15px; line-height: 1.65; }
   .modal__sub-title { font-size: 15px; margin-bottom: var(--sp-4); }
 
   .gallery-header { padding: var(--sp-20) 0 var(--sp-12); }

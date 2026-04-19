@@ -98,6 +98,10 @@ const Modal = () => {
             ref={modalRef}
             onClick={(e) => e.stopPropagation()}
         >
+            <button className="modal__exit" onClick={handleClose} aria-label="Close">
+                <FontAwesomeIcon icon={faTimes} />
+            </button>
+
             <div className="modal__left modal__half modal__about" onClick={(e) => e.stopPropagation()}>
                 <h3 className="modal__title modal__title--about">Here's a bit about us.</h3>
                 <p className="modal__para">
@@ -112,9 +116,6 @@ const Modal = () => {
                 </p>
             </div>
             <div className="modal__right modal__half modal__contact" onClick={(e) => e.stopPropagation()}>
-                <i className="fas fa-times modal__exit click" onClick={handleClose}>
-                    <FontAwesomeIcon icon={faTimes} />
-                </i>
                 <h3 className="modal__title modal__title--contact">Let's have a chat!</h3>
                 <p className="modal__sub-title modal__sub-title--contact">We'd love to be part of your next event.</p>
                 <form id="contact__form" onSubmit={(event) => contact(event, setIsModalOpen)}>
