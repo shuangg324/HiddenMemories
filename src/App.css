@@ -484,6 +484,8 @@ body.modal--open {
   border-right: 1px solid var(--border-subtle);
 }
 
+.modal__scroll-hint { display: none; }
+
 .modal__contact { background: var(--bg-surface); }
 
 .modal__title {
@@ -3694,6 +3696,11 @@ select.cf-input option {
   opacity: 0;
 }
 
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); opacity: 0.7; }
+  50%       { transform: translateY(6px); opacity: 1; }
+}
+
 /* ── Scroll-reveal keyframes (blur-to-clear) ── */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(24px); }
@@ -3923,6 +3930,30 @@ select.cf-input option {
 
   .modal__contact {
     border-radius: 0 0 var(--r-xl) var(--r-xl);
+  }
+
+  /* Scroll hint — bouncing chevron at bottom of about section */
+  .modal__scroll-hint {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sp-1);
+    margin-top: var(--sp-6);
+    color: var(--accent);
+    animation: scrollBounce 1.6s var(--ease-inout) infinite;
+  }
+
+  .modal__scroll-hint-text {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .modal__scroll-chevron {
+    width: 20px;
+    height: 20px;
   }
 
   /* Name + email stacked */
@@ -4421,6 +4452,7 @@ select.cf-input option {
     -webkit-text-fill-color: var(--text-primary);
     background: none;
     color: var(--text-primary);
+    opacity: 1;
   }
 }
 

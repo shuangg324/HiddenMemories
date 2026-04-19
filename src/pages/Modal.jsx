@@ -114,6 +114,12 @@ const Modal = () => {
                     <br />
                     <span className="italic">*Servicing LA County and Surrounding Areas.</span>
                 </p>
+                <div className="modal__scroll-hint" aria-hidden="true">
+                    <span className="modal__scroll-hint-text">Book with us</span>
+                    <svg className="modal__scroll-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                </div>
             </div>
             <div className="modal__right modal__half modal__contact" onClick={(e) => e.stopPropagation()}>
                 <h3 className="modal__title modal__title--contact">Let's have a chat!</h3>
