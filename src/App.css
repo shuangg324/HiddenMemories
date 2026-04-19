@@ -323,6 +323,12 @@ body::after {
    ══════════════════════════════════════════════════ */
 
 /* ── Backdrop: instant fade ── */
+/* Lock body scroll when modal open */
+body.modal--open {
+  overflow: hidden;
+  touch-action: none;
+}
+
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -3881,24 +3887,23 @@ select.cf-input option {
     border-radius: var(--r-xl);
   }
 
-  /* Full-width sticky close bar — rounds with the modal top */
+  /* X: small absolute button, top-right, doesn't scroll with content */
   .modal__exit {
-    position: sticky;
-    top: 0;
-    width: 100%;
-    height: 48px;
-    border-radius: var(--r-xl) var(--r-xl) 0 0;
+    position: absolute;
+    top: var(--sp-4);
+    right: var(--sp-4);
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--r-pill);
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    padding: 0 var(--sp-8);
-    background: var(--bg-elevated);
-    border-bottom: none;
-    font-size: 20px;
-    color: var(--text-secondary);
-    flex-shrink: 0;
+    justify-content: center;
     z-index: 10;
     margin: 0;
+    flex-shrink: 0;
   }
 
   /* Each half stacks with proper side padding */
@@ -3913,24 +3918,24 @@ select.cf-input option {
   .modal__about {
     border-right: none;
     border-bottom: 1px solid var(--border-subtle);
+    padding-top: var(--sp-12);
   }
 
   .modal__contact {
     border-radius: 0 0 var(--r-xl) var(--r-xl);
   }
 
-  .modal__form-row { grid-template-columns: 1fr; }
+  /* Name + email stacked, gap only between items not within them */
+  .modal__form-row { grid-template-columns: 1fr; gap: 0; }
+  .modal__form-row .form__item + .form__item { margin-top: var(--sp-5); }
 
-  .modal__title     { font-size: 22px; margin-bottom: var(--sp-3); }
-  .modal__para      { font-size: 15px; line-height: 1.65; }
-  .modal__sub-title { font-size: 15px; margin-bottom: var(--sp-3); }
-
-  /* Compact form so submit is reachable without scrolling */
-  .modal__contact .form__item        { margin-bottom: var(--sp-3); }
-  .modal__contact .form__item--label { font-size: 11px; margin-bottom: 4px; }
-  .modal__contact .input             { height: 44px; font-size: 15px; padding: 0 var(--sp-3); }
-  .modal__contact .modal__textarea   { height: 80px !important; padding: var(--sp-2) var(--sp-3) !important; font-size: 15px; }
-  .modal__contact .form__submit      { padding: 10px; font-size: 14px; margin-top: var(--sp-2); }
+  /* Shimmer + background-clip breaks on mobile — use solid color */
+  .hero__title {
+    background: none;
+    -webkit-text-fill-color: var(--text-primary);
+    color: var(--text-primary);
+    animation: fadeInUp 800ms var(--ease-expo) 350ms forwards;
+  }
 
   .gallery-header { padding: var(--sp-20) 0 var(--sp-12); }
   .gallery-header__title { font-size: clamp(40px, 10vw, 64px); }
