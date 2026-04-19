@@ -675,7 +675,7 @@ textarea.input {
   margin-bottom: var(--sp-8);
   background: var(--accent-muted);
   opacity: 0;
-  animation: fadeInUp 700ms var(--ease-expo) 200ms forwards;
+  animation: fadeInUp 900ms var(--ease-expo) 300ms forwards;
 }
 
 .hero__title {
@@ -700,7 +700,7 @@ textarea.input {
   max-width: 44ch;
   margin-bottom: var(--sp-10);
   opacity: 0;
-  animation: fadeInUp 700ms var(--ease-expo) 500ms forwards;
+  animation: fadeInUp 900ms var(--ease-expo) 650ms forwards;
 }
 
 .hero__actions {
@@ -709,7 +709,7 @@ textarea.input {
   gap: var(--sp-4);
   flex-wrap: wrap;
   opacity: 0;
-  animation: fadeInUp 700ms var(--ease-expo) 650ms forwards;
+  animation: fadeInUp 900ms var(--ease-expo) 850ms forwards;
 }
 
 .btn-primary {
@@ -765,7 +765,7 @@ textarea.input {
   padding-top: var(--sp-8);
   border-top: 1px solid var(--border-subtle);
   opacity: 0;
-  animation: fadeInUp 700ms var(--ease-expo) 800ms forwards;
+  animation: fadeInUp 900ms var(--ease-expo) 1050ms forwards;
 }
 
 .hero__trust-item {
@@ -3937,12 +3937,14 @@ select.cf-input option {
   .modal__about {
     border-right: none;
     border-bottom: 1px solid var(--border-subtle);
-    padding-top: 0;
+    padding-top: 120px;
     padding-bottom: var(--sp-8);
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+    text-align: center;
   }
 
   .modal__about .modal__scroll-hint {
@@ -3994,7 +3996,7 @@ select.cf-input option {
     background: none;
     -webkit-text-fill-color: var(--text-primary);
     color: var(--text-primary);
-    animation: fadeInUp 800ms var(--ease-expo) 350ms forwards;
+    animation: fadeInUp 900ms var(--ease-expo) 450ms forwards;
   }
 
   .gallery-header { padding: var(--sp-20) 0 var(--sp-12); }
@@ -4483,6 +4485,27 @@ select.cf-input option {
     background: none;
     color: var(--text-primary);
     opacity: 1;
+  }
+  /* Restore hero entry animations — elements start at opacity 0 so they'd stay invisible */
+  .hero__eyebrow {
+    animation-duration: 700ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  .hero__title {
+    animation-duration: 800ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  .hero__sub {
+    animation-duration: 700ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  .hero__actions {
+    animation-duration: 700ms !important;
+    animation-iteration-count: 1 !important;
+  }
+  .hero__trust {
+    animation-duration: 700ms !important;
+    animation-iteration-count: 1 !important;
   }
   /* Keep bubbles and marquee animating — core visual identity */
   .bubble {
