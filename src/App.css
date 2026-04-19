@@ -485,6 +485,7 @@ body.modal--open {
 }
 
 .modal__scroll-hint { display: none; }
+.modal__logo { display: none; }
 
 .modal__contact { background: var(--bg-surface); }
 
@@ -3922,10 +3923,18 @@ select.cf-input option {
     justify-content: flex-start;
   }
 
+  .modal__logo {
+    display: block;
+    width: 80px;
+    margin: 0 auto var(--sp-4);
+    object-fit: contain;
+    opacity: 0.75;
+  }
+
   .modal__about {
     border-right: none;
     border-bottom: 1px solid var(--border-subtle);
-    padding-top: var(--sp-12);
+    padding-top: 0;
     padding-bottom: var(--sp-8);
     min-height: 100dvh;
     display: flex;

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useModal } from '../utils/modalContext.js';
 import { contact } from '../utils/toggleModal.js';
+import Logo from '../assets/LogoHM.png';
 
 /* Must be >= longest CSS exit animation (door close 220ms + drop delay 100ms + drop 520ms = 640ms) */
 const EXIT_MS = 680;
@@ -103,6 +104,7 @@ const Modal = () => {
             </button>
 
             <div className="modal__left modal__half modal__about" onClick={(e) => e.stopPropagation()}>
+                <img className="modal__logo" src={Logo} alt="Hidden Memories Bar" />
                 <h3 className="modal__title modal__title--about">Here's a bit about us.</h3>
                 <p className="modal__para">
                     We are a small, passionate crew of bartenders who genuinely love what we do.
