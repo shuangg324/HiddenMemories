@@ -162,7 +162,7 @@ const Packages = () => {
               >
                 <div className="package-icon-header">
                   <FontAwesomeIcon icon={faGem} className="package-main-icon premium-icon" />
-                  <span className="package-badge premium-badge">Customise</span>
+                  <span className="package-badge premium-badge">Customize</span>
                 </div>
 
                 <p className="italic package__title enhanced-package-title">
