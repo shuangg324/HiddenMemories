@@ -330,7 +330,7 @@ const Home = () => {
             </p>
             <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
               <button className="btn-primary" onClick={handleBook}>
-                Get a free quote
+                Book your event
               </button>
               <a href="tel:+16263674586" className="btn-ghost">
                 (626) 367-4586

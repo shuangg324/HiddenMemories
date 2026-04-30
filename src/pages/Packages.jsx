@@ -220,7 +220,7 @@ const Packages = () => {
                     className="packages-cta__button packages-cta__button--primary"
                   >
                     <FontAwesomeIcon icon={faMagic} />
-                    <span>Get your free quote</span>
+                    <span>Book your event</span>
                   </button>
                   <a
                     href="tel:+16263674586"

@@ -3335,7 +3335,7 @@ select.cf-input option {
 }
 
 .qc-header__sub {
-  font-size: 21px;
+  font-size: 24px;
   color: var(--text-secondary);
   line-height: 1.6;
 }
@@ -3355,7 +3355,7 @@ select.cf-input option {
 
 .qc-block__label {
   display: block;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.13em;
   text-transform: uppercase;
@@ -3367,7 +3367,7 @@ select.cf-input option {
   font-weight: 400;
   letter-spacing: 0;
   text-transform: none;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 /* ── Guest stepper ── */
@@ -3391,7 +3391,7 @@ select.cf-input option {
   width: 72px;
   background: none;
   border: none;
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 300;
   color: var(--text-muted);
   cursor: pointer;
@@ -3418,7 +3418,7 @@ select.cf-input option {
   flex: 1;
   text-align: center;
   font-family: var(--font-display);
-  font-size: 36px;
+  font-size: 40px;
   font-weight: 400;
   color: var(--text-primary);
   background: none;
@@ -3446,7 +3446,7 @@ select.cf-input option {
   border: 1px solid var(--border-subtle);
   border-radius: var(--r-md);
   font-family: var(--font-body);
-  font-size: 19px;
+  font-size: 21px;
   font-weight: 500;
   color: var(--text-secondary);
   cursor: pointer;
@@ -3477,7 +3477,7 @@ select.cf-input option {
 }
 
 .qc-pill__tag {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 400;
   letter-spacing: 0.06em;
   color: var(--text-muted);
@@ -3570,7 +3570,7 @@ select.cf-input option {
 
 .qc-addon__name {
   display: block;
-  font-size: 17px;
+  font-size: 20px;
   color: var(--text-secondary);
   transition: color 200ms var(--ease-out);
 }
@@ -3579,13 +3579,13 @@ select.cf-input option {
 
 .qc-addon__desc {
   display: block;
-  font-size: 14px;
+  font-size: 17px;
   color: var(--text-muted);
   margin-top: 2px;
 }
 
 .qc-addon__price {
-  font-size: 15px;
+  font-size: 18px;
   color: var(--accent);
   font-weight: 500;
   white-space: nowrap;
@@ -3606,7 +3606,7 @@ select.cf-input option {
 }
 
 .qc-result__eyebrow {
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.14em;
@@ -3629,7 +3629,7 @@ select.cf-input option {
 }
 
 .qc-result__meta {
-  font-size: 14px;
+  font-size: 17px;
   color: var(--text-muted);
   margin-top: -var(--sp-2);
 }
@@ -3648,13 +3648,13 @@ select.cf-input option {
   justify-content: space-between;
   padding: 8px 0;
   border-bottom: 1px solid var(--border-subtle);
-  font-size: 14px;
+  font-size: 17px;
   color: var(--text-secondary);
 }
 
 .qc-breakdown__row--addon {
   padding-left: var(--sp-4);
-  font-size: 13px;
+  font-size: 16px;
   color: var(--text-muted);
 }
 
@@ -3662,14 +3662,14 @@ select.cf-input option {
   display: flex;
   justify-content: space-between;
   padding: var(--sp-3) 0 0;
-  font-size: 16px;
+  font-size: 19px;
   font-weight: 600;
   color: var(--text-primary);
 }
 
 /* ── Tip ── */
 .qc-tip {
-  font-size: 13px;
+  font-size: 16px;
   color: var(--accent-light);
   background: var(--accent-muted);
   border-radius: var(--r-md);
@@ -3679,7 +3679,7 @@ select.cf-input option {
 
 /* ── Empty ── */
 .qc-empty {
-  font-size: 15px;
+  font-size: 18px;
   color: var(--text-muted);
   line-height: 1.65;
 }
