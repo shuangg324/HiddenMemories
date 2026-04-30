@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import { Helmet } from 'react-helmet-async';
 import '../App.css';
 import { useModal } from '../utils/modalContext';
 import Lightbox from '../components/Lightbox';
@@ -173,6 +174,11 @@ const Gallery = () => {
 
   return (
     <div className="gallery-page">
+      <Helmet>
+        <title>Event Gallery | Hidden Memories Bar — Mobile Bartending Los Angeles</title>
+        <meta name="description" content="See Hidden Memories Bar in action. Photos from weddings, corporate events, and private parties across LA County. Fine-dining cocktails, beautiful setups." />
+        <link rel="canonical" href="https://hiddenmemoriesbar.netlify.app/gallery" />
+      </Helmet>
 
       {/* ── Header ── */}
       <header className="gallery-header">

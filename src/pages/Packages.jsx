@@ -1,4 +1,5 @@
 import { useCallback, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import '../App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -80,6 +81,11 @@ const Packages = () => {
 
   return (
     <div className="App">
+      <Helmet>
+        <title>Bar Packages & Pricing | Hidden Memories Bar — Mobile Bartending Los Angeles</title>
+        <meta name="description" content="View our mobile bar packages for weddings, corporate events, and private parties in LA County. Custom cocktail menus, full setup included. Get a free quote today." />
+        <link rel="canonical" href="https://hiddenmemoriesbar.netlify.app/packages" />
+      </Helmet>
       <section id="packages-page">
 
         <div className="container">

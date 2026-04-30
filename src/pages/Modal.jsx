@@ -65,8 +65,8 @@ const Modal = () => {
             if (
                 modalRef.current &&
                 !modalRef.current.contains(e.target) &&
-                !document.querySelector('.mail__btn')?.contains(e.target) &&
-                !document.querySelector('.navbar')?.contains(e.target)
+                !(document.querySelector('.mail__btn') && document.querySelector('.mail__btn').contains(e.target)) &&
+                !(document.querySelector('.navbar') && document.querySelector('.navbar').contains(e.target))
             ) {
                 handleClose();
             }
@@ -75,12 +75,12 @@ const Modal = () => {
         const handleCloseEvent = () => handleClose();
 
         document.addEventListener('mousedown', handleClickOutside);
-        modalRef.current?.addEventListener('closeModal', handleCloseEvent);
+        if (modalRef.current) modalRef.current.addEventListener('closeModal', handleCloseEvent);
 
         const ref = modalRef.current;
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
-            ref?.removeEventListener('closeModal', handleCloseEvent);
+            if (ref) ref.removeEventListener('closeModal', handleCloseEvent);
         };
     }, [isModalOpen, handleClose]);
 

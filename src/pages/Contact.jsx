@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
+import { Helmet } from 'react-helmet-async';
 import emailjs from 'emailjs-com';
 import '../App.css';
 
@@ -202,7 +203,7 @@ const WeddingContactForm = () => {
 
   /* Sequential stagger reveal */
   useEffect(() => {
-    const items = pageRef.current?.querySelectorAll('.contact-item') ?? [];
+    const items = pageRef.current ? pageRef.current.querySelectorAll('.contact-item') : [];
     items.forEach((el, i) => {
       setTimeout(() => el.classList.add('contact-item--visible'), i * 85);
     });
@@ -215,7 +216,8 @@ const WeddingContactForm = () => {
 
   const handleDateChange = (value) => {
     setFormData(prev => ({ ...prev, eventDate: value }));
-    document.getElementById('eventDate')?.closest('.cf-field')?.classList.remove('cf-field--error');
+    const dateField = document.getElementById('eventDate');
+    if (dateField) { const p = dateField.closest('.cf-field'); if (p) p.classList.remove('cf-field--error'); }
   };
 
   const validateAndScrollToError = () => {
@@ -234,7 +236,7 @@ const WeddingContactForm = () => {
       if (!value || (typeof value === 'string' && value.trim() === '')) {
         const el = document.getElementById(field.id);
         if (el) {
-          el.closest('.cf-field')?.classList.add('cf-field--error');
+          const cfField = el.closest('.cf-field'); if (cfField) cfField.classList.add('cf-field--error');
           el.scrollIntoView({ behavior: 'smooth', block: 'center' });
           el.focus();
         }
@@ -285,6 +287,11 @@ const WeddingContactForm = () => {
 
   return (
     <div className="contact-page" ref={pageRef}>
+      <Helmet>
+        <title>Contact Us | Hidden Memories Bar — Mobile Bartending Los Angeles</title>
+        <meta name="description" content="Get in touch with Hidden Memories Bar. Book mobile bartending for your wedding, corporate event, or private party in LA County. Fast response guaranteed." />
+        <link rel="canonical" href="https://hiddenmemoriesbar.netlify.app/contact" />
+      </Helmet>
       <Toast toast={toast} onClose={closeToast} />
 
       {/* ── Left panel ── */}

@@ -1,4 +1,5 @@
 import { useMemo, useCallback, useState, useEffect, useRef } from 'react';
+import { Helmet } from 'react-helmet-async';
 import '../App.css';
 
 function useAnimatedValue(target, duration = 400) {
@@ -66,7 +67,7 @@ const QuoteCalculator = () => {
 
   /* Sequential stagger reveal */
   useEffect(() => {
-    const items = pageRef.current?.querySelectorAll('.qc-item') ?? [];
+    const items = pageRef.current ? pageRef.current.querySelectorAll('.qc-item') : [];
     items.forEach((el, i) => {
       setTimeout(() => el.classList.add('qc-item--visible'), i * 110);
     });
@@ -129,6 +130,11 @@ const QuoteCalculator = () => {
 
   return (
     <div className="qc-page" ref={pageRef}>
+      <Helmet>
+        <title>Get a Free Quote | Hidden Memories Bar — Mobile Bartending Los Angeles</title>
+        <meta name="description" content="Get an instant quote for mobile bartending in LA County. Custom packages for weddings, corporate events, and private parties. No commitment required." />
+        <link rel="canonical" href="https://hiddenmemoriesbar.netlify.app/quote" />
+      </Helmet>
 
       {/* ── Header ── */}
       <header className="qc-header qc-item">

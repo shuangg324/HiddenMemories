@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import './App.css';
 import Home from './pages/Home.jsx';
 import Packages from './pages/Packages.jsx';
@@ -17,6 +18,7 @@ import { ModalProvider } from './utils/modalContext.js';
 function App() {
   useRipple();
   return (
+    <HelmetProvider>
     <Router>
       <ModalProvider>
         <ScrollToTop />
@@ -37,6 +39,7 @@ function App() {
         <Footer />
       </ModalProvider>
     </Router>
+    </HelmetProvider>
   );
 }
 

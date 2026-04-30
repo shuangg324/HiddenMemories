@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { useModal } from '../utils/modalContext';
 
 /* Local assets */
@@ -104,6 +105,11 @@ const Home = () => {
 
   return (
     <div className="App">
+      <Helmet>
+        <title>Hidden Memories Bar | Mobile Bartending for Weddings & Events in Los Angeles</title>
+        <meta name="description" content="Premium mobile bartending in LA County. Fine-dining cocktails, full bar setup, and personal touches your guests will remember. Book Hidden Memories Bar for your wedding, corporate event, or private party." />
+        <link rel="canonical" href="https://hiddenmemoriesbar.netlify.app/" />
+      </Helmet>
 
       {/* ══════════════════════════════
           HERO
