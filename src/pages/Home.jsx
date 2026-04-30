@@ -280,6 +280,33 @@ const Home = () => {
       </section>
 
       {/* ══════════════════════════════
+          TESTIMONIALS
+          ══════════════════════════════ */}
+      <section className="testimonials" aria-label="Client testimonials">
+        <div className="container">
+          <div className="testimonials__header" data-animate="fade-in-up">
+            <span className="eyebrow">Kind words</span>
+            <h2 className="section__title">What our clients say</h2>
+          </div>
+          <div className="testimonials__grid">
+            {[
+              { quote: "Our guests could not stop talking about the drinks. Everything was seamless from setup to last call. Absolutely worth it.", name: "Jessica R.", event: "Wedding · Pasadena" },
+              { quote: "Hired them for a corporate rooftop event. Professional, on time, and the cocktails were genuinely impressive. Will book again.", name: "Marcus T.", event: "Corporate Event · DTLA" },
+              { quote: "Made my birthday feel like a real VIP experience. They handled everything and we just got to enjoy the night.", name: "Alyssa M.", event: "Birthday Party · Malibu" },
+            ].map((t, i) => (
+              <div key={i} className="testimonial-card" data-animate="fade-in-up" data-delay={i + 1}>
+                <p className="testimonial-card__quote">"{t.quote}"</p>
+                <div className="testimonial-card__author">
+                  <span className="testimonial-card__name">{t.name}</span>
+                  <span className="testimonial-card__event">{t.event}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════
           CTA
           ══════════════════════════════ */}
       <section className="home-cta" aria-label="Call to action">
