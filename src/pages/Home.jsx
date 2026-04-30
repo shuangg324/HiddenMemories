@@ -130,7 +130,7 @@ const Home = () => {
           </h1>
 
           <p className="hero__sub">
-            Bespoke cocktails and sophisticated bartending for the moments that matter most. We bring the bar to you, beautifully.
+            Fine-dining cocktails, full bar setup, and the kind of personal touches your guests will still talk about.
           </p>
 
           <div className="hero__actions">
